@@ -203,6 +203,8 @@ class ConsoleWriter(StatsWriter):
                 log_info.append(f"Terminated: {int(values['Custom/Terminated'].sum)}")
             if "Custom/MaxStepReached" in values:
                 log_info.append(f"MaxStep: {int(values['Custom/MaxStepReached'].sum)}")
+            if "Custom/UntrackedEpisodeEnd" in values:
+                log_info.append(f"Untracked: {int(values['Custom/UntrackedEpisodeEnd'].sum)}")
             if "Custom/NumEnvs" in values:
                 self.num_envs_hint = int(round(values["Custom/NumEnvs"].mean))
             if "Custom/EscalatedEnvironments" in values:

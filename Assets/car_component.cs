@@ -48,6 +48,16 @@ public class car_component : MonoBehaviour
     private float currentDisturbanceForce;
     private float currentDisturbanceTorque;
 
+    // Called by CarAgent.OnEpisodeBegin() - these are private, so it can't reset them directly.
+    // Forces a fresh disturbance roll next time the car is on ice, instead of possibly reusing a
+    // stale force/torque left over from whatever the previous episode last rolled.
+    public void ResetSlipperyDisturbance()
+    {
+        slipperyDisturbanceTimer = 0f;
+        currentDisturbanceForce = 0f;
+        currentDisturbanceTorque = 0f;
+    }
+
     [Tooltip("Centre of mass offset from Rigidbody origin. Lower Y = more stable, less likely to tip.")]
     public Vector3 centreOfMassOffset = new Vector3(0f, -0.5f, 0f);
     public bool showCentreOfMassGizmo = true;

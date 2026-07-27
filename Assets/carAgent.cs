@@ -138,15 +138,24 @@ public class CarAgent : Agent
     // MaxStep) — see EndEpisodeWithLog and the MaxStep branch of OnActionReceived.
     void RecordEpisodeOutcome(bool wasGoal)
     {
+        // Bootstrap-stage episodes (Front/Behind/Side) are easier than full random placement -
+        // short fixed distance to goal, all tiles forced Normal, no hazards - so their goal rate
+        // doesn't reflect real driving competence. Excluded so escalation only fires once the
+        // agent is actually succeeding under the full training distribution.
+        if (episodeBootstrapStage != BootstrapStage.None) return;
+
         int window = Mathf.Max(1, (int)Academy.Instance.EnvironmentParameters.GetWithDefault("terminal_penalty_escalation_window", 20f));
         recentEpisodeGoals.Enqueue(wasGoal);
         while (recentEpisodeGoals.Count > window)
             recentEpisodeGoals.Dequeue();
     }
 
+    private DecisionRequester decisionRequester;
+
     public override void Initialize()
     {
         startPosition = spawnPoint.position;
+        decisionRequester = GetComponent<DecisionRequester>();
     }
 
     void Update()
@@ -197,9 +206,17 @@ public class CarAgent : Agent
         if (ep.GetWithDefault("bootstrap_curriculum_enabled", 1f) < 0.5f) return BootstrapStage.None;
 
         float numEnvs = Mathf.Max(1f, ep.GetWithDefault("training_num_envs", 1f));
-        float frontSteps  = ep.GetWithDefault("bootstrap_stage_front_steps", 20_000f) / numEnvs;
-        float behindSteps = ep.GetWithDefault("bootstrap_stage_behind_steps", 20_000f) / numEnvs;
-        float sideSteps   = ep.GetWithDefault("bootstrap_stage_side_steps", 20_000f) / numEnvs;
+
+        // Academy.TotalStepCount (used below) ticks every environment step regardless of
+        // DecisionPeriod, but bootstrap_stage_*_steps are GLOBAL DECISION steps - matching the
+        // trainer's own Step:/max_steps convention (decisions summed across workers). Multiplying
+        // by DecisionPeriod converts back into the tick units TotalStepCount actually counts in,
+        // so e.g. bootstrap_stage_front_steps: 200000 with --num-envs 32 really means the Front
+        // stage lasts until the trainer's Step: counter reaches 200000, not 200000/DecisionPeriod.
+        float decisionPeriod = decisionRequester != null ? Mathf.Max(1, decisionRequester.DecisionPeriod) : 1f;
+        float frontSteps  = ep.GetWithDefault("bootstrap_stage_front_steps", 20_000f) * decisionPeriod / numEnvs;
+        float behindSteps = ep.GetWithDefault("bootstrap_stage_behind_steps", 20_000f) * decisionPeriod / numEnvs;
+        float sideSteps   = ep.GetWithDefault("bootstrap_stage_side_steps", 20_000f) * decisionPeriod / numEnvs;
 
         float step = Academy.Instance.TotalStepCount;
         if (step < frontSteps) return BootstrapStage.Front;
@@ -223,6 +240,16 @@ public class CarAgent : Agent
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         episodeStepCount = 0;
+
+        // Neither of these is reset by anything else - car_component has no episode concept of
+        // its own, so without this, wheels/gear silently carry over whatever they were at the
+        // instant the previous episode ended (e.g. still turned hard from a spin, or stuck in
+        // reverse from a Behind-stage episode). The Behind-stage branch below can still put the
+        // agent back into reverse on purpose; this just makes "forward, wheels straight" the
+        // default starting point for every episode instead of whatever state was left behind.
+        carController.currentSteerAngle = 0f;
+        carController.reverseGear = false;
+        carController.ResetSlipperyDisturbance();
 
         episodeBootstrapStage = DetermineBootstrapStage();
         currentBootstrapStageDisplay = episodeBootstrapStage.ToString();

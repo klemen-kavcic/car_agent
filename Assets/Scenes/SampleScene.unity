@@ -1139,7 +1139,7 @@ MonoBehaviour:
   spawnAreaMax: {x: 45, y: 45}
   goalAreaMin: {x: -45, y: -45}
   goalAreaMax: {x: 45, y: 45}
-  disableCurriculumInEditor: 0
+  disableCurriculumInEditor: 1
   currentBootstrapStageDisplay: None
   currentEpisodeReward: 0
   lastEpisodeReward: 0
@@ -1202,11 +1202,11 @@ MonoBehaviour:
   maxSteerDeltaPerDecision: 3.5
   stepsPerDecision: 5
   slipperyFrictionMultiplier: 0.05
-  slipperyDisturbanceForce: 20
-  slipperyDisturbanceTorque: 40
+  slipperyDisturbanceForce: 20000
+  slipperyDisturbanceTorque: 4000
   slipperyDisturbanceInterval: 0.4
   normalTopSpeedMS: 25
-  grassSpeedFraction: 0.1
+  grassSpeedFraction: 0.05
   speedLimitBrakeTorque: 100000
   reverseSpeedFraction: 0.15
   steerDeltaInput: 0
