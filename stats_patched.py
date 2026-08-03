@@ -167,6 +167,19 @@ class ConsoleWriter(StatsWriter):
         # alongside it (MOST_RECENT) so the total can be printed as "x/N".
         self.escalated_envs_total = 0
         self.num_envs_hint: Optional[int] = None
+        # Only print the "Escalated: x/N" line the moment the count actually changes, not on
+        # every subsequent summary line for the rest of the run once escalation has started.
+        self.last_reported_escalated_total = 0
+        # Same running-total pattern as escalated_envs_total above, but for the independent goal-
+        # reward escalation (Custom/EscalatedGoalRewardEnvironments - see carAgent.cs).
+        self.escalated_goal_reward_envs_total = 0
+        self.last_reported_escalated_goal_reward_total = 0
+        # Same one-shot-per-env running-total pattern again, once per bootstrap curriculum stage
+        # transition (Custom/BootstrapStageEntered<Behind|Side|None> - see carAgent.cs
+        # OnEpisodeBegin). Keyed by stage name since there are 3 independent transitions to track,
+        # each reported the moment its own count changes.
+        self.bootstrap_stage_totals: Dict[str, int] = defaultdict(int)
+        self.last_reported_bootstrap_stage_totals: Dict[str, int] = defaultdict(int)
 
     def write_stats(
         self, category: str, values: Dict[str, StatsSummary], step: int
@@ -209,9 +222,27 @@ class ConsoleWriter(StatsWriter):
                 self.num_envs_hint = int(round(values["Custom/NumEnvs"].mean))
             if "Custom/EscalatedEnvironments" in values:
                 self.escalated_envs_total += int(values["Custom/EscalatedEnvironments"].sum)
-            if self.escalated_envs_total > 0:
+            if self.escalated_envs_total != self.last_reported_escalated_total:
                 denom = self.num_envs_hint if self.num_envs_hint is not None else "?"
                 log_info.append(f"Escalated: {self.escalated_envs_total}/{denom}")
+                self.last_reported_escalated_total = self.escalated_envs_total
+            if "Custom/EscalatedGoalRewardEnvironments" in values:
+                self.escalated_goal_reward_envs_total += int(
+                    values["Custom/EscalatedGoalRewardEnvironments"].sum
+                )
+            if self.escalated_goal_reward_envs_total != self.last_reported_escalated_goal_reward_total:
+                denom = self.num_envs_hint if self.num_envs_hint is not None else "?"
+                log_info.append(f"GoalEscalated: {self.escalated_goal_reward_envs_total}/{denom}")
+                self.last_reported_escalated_goal_reward_total = self.escalated_goal_reward_envs_total
+            for stage_key in ("Behind", "Side", "None"):
+                stat_name = f"Custom/BootstrapStageEntered{stage_key}"
+                if stat_name in values:
+                    self.bootstrap_stage_totals[stage_key] += int(values[stat_name].sum)
+                if self.bootstrap_stage_totals[stage_key] != self.last_reported_bootstrap_stage_totals[stage_key]:
+                    denom = self.num_envs_hint if self.num_envs_hint is not None else "?"
+                    label = "BootstrapDone" if stage_key == "None" else f"Stage>{stage_key}"
+                    log_info.append(f"{label}: {self.bootstrap_stage_totals[stage_key]}/{denom}")
+                    self.last_reported_bootstrap_stage_totals[stage_key] = self.bootstrap_stage_totals[stage_key]
             log_info.append(is_training)
 
             if self.self_play and "Self-play/ELO" in values:

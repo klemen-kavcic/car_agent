@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Unity.MLAgents;
 using Unity.MLAgents.Policies;
 using UnityEditor;
 using UnityEditor.Callbacks;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Writes build_info.txt next to every Standalone build, so a build sitting in an HPC folder is
 // self-documenting (sensor shape/points, observation size, action space) instead of relying on
@@ -13,49 +16,67 @@ using UnityEngine;
 // the existing "Run: ..." line - see the comment at the bottom for the exact shell snippet.
 public static class BuildInfoWriter
 {
-    // [PostProcessBuild] only sees whatever scene(s) happen to already be loaded in the Editor
-    // when the whole build finishes - not the scene(s) actually baked into the player - so
-    // FindAnyObjectByType there can silently find nothing even though the build is fine (this is
-    // what caused the "(no X found in the built scene)" gaps in some HPC build logs).
-    // [PostProcessScene] instead fires once per scene *during* the build, while that scene is
-    // genuinely loaded for processing, so it can't miss anything. It has no access to the output
-    // path though, so it just stashes what it finds here; OnPostprocessBuild reads the stash and
-    // does the actual file write once the build (and thus the output path) exists. A scene with
-    // none of these components must not clobber a hit from an earlier scene in a multi-scene
-    // build, hence the `??=`-style "only fill if still empty" checks.
-    private static CarSensor foundSensor;
-    private static BehaviorParameters foundBehavior;
-    private static CarAgent foundAgent;
-    private static car_component foundCarController;
-    private static GridManager foundGridManager;
-
-    [PostProcessScene]
-    public static void OnPostprocessScene()
-    {
-        if (foundSensor == null) foundSensor = UnityEngine.Object.FindAnyObjectByType<CarSensor>();
-        if (foundBehavior == null) foundBehavior = UnityEngine.Object.FindAnyObjectByType<BehaviorParameters>();
-        if (foundAgent == null) foundAgent = UnityEngine.Object.FindAnyObjectByType<CarAgent>();
-        if (foundCarController == null) foundCarController = UnityEngine.Object.FindAnyObjectByType<car_component>();
-        if (foundGridManager == null) foundGridManager = UnityEngine.Object.FindAnyObjectByType<GridManager>();
-    }
-
+    // Both the legacy [PostProcessScene] attribute and the newer IProcessSceneWithReport
+    // interface were tried here first and NEITHER ever fired under this project's Unity 6/URP
+    // build pipeline - confirmed by diagnostic Debug.Log calls in both that never printed, even
+    // though OnPostprocessBuild below (a normal per-build, not per-scene, callback) fired fine
+    // every time. Rather than chase why the per-scene hook is skipped, this sidesteps it
+    // entirely: by the time OnPostprocessBuild runs the build has already finished, so it's safe
+    // to just re-open every scene registered in Build Settings right here and scan it directly -
+    // no dependency on any scene-processing callback timing/caching quirk at all.
     [PostProcessBuild(1)]
     public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
     {
-        var sensor = foundSensor;
-        var behavior = foundBehavior;
-        var agent = foundAgent;
-        var decisionRequester = agent != null ? agent.GetComponent<DecisionRequester>() : null;
-        var carController = foundCarController;
-        var gridManager = foundGridManager;
+        CarSensor sensor = null;
+        BehaviorParameters behavior = null;
+        CarAgent agent = null;
+        car_component carController = null;
+        GridManager gridManager = null;
 
-        // Reset for the next build in this Editor session - these are static so they'd otherwise
-        // leak a stale hit from this build into the next one.
-        foundSensor = null;
-        foundBehavior = null;
-        foundAgent = null;
-        foundCarController = null;
-        foundGridManager = null;
+        var openedPaths = new List<string>();
+
+        Debug.Log($"[BuildInfoWriter] EditorBuildSettings.scenes has {EditorBuildSettings.scenes.Length} entries; " +
+            $"{EditorSceneManager.sceneCount} scene(s) currently loaded.");
+
+        foreach (var buildScene in EditorBuildSettings.scenes)
+        {
+            if (!buildScene.enabled)
+            {
+                Debug.Log($"[BuildInfoWriter] Skipping disabled scene '{buildScene.path}'.");
+                continue;
+            }
+
+            bool alreadyLoaded = false;
+            for (int i = 0; i < EditorSceneManager.sceneCount; i++)
+            {
+                if (EditorSceneManager.GetSceneAt(i).path == buildScene.path) { alreadyLoaded = true; break; }
+            }
+
+            Scene scene;
+            if (!alreadyLoaded)
+            {
+                scene = EditorSceneManager.OpenScene(buildScene.path, OpenSceneMode.Additive);
+                openedPaths.Add(buildScene.path);
+            }
+            else
+            {
+                scene = EditorSceneManager.GetSceneByPath(buildScene.path);
+            }
+
+            Debug.Log($"[BuildInfoWriter] Scene '{buildScene.path}': alreadyLoaded={alreadyLoaded}, " +
+                $"isLoaded={scene.isLoaded}, isValid={scene.IsValid()}, rootCount={(scene.IsValid() ? scene.rootCount : -1)}");
+
+            if (sensor == null) sensor = UnityEngine.Object.FindAnyObjectByType<CarSensor>(FindObjectsInactive.Include);
+            if (behavior == null) behavior = UnityEngine.Object.FindAnyObjectByType<BehaviorParameters>(FindObjectsInactive.Include);
+            if (agent == null) agent = UnityEngine.Object.FindAnyObjectByType<CarAgent>(FindObjectsInactive.Include);
+            if (carController == null) carController = UnityEngine.Object.FindAnyObjectByType<car_component>(FindObjectsInactive.Include);
+            if (gridManager == null) gridManager = UnityEngine.Object.FindAnyObjectByType<GridManager>(FindObjectsInactive.Include);
+
+            Debug.Log($"[BuildInfoWriter] After scanning '{buildScene.path}': sensor={sensor != null}, " +
+                $"behavior={behavior != null}, agent={agent != null}, car={carController != null}, grid={gridManager != null}");
+        }
+
+        var decisionRequester = agent != null ? agent.GetComponent<DecisionRequester>() : null;
 
         var sb = new StringBuilder();
         sb.AppendLine("=== Build info (auto-generated by BuildInfoWriter.cs) ===");
@@ -127,6 +148,20 @@ public static class BuildInfoWriter
         string manifestPath = Path.Combine(outputDir, "build_info.txt");
         File.WriteAllText(manifestPath, sb.ToString());
         Debug.Log($"[BuildInfoWriter] Wrote build manifest to {manifestPath}");
+
+        // Close only the scenes we opened ourselves here, leaving whatever the user already had
+        // open (and its dirty/undo state) untouched. Must happen AFTER the manifest string above
+        // is fully built, not before - CloseScene destroys that scene's GameObjects, and Unity
+        // overloads != null for destroyed objects to evaluate false, so every sensor/behavior/
+        // agent/carController/gridManager reference above would silently read back as "not
+        // found" if this ran any earlier, even though the scan itself (further up) found them
+        // all just fine.
+        for (int i = EditorSceneManager.sceneCount - 1; i >= 0; i--)
+        {
+            Scene scene = EditorSceneManager.GetSceneAt(i);
+            if (openedPaths.Contains(scene.path))
+                EditorSceneManager.CloseScene(scene, true);
+        }
     }
 }
 

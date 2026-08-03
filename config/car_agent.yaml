@@ -52,19 +52,51 @@ environment_parameters:
   # matching reward_goal's order of magnitude).
   reward_checkpoint: 0.05
 
+  # --- Idle penalty (escalating, not flat) -----------------------------------------------
+  # Standing still costs the same flat reward_time_penalty as driving, so a policy that's
+  # unsure how to proceed (e.g. can't see a safe way around a Terminal tile) can just wait the
+  # episode out for close to free. This adds an extra, GROWING penalty once the car's speed
+  # (carAgent.cs OnActionReceived, rb.linearVelocity.magnitude) has stayed below
+  # idle_speed_threshold for more than idle_grace_steps consecutive decision steps in a row -
+  # the counter resets the instant speed exceeds the threshold again. idle_speed_threshold
+  # defaults far below car_component's reverseEngageSpeed (0.5 m/s), so a normal brake-to-
+  # shift-gear moment never trips it; idle_grace_steps additionally absorbs a brief full stop.
+  # Growing (idle_penalty_growth), not flat, so a frozen policy can't just tolerate a fixed
+  # cost for the rest of the episode - the longer it stands still, the worse it gets. Set
+  # idle_penalty_enabled to 0 to disable entirely (default off).
+  idle_penalty_enabled: 0
+  idle_speed_threshold: 0.001
+  idle_grace_steps: 20
+  idle_penalty_base: -0.02
+  idle_penalty_growth: 0.05
+
   # --- Terminal penalty escalation (one-time step-up, not a gradual ramp) ---
-  # Once the agent has been reaching the goal consistently — a rolling rate over the last
-  # terminal_penalty_escalation_window episodes >= terminal_penalty_escalation_goal_rate —
-  # reward_terminal_penalty switches permanently to terminal_penalty_escalated_value for the
-  # rest of that run. Tightens safety once the agent already drives competently, instead of
-  # punishing crashes this harshly from the very first, still-clumsy episodes. Tracked
-  # per-parallel-environment (carAgent.cs), so with --num-envs > 1 different workers may
-  # escalate at slightly different points — same caveat as the shaping schedule below.
-  # Set terminal_penalty_escalation_enabled to 0 to disable entirely (default off).
+  # Once GLOBAL training step terminal_penalty_escalation_step is reached, reward_terminal_penalty
+  # switches permanently to terminal_penalty_escalated_value for the rest of that run. Tightens
+  # safety once the agent should already drive competently, instead of punishing crashes this
+  # harshly from the very first, still-clumsy episodes. Step-based (not a rolling goal-rate
+  # window) specifically so every parallel worker escalates at essentially the same point:
+  # Academy.Instance.TotalStepCount is per-process, but stays in close lockstep across workers
+  # since they're all paced by the same DecisionPeriod - unlike goal-rate, which could vary
+  # wildly worker-to-worker and let some drift millions of steps ahead of others before each
+  # independently crossed its own threshold. Same GLOBAL-steps/training_num_envs convention as
+  # the bootstrap stage steps below (divided by training_num_envs, multiplied by DecisionPeriod,
+  # internally in carAgent.cs). Set terminal_penalty_escalation_enabled to 0 to disable entirely
+  # (default off).
   terminal_penalty_escalation_enabled: 0
-  terminal_penalty_escalation_goal_rate: 0.75
-  terminal_penalty_escalation_window: 20
+  terminal_penalty_escalation_step: 10000000
   terminal_penalty_escalated_value: -15.0
+
+  # --- Goal reward escalation (one-time step-up, not a gradual ramp) ---
+  # Same mechanism as terminal_penalty_escalation above, applied to reward_goal instead: once
+  # GLOBAL training step goal_reward_escalation_step is reached, reward_goal switches permanently
+  # to goal_reward_escalated_value for the rest of that run. Lets a run start with a smaller goal
+  # reward (so early training isn't dominated by the sparse goal payoff over the denser approach/
+  # checkpoint shaping) and step it up once the agent already drives competently. Set
+  # goal_reward_escalation_enabled to 0 to disable entirely (default off).
+  goal_reward_escalation_enabled: 0
+  goal_reward_escalation_step: 10000000
+  goal_reward_escalated_value: 5.0
 
   # IMPORTANT: Academy.Instance.TotalStepCount is per-process, not aggregated across --num-envs
   # workers, so this MUST match whatever --num-envs value you pass on the mlagents-learn command
@@ -74,23 +106,26 @@ environment_parameters:
 
   # --- Bootstrap curriculum -------------------------------------------------------------
   # For the very first steps of training (before goal placement falls back to pure
-  # full-random), force the goal through three easy, sequential drills so the policy learns
+  # full-random), force the goal through four easy, sequential drills so the policy learns
   # basic controls while it's still close to random exploration:
-  #   1. Front  - goal straight ahead: throttle + steering toward a target.
-  #   2. Behind - goal straight behind: forces reverse-gear engagement / backing up. The
+  #   1. Front   - goal straight ahead: throttle + steering toward a target.
+  #   2. Behind  - goal straight behind: forces reverse-gear engagement / backing up. The
   #      approach-bonus reward is flipped to reward reversing (not forward motion) during
   #      this stage only (see carAgent.cs OnTriggerEnter) - this directly discourages the
   #      agent from "cheating" the goal with a forward-facing 180 turn instead of genuinely
-  #      learning reverse. (A stronger fix - narrow corridors that physically block a
-  #      U-turn - is deferred as a future, more expensive curriculum; this reward flip is
-  #      the cheap substitute for now.)
-  #   3. Side   - goal at a randomised side angle/distance: variety, bridging toward full
+  #      learning reverse.
+  #   3. DeadEnd - goal placed behind, beyond a narrow one-cell-wide pocket of Terminal tiles
+  #      built straight ahead of the spawn (too narrow to arc a forward U-turn inside). The
+  #      only way out without ending the episode is to reverse straight back the way it drove
+  #      in - the "stronger fix" the Behind stage's single wall alone couldn't teach, since a
+  #      lone wall can usually just be steered around instead of reversed away from.
+  #   4. Side    - goal at a randomised side angle/distance: variety, bridging toward full
   #      random placement.
   # All step counts below are GLOBAL steps (summed across all --num-envs workers, matching
   # total_training_steps' convention) and are divided by training_num_envs internally.
   # Deliberately short - this is a quick "learn the controls" primer, not a long-running
-  # curriculum. Once all three stages finish, goal placement is pure full-random across the
-  # whole goal area. While ANY of the three stages is active, all grid tiles are also forced
+  # curriculum. Once all four stages finish, goal placement is pure full-random across the
+  # whole goal area. While ANY of the four stages is active, all grid tiles are also forced
   # to TileType.Normal (no Terminal/Slippery/SpeedLimited) via GridManager.forceAllNormal,
   # sharing this same enabled flag and stage-steps budget rather than being separately
   # configurable. Set bootstrap_curriculum_enabled to 0 to disable entirely.
@@ -98,8 +133,10 @@ environment_parameters:
 
   # Approach-bonus override for the Front/Behind stages only (carAgent.cs UpdateRewardWeights).
   # Goal is directly ahead/behind during these two stages, so a stronger pull toward driving/
-  # reversing straight at it helps basic control learning land faster. Side stage and beyond
-  # (including full-random placement once bootstrap ends) use reward_approach_bonus as normal.
+  # reversing straight at it helps basic control learning land faster. DeadEnd/Side stages and
+  # beyond (including full-random placement once bootstrap ends) use reward_approach_bonus as
+  # normal - DeadEnd's final approach into the goal is a normal forward drive, once the car has
+  # already backed clear of the pocket.
   bootstrap_approach_bonus: 3.0
 
   # Stage 1: Front.
@@ -111,13 +148,53 @@ environment_parameters:
   bootstrap_behind_distance: 6
 
   # Probability a Behind-stage episode spawns with reverse gear already engaged (carAgent.cs
-  # OnEpisodeBegin), so the policy directly experiences what reverse does (gas -> backward motion
-  # -> reward) instead of only discovering it via random exploration of the gear-toggle action.
-  # The policy's own discrete gear action can still flip it back on step 1; this just raises how
-  # often reverse actually gets tried. Set to 0 to disable (never force-spawn in reverse).
-  bootstrap_behind_spawn_reverse_prob: 0.5
+  # OnEpisodeBegin), so the policy directly experiences what reverse does (acceleration -> backward
+  # motion -> reward) instead of only discovering it via random exploration of the gear-toggle
+  # action. The policy's own discrete gear action can still flip it back on step 1; this just
+  # raises how often reverse actually gets tried. Decays linearly from _start to _end over the
+  # course of the Behind stage: near-certain at first (isolate "accelerate while already in
+  # reverse" with zero gear-decision confusion), lower by the end (forces practicing the actual
+  # decision to shift into reverse before bootstrap ends). Set both to 0 to disable entirely.
+  bootstrap_behind_spawn_reverse_prob_start: 1.0
+  bootstrap_behind_spawn_reverse_prob_end: 0.3
 
-  # Stage 3: Side (randomised angle 0=front/180=behind, mirrored left/right, plus randomised
+  # Distance (world units, in front of spawn) at which a Behind-stage episode forces a Terminal
+  # tile, overriding whatever forceAllNormal/the tile-mix would otherwise have generated there
+  # (carAgent.cs OnEpisodeBegin, GridManager.SetTileTypeAt). Makes driving forward - instead of
+  # reversing toward the goal behind - end the episode immediately: a much stronger, unambiguous
+  # signal than bootstrap_behind_spawn_reverse_prob_start/_end above, which only nudges the odds of trying
+  # reverse rather than actively punishing forward. Keep this comfortably above half of
+  # GridManager's cellSize so it can never land in the same cell as the spawn point itself.
+  bootstrap_behind_terminal_distance: 4
+
+  # Stage 3: DeadEnd (reverse-out-of-a-pocket drill). Spawn heading is snapped to one of the 4
+  # grid-aligned cardinal directions (carAgent.cs OnEpisodeBegin) so the pocket below lines up
+  # exactly with whole grid cells. bootstrap_deadend_depth_cells is how many cells deep the
+  # pocket extends ahead of the (mouth-referenced) spawn point - walls flank both sides of that
+  # whole depth, plus a cap one cell further - and the car itself is spawned near the closed
+  # end of it (not at the open mouth), so it actually has to recognize it's trapped and reverse
+  # a meaningful distance back out, rather than starting already at the exit. Keep this at
+  # least 1 - narrower/shallower pockets are easier, but a depth of 1 already blocks any forward
+  # U-turn given the 1-cell pocket width. Goal distance/angle spread control how far behind the
+  # mouth (and how much side variety) the goal lands - angle 180 = straight behind, so a spread
+  # of 60 keeps it within 120-240 degrees, always comfortably in the rear hemisphere away from
+  # the pocket.
+  bootstrap_stage_deadend_steps: 20000
+  bootstrap_deadend_depth_cells: 3
+  bootstrap_deadend_goal_distance_min: 10
+  bootstrap_deadend_goal_distance_max: 18
+  bootstrap_deadend_goal_angle_spread_deg: 60
+
+  # Same reverse-gear-spawn trick as bootstrap_behind_spawn_reverse_prob_start/_end above,
+  # applied to the DeadEnd stage - except this one decays all the way to 0, not to a nonzero
+  # floor. DeadEnd is the last bootstrap stage that has anything to do with reversing; Side and
+  # full-random placement afterward offer no assistance at all, so by the time this stage ends
+  # the policy needs to reliably decide to shift into reverse entirely on its own (from
+  # wall-sensor cues, since unlike Behind the goal here isn't simply placed behind the car).
+  bootstrap_deadend_spawn_reverse_prob_start: 1.0
+  bootstrap_deadend_spawn_reverse_prob_end: 0.0
+
+  # Stage 4: Side (randomised angle 0=front/180=behind, mirrored left/right, plus randomised
   # distance, each re-rolled every episode in this stage).
   bootstrap_stage_side_steps: 20000
   bootstrap_side_distance_min: 8

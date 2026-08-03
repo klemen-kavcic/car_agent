@@ -80,14 +80,14 @@
 | 2 | Distance to goal | 1 | `toGoal.magnitude` |
 | 3 | Velocity (local space) | 3 | `transform.InverseTransformDirection(rb.linearVelocity)` |
 | 4 | Yaw rate (local space) | 1 | `transform.InverseTransformDirection(rb.angularVelocity).y` |
-| 4 | Current steering angle, normalized | 1 | `currentSteerAngle / maxSteerAngle` → roughly [-1, 1] |
-| 5 | Reverse gear flag | 1 | `carController.reverseGear ? 1 : 0` |
-| 6 | Brake-pedal-selected flag | 1 | `pedalIsBrake ? 1 : 0` |
-| 7 | Pedal magnitude | 1 | `gasInput + brakeInput` (only one is ever nonzero) |
-| 8 | Current tile type, one-hot | 4 | Normal / Slippery / SpeedLimited / Terminal |
-| **Base subtotal** | | **16** | |
-| 9 | Grid sensor readings, one-hot per point | 37 × 4 = 148 | `CarSensor` — stadium-shaped pattern, radius 3, sensor spacing 3m |
-| **Total** | | **164** | |
+| 5 | Current steering angle, normalized | 1 | `currentSteerAngle / maxSteerAngle` → roughly [-1, 1] |
+| 6 | Reverse gear flag | 1 | `carController.reverseGear ? 1 : 0` |
+| 7 | Brake-pedal-selected flag | 1 | `pedalIsBrake ? 1 : 0` |
+| 8 | Pedal magnitude | 1 | `gasInput + brakeInput` (only one is ever nonzero) |
+| **Base subtotal** | | **8** | |
+| 9 | Current tile type, one-hot | 4 | Normal / Slippery / SpeedLimited / Terminal |
+| 10 | Grid sensor readings, one-hot per point | 37 × 4 = 148 | `CarSensor` — stadium-shaped pattern, radius 3, sensor spacing 3m |
+| **Total** | | **112** | |                      24
 
 
     - higher penalty later after it is more successful
@@ -104,3 +104,8 @@
 
 
     mklink /J "Assets\Models\HpcResults" "D:\path\to\your\local\results\folder"
+
+0729
+    - checked if observations and inputs are in correct order
+    - hopefully eliminated the unnacounted for episodes, the counter counted just action steps not all of them, i think all of the unnacounted for were timeouts
+    - make random seeds

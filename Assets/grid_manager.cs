@@ -161,6 +161,28 @@ public class GridManager : MonoBehaviour
         return grid[c.x, c.y];
     }
 
+    // Overrides a single already-generated tile's type (and material) in place, without a full
+    // Regenerate() - used by the bootstrap curriculum to force one specific cell (e.g. directly in
+    // front of a Behind-stage spawn) regardless of forceAllNormal/the probXxx tile mix. Silently
+    // no-ops if worldPos falls outside the grid.
+    public void SetTileTypeAt(Vector3 worldPos, TileType type)
+    {
+        var c = WorldToGrid(worldPos);
+        if (c.x < 0 || c.x >= gridSize || c.y < 0 || c.y >= gridSize) return;
+
+        tileTypes[c.x, c.y] = type;
+        var tile = tiles[c.x, c.y];
+        if (tile == null) return;
+        tile.type = type;
+
+        var mat = MaterialForType(type);
+        if (mat != null)
+        {
+            var renderer = tile.GetComponent<Renderer>();
+            if (renderer != null) renderer.material = mat;
+        }
+    }
+
     public void GetNeighborhood5x5(Vector3 worldPos, TileType[] result)
     {
         var center = WorldToGrid(worldPos);

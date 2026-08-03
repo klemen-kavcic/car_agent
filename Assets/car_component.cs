@@ -25,7 +25,7 @@ public class car_component : MonoBehaviour
     [Range(0f, 1f)] public float reverseSpeedFraction = 0.15f;
 
     public float steerDeltaInput;
-    [Range(0f, 1f)] public float gasInput;
+    [Range(0f, 1f)] public float accelerationInput;
     [Range(0f, 1f)] public float brakeInput;
     [Tooltip("Brake bias: normal (pedal) brake torque (N·m) applied to the front vs rear wheels.")]
     public float frontMaxBrakeTorque = 2200f;
@@ -78,8 +78,8 @@ public class car_component : MonoBehaviour
 
         float gearDirection = reverseGear ? -1f : 1f;
         float gearSpeedFraction = reverseGear ? reverseSpeedFraction : 1f;
-        float frontMotor = frontDriveSpeed * gasInput * gearDirection * gearSpeedFraction;
-        float rearMotor = rearDriveSpeed * gasInput * gearDirection * gearSpeedFraction;
+        float frontMotor = frontDriveSpeed * accelerationInput * gearDirection * gearSpeedFraction;
+        float rearMotor = rearDriveSpeed * accelerationInput * gearDirection * gearSpeedFraction;
 
         float steerDeltaThisStep = steerDeltaInput * maxSteerDeltaPerDecision / stepsPerDecision;
         currentSteerAngle = Mathf.Clamp(currentSteerAngle + steerDeltaThisStep, -maxSteerAngle, maxSteerAngle);
@@ -138,7 +138,7 @@ public class car_component : MonoBehaviour
                 break;
         }
 
-        regenActive = gasInput <= 0.01f;
+        regenActive = accelerationInput <= 0.01f;
         float regenTorque = regenActive ? regenBrakeTorque : 0f;
         float frontBrakeTorque = Mathf.Max(tileBrakeTorque, brakeInput * frontMaxBrakeTorque, regenTorque);
         float rearBrakeTorque = Mathf.Max(tileBrakeTorque, brakeInput * rearMaxBrakeTorque, regenTorque);

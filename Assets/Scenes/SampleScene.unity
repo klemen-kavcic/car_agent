@@ -1139,13 +1139,15 @@ MonoBehaviour:
   spawnAreaMax: {x: 45, y: 45}
   goalAreaMin: {x: -45, y: -45}
   goalAreaMax: {x: 45, y: 45}
-  disableCurriculumInEditor: 1
+  disableCurriculumInEditor: 0
+  forceStageInEditor: 0
+  editorForcedStage: 0
   currentBootstrapStageDisplay: None
   currentEpisodeReward: 0
   lastEpisodeReward: 0
   lastEpisodeEndReason: 
-  recentGoalRate: 0
   terminalPenaltyEscalated: 0
+  goalRewardEscalated: 0
   carSensor: {fileID: 1583814002}
 --- !u!114 &1583814005
 MonoBehaviour:
@@ -1206,11 +1208,11 @@ MonoBehaviour:
   slipperyDisturbanceTorque: 4000
   slipperyDisturbanceInterval: 0.4
   normalTopSpeedMS: 25
-  grassSpeedFraction: 0.05
+  grassSpeedFraction: 0.02
   speedLimitBrakeTorque: 100000
   reverseSpeedFraction: 0.15
   steerDeltaInput: 0
-  gasInput: 0
+  accelerationInput: 0
   brakeInput: 0
   frontMaxBrakeTorque: 2200
   rearMaxBrakeTorque: 1000
@@ -1221,7 +1223,7 @@ MonoBehaviour:
   currentSpeedMS: 0
   currentTileType: 0
   regenActive: 0
-  centreOfMassOffset: {x: 0, y: -0.4, z: 0}
+  centreOfMassOffset: {x: 0, y: -0.5, z: 0}
   showCentreOfMassGizmo: 1
 --- !u!65 &1583814007
 BoxCollider:
