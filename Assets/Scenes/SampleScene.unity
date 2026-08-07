@@ -1139,9 +1139,9 @@ MonoBehaviour:
   spawnAreaMax: {x: 45, y: 45}
   goalAreaMin: {x: -45, y: -45}
   goalAreaMax: {x: 45, y: 45}
-  disableCurriculumInEditor: 0
-  forceStageInEditor: 0
-  editorForcedStage: 0
+  disableCurriculumInEditor: 1
+  forceStageInEditor: 1
+  editorForcedStage: 3
   currentBootstrapStageDisplay: None
   currentEpisodeReward: 0
   lastEpisodeReward: 0
@@ -1171,9 +1171,9 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 9693f16bf03e67d4ab15835d35872514, type: 3}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 2
   m_BehaviorName: CarAgent
   TeamId: 0
   m_UseChildSensors: 1
@@ -1218,7 +1218,7 @@ MonoBehaviour:
   rearMaxBrakeTorque: 1000
   regenBrakeTorque: 450
   reverseEngageSpeed: 0.5
-  reverseGear: 0
+  reverseGear: 1
   currentSteerAngle: 0
   currentSpeedMS: 0
   currentTileType: 0
