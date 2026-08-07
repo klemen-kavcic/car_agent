@@ -1,0 +1,295 @@
+default_settings: null
+behaviors:
+  CarAgent:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 2048
+      buffer_size: 16384
+      learning_rate: 0.0003
+      beta: 0.005
+      epsilon: 0.2
+      lambd: 0.95
+      num_epoch: 3
+      shared_critic: false
+      learning_rate_schedule: linear
+      beta_schedule: linear
+      epsilon_schedule: linear
+    checkpoint_interval: 500000
+    network_settings:
+      normalize: false
+      hidden_units: 128
+      num_layers: 2
+      vis_encode_type: simple
+      memory: null
+      goal_conditioning_type: hyper
+      deterministic: false
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+        network_settings:
+          normalize: false
+          hidden_units: 128
+          num_layers: 2
+          vis_encode_type: simple
+          memory: null
+          goal_conditioning_type: hyper
+          deterministic: false
+    init_path: null
+    keep_checkpoints: 5
+    even_checkpoints: false
+    max_steps: 50000000
+    time_horizon: 128
+    summary_freq: 10000
+    threaded: false
+    self_play: null
+    behavioral_cloning: null
+env_settings:
+  env_path: /d/hpc/home/kk42117/mag/car/Linux/car.x86_64
+  env_args: null
+  base_port: 5205
+  num_envs: 32
+  num_areas: 1
+  timeout_wait: 60
+  seed: -1
+  max_lifetime_restarts: 10
+  restarts_rate_limit_n: 1
+  restarts_rate_limit_period_s: 60
+engine_settings:
+  width: 84
+  height: 84
+  quality_level: 5
+  time_scale: 20
+  target_frame_rate: -1
+  capture_frame_rate: 60
+  no_graphics: true
+  no_graphics_monitor: false
+environment_parameters:
+  reward_goal:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9534
+          value: 5.0
+      name: reward_goal
+      completion_criteria: null
+  reward_approach_bonus:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9535
+          value: 1.0
+      name: reward_approach_bonus
+      completion_criteria: null
+  reward_terminal_penalty:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9536
+          value: -5.0
+      name: reward_terminal_penalty
+      completion_criteria: null
+  reward_time_penalty:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9537
+          value: -0.01
+      name: reward_time_penalty
+      completion_criteria: null
+  reward_time_penalty_growth:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9538
+          value: 0.0
+      name: reward_time_penalty_growth
+      completion_criteria: null
+  reward_checkpoint:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9539
+          value: 0.05
+      name: reward_checkpoint
+      completion_criteria: null
+  total_training_steps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9540
+          value: 50000000
+      name: total_training_steps
+      completion_criteria: null
+  training_num_envs:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9541
+          value: 32
+      name: training_num_envs
+      completion_criteria: null
+  terminal_penalty_escalation_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9542
+          value: 1
+      name: terminal_penalty_escalation_enabled
+      completion_criteria: null
+  terminal_penalty_escalation_goal_rate:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9543
+          value: 0.75
+      name: terminal_penalty_escalation_goal_rate
+      completion_criteria: null
+  terminal_penalty_escalation_window:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9544
+          value: 100
+      name: terminal_penalty_escalation_window
+      completion_criteria: null
+  terminal_penalty_escalated_value:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9545
+          value: -15.0
+      name: terminal_penalty_escalated_value
+      completion_criteria: null
+  bootstrap_curriculum_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9546
+          value: 1
+      name: bootstrap_curriculum_enabled
+      completion_criteria: null
+  bootstrap_approach_bonus:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9547
+          value: 5.0
+      name: bootstrap_approach_bonus
+      completion_criteria: null
+  bootstrap_stage_front_steps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9548
+          value: 200000
+      name: bootstrap_stage_front_steps
+      completion_criteria: null
+  bootstrap_front_distance:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9549
+          value: 10
+      name: bootstrap_front_distance
+      completion_criteria: null
+  bootstrap_stage_behind_steps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9550
+          value: 500000
+      name: bootstrap_stage_behind_steps
+      completion_criteria: null
+  bootstrap_behind_distance:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9551
+          value: 3
+      name: bootstrap_behind_distance
+      completion_criteria: null
+  bootstrap_behind_spawn_reverse_prob:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9552
+          value: 0.5
+      name: bootstrap_behind_spawn_reverse_prob
+      completion_criteria: null
+  bootstrap_stage_side_steps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9553
+          value: 500000
+      name: bootstrap_stage_side_steps
+      completion_criteria: null
+  bootstrap_side_distance_min:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9554
+          value: 8
+      name: bootstrap_side_distance_min
+      completion_criteria: null
+  bootstrap_side_distance_max:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9555
+          value: 15
+      name: bootstrap_side_distance_max
+      completion_criteria: null
+  bootstrap_side_angle_min_deg:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9556
+          value: 30
+      name: bootstrap_side_angle_min_deg
+      completion_criteria: null
+  bootstrap_side_angle_max_deg:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9557
+          value: 150
+      name: bootstrap_side_angle_max_deg
+      completion_criteria: null
+checkpoint_settings:
+  run_id: car_run_17811584_esc1
+  initialize_from: null
+  load_model: false
+  resume: false
+  force: false
+  train_model: false
+  inference: false
+  results_dir: /d/hpc/home/kk42117/mag/car/results
+torch_settings:
+  device: cpu
+debug: false

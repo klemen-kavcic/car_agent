@@ -1,0 +1,125 @@
+{
+    "reward_goal": {
+        "lesson_num": 0
+    },
+    "reward_approach_bonus": {
+        "lesson_num": 0
+    },
+    "reward_terminal_penalty": {
+        "lesson_num": 0
+    },
+    "reward_time_penalty": {
+        "lesson_num": 0
+    },
+    "reward_time_penalty_growth": {
+        "lesson_num": 0
+    },
+    "reward_checkpoint": {
+        "lesson_num": 0
+    },
+    "total_training_steps": {
+        "lesson_num": 0
+    },
+    "training_num_envs": {
+        "lesson_num": 0
+    },
+    "terminal_penalty_escalation_enabled": {
+        "lesson_num": 0
+    },
+    "terminal_penalty_escalation_goal_rate": {
+        "lesson_num": 0
+    },
+    "terminal_penalty_escalation_window": {
+        "lesson_num": 0
+    },
+    "terminal_penalty_escalated_value": {
+        "lesson_num": 0
+    },
+    "shaping_hold_fraction": {
+        "lesson_num": 0
+    },
+    "shaping_decay_end_fraction": {
+        "lesson_num": 0
+    },
+    "time_penalty_decay_enabled": {
+        "lesson_num": 0
+    },
+    "progress_multiplier_decay_enabled": {
+        "lesson_num": 0
+    },
+    "goal_distance_curriculum_enabled": {
+        "lesson_num": 0
+    },
+    "goal_distance_curriculum_end_steps": {
+        "lesson_num": 0
+    },
+    "goal_distance_curriculum_start_distance": {
+        "lesson_num": 0
+    },
+    "goal_distance_curriculum_min_distance": {
+        "lesson_num": 0
+    },
+    "CarAgent": {
+        "checkpoints": [
+            {
+                "steps": 48499945,
+                "file_path": "/d/hpc/home/kk42117/mag/car/results/car_run_17617385_esc0/CarAgent/CarAgent-48499945.onnx",
+                "reward": 2.7978012830019,
+                "creation_time": 1784450083.0921295,
+                "auxillary_file_paths": [
+                    "/d/hpc/home/kk42117/mag/car/results/car_run_17617385_esc0/CarAgent/CarAgent-48499945.pt"
+                ]
+            },
+            {
+                "steps": 48999902,
+                "file_path": "/d/hpc/home/kk42117/mag/car/results/car_run_17617385_esc0/CarAgent/CarAgent-48999902.onnx",
+                "reward": 0.7834048100880214,
+                "creation_time": 1784450480.7520318,
+                "auxillary_file_paths": [
+                    "/d/hpc/home/kk42117/mag/car/results/car_run_17617385_esc0/CarAgent/CarAgent-48999902.pt"
+                ]
+            },
+            {
+                "steps": 49499970,
+                "file_path": "/d/hpc/home/kk42117/mag/car/results/car_run_17617385_esc0/CarAgent/CarAgent-49499970.onnx",
+                "reward": 3.437894037791661,
+                "creation_time": 1784450873.8984709,
+                "auxillary_file_paths": [
+                    "/d/hpc/home/kk42117/mag/car/results/car_run_17617385_esc0/CarAgent/CarAgent-49499970.pt"
+                ]
+            },
+            {
+                "steps": 49999924,
+                "file_path": "/d/hpc/home/kk42117/mag/car/results/car_run_17617385_esc0/CarAgent/CarAgent-49999924.onnx",
+                "reward": 3.0122534930706024,
+                "creation_time": 1784451271.2201047,
+                "auxillary_file_paths": [
+                    "/d/hpc/home/kk42117/mag/car/results/car_run_17617385_esc0/CarAgent/CarAgent-49999924.pt"
+                ]
+            },
+            {
+                "steps": 50000052,
+                "file_path": "/d/hpc/home/kk42117/mag/car/results/car_run_17617385_esc0/CarAgent/CarAgent-50000052.onnx",
+                "reward": 3.0122534930706024,
+                "creation_time": 1784451271.253146,
+                "auxillary_file_paths": [
+                    "/d/hpc/home/kk42117/mag/car/results/car_run_17617385_esc0/CarAgent/CarAgent-50000052.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 50000052,
+            "file_path": "/d/hpc/home/kk42117/mag/car/results/car_run_17617385_esc0/CarAgent.onnx",
+            "reward": 3.0122534930706024,
+            "creation_time": 1784451271.253146,
+            "auxillary_file_paths": [
+                "/d/hpc/home/kk42117/mag/car/results/car_run_17617385_esc0/CarAgent/CarAgent-50000052.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.1.2+cu121"
+    }
+}

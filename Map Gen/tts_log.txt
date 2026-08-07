@@ -1,0 +1,86 @@
+EXTERNALS
+ - frame
+   -- length
+   -- width
+   -- articulating trailer - [x]
+      --- trailer length
+      --- trailer width
+      --- hitch position
+      --- max_hitch_angle
+
+ - axle groups     // Each axle groups have - number of axles, separation, position, wheels/axle
+   -- F (front)
+   -- M (mid)
+   -- R (rear)
+   -- T (trailer) if enabled  
+
+ - wheels
+   -- wheel radius
+   -- wheel width
+   -- wheel grip (default - 1.0)
+
+ - body
+   -- chassis floor [ ]
+      --- main
+          ---- overhangs
+          ---- corners
+      --- trailer
+          ---- overhangs
+          ---- corners
+   -- outer body [ ]
+      --- body color (Hex Code)
+      --- body shape
+	  --- front hood length (max is 0.5 * total length)
+          --- rear hood length (max is 0.5 * total length)
+          --- num_seats
+          --- has roof [ ]
+              ---- roof length (max is total length - front hood - rear hood)
+              ---- roof position (between front hood and rear hood)
+              ---- roof width
+      --- trailer color (if enabled)
+   -- lights [ ]
+      --- front light
+          ---- light bar width (smaller than full width lights would be split into two lights on two sides)
+          ---- light bar thickness
+          ---- light bar position
+          ---- indicator length ( % of light bar length occupied from the edges
+      --- rear light
+          ---- light bar width (smaller than full width lights would be split into two lights on two sides)
+          ---- light bar thickness
+          ---- light bar position
+          ---- indicator length ( % of light bar length occupied from the edges
+   -- glass [ ]
+      --- front windshield [ ]
+      --- rear windshield [ ]
+      --- number of windows
+      --- sun roof
+   
+INTERNALS
+ - Axle Controllers
+   -- Drive Shaft - Front Rear Both
+   -- Steering - Front Rear Both
+      --- Max Angle
+ - Motor 
+ - Drive Train
+ - Battery
+ - Efficiency Regeneration
+ - Throttle Sensitivity Curve
+ - Brakes
+
+LOAD
+ - Component Weight Coefficients
+   -- Frame
+   -- Axle Groups
+   -- Wheels
+   -- Outer Body
+   -- Glasses
+   -- Lights
+   -- Motor
+   -- Drivetrain
+   -- Battery
+   -- Brakes
+ - Interior Dry Weight
+ - Passenger
+ - Cargo
+   -- Boot
+   -- Trailer (if enabled)

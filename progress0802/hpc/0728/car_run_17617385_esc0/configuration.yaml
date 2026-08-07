@@ -1,0 +1,259 @@
+default_settings: null
+behaviors:
+  CarAgent:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 2048
+      buffer_size: 16384
+      learning_rate: 0.0003
+      beta: 0.005
+      epsilon: 0.2
+      lambd: 0.95
+      num_epoch: 3
+      shared_critic: false
+      learning_rate_schedule: linear
+      beta_schedule: linear
+      epsilon_schedule: linear
+    checkpoint_interval: 500000
+    network_settings:
+      normalize: false
+      hidden_units: 128
+      num_layers: 2
+      vis_encode_type: simple
+      memory: null
+      goal_conditioning_type: hyper
+      deterministic: false
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+        network_settings:
+          normalize: false
+          hidden_units: 128
+          num_layers: 2
+          vis_encode_type: simple
+          memory: null
+          goal_conditioning_type: hyper
+          deterministic: false
+    init_path: null
+    keep_checkpoints: 5
+    even_checkpoints: false
+    max_steps: 50000000
+    time_horizon: 128
+    summary_freq: 10000
+    threaded: false
+    self_play: null
+    behavioral_cloning: null
+env_settings:
+  env_path: /d/hpc/home/kk42117/mag/car/Linux/car.x86_64
+  env_args: null
+  base_port: 5005
+  num_envs: 32
+  num_areas: 1
+  timeout_wait: 60
+  seed: -1
+  max_lifetime_restarts: 10
+  restarts_rate_limit_n: 1
+  restarts_rate_limit_period_s: 60
+engine_settings:
+  width: 84
+  height: 84
+  quality_level: 5
+  time_scale: 20
+  target_frame_rate: -1
+  capture_frame_rate: 60
+  no_graphics: true
+  no_graphics_monitor: false
+environment_parameters:
+  reward_goal:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9719
+          value: 5.0
+      name: reward_goal
+      completion_criteria: null
+  reward_approach_bonus:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9720
+          value: 3.0
+      name: reward_approach_bonus
+      completion_criteria: null
+  reward_terminal_penalty:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9721
+          value: -5.0
+      name: reward_terminal_penalty
+      completion_criteria: null
+  reward_time_penalty:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9722
+          value: -0.01
+      name: reward_time_penalty
+      completion_criteria: null
+  reward_time_penalty_growth:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9723
+          value: 0.0
+      name: reward_time_penalty_growth
+      completion_criteria: null
+  reward_checkpoint:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9724
+          value: 0.05
+      name: reward_checkpoint
+      completion_criteria: null
+  total_training_steps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9725
+          value: 50000000
+      name: total_training_steps
+      completion_criteria: null
+  training_num_envs:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9726
+          value: 32
+      name: training_num_envs
+      completion_criteria: null
+  terminal_penalty_escalation_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9727
+          value: 0
+      name: terminal_penalty_escalation_enabled
+      completion_criteria: null
+  terminal_penalty_escalation_goal_rate:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9728
+          value: 0.6
+      name: terminal_penalty_escalation_goal_rate
+      completion_criteria: null
+  terminal_penalty_escalation_window:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9729
+          value: 20
+      name: terminal_penalty_escalation_window
+      completion_criteria: null
+  terminal_penalty_escalated_value:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9730
+          value: -15.0
+      name: terminal_penalty_escalated_value
+      completion_criteria: null
+  shaping_hold_fraction:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9731
+          value: 0.3
+      name: shaping_hold_fraction
+      completion_criteria: null
+  shaping_decay_end_fraction:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9732
+          value: 0.75
+      name: shaping_decay_end_fraction
+      completion_criteria: null
+  time_penalty_decay_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9733
+          value: 0
+      name: time_penalty_decay_enabled
+      completion_criteria: null
+  progress_multiplier_decay_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9734
+          value: 0
+      name: progress_multiplier_decay_enabled
+      completion_criteria: null
+  goal_distance_curriculum_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9735
+          value: 0
+      name: goal_distance_curriculum_enabled
+      completion_criteria: null
+  goal_distance_curriculum_end_steps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9736
+          value: 3000000
+      name: goal_distance_curriculum_end_steps
+      completion_criteria: null
+  goal_distance_curriculum_start_distance:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9737
+          value: 20
+      name: goal_distance_curriculum_start_distance
+      completion_criteria: null
+  goal_distance_curriculum_min_distance:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9738
+          value: 3
+      name: goal_distance_curriculum_min_distance
+      completion_criteria: null
+checkpoint_settings:
+  run_id: car_run_17617385_esc0
+  initialize_from: null
+  load_model: false
+  resume: false
+  force: false
+  train_model: false
+  inference: false
+  results_dir: /d/hpc/home/kk42117/mag/car/results
+torch_settings:
+  device: cpu
+debug: false
