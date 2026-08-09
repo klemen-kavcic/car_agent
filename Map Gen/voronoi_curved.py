@@ -201,6 +201,57 @@ def blob(rng, sx, sy, cell, yy, xx, p):
     return m & cell
 
 
+# ------------------------------------------------------------- unity export
+# Cell classification codes written to the exported grid files, and the order
+# they're matched against below - index into this list IS the code.
+#   0 = gravel (BG - the buffer strip around roads and any leftover gaps)
+#   1 = asphalt (ROAD)
+#   2 = grass (green blob)
+#   3 = ice (blue blob)
+#   4 = terminal (red blob)
+UNITY_PALETTE = [BG, ROAD, COLORS[1], COLORS[2], COLORS[0]]
+
+
+def classify_grid(img: Image.Image, gridsize: int) -> np.ndarray:
+    """Downsample the rendered map to a gridsize x gridsize array of the codes
+    above, one per Unity grid cell, by nearest-colour match (not exact
+    equality - the rendered curves/blob edges are anti-aliased) at each
+    cell's pixel-space centre.
+    """
+    # int32, not int16: squared RGB diffs (up to 255**2=65025) overflow int16's 32767 max.
+    arr = np.asarray(img.convert("RGB"), dtype=np.int32)
+    size = arr.shape[0]
+    palette = np.array(UNITY_PALETTE, dtype=np.int32)
+
+    cell_px = size / gridsize
+    coords = np.clip(((np.arange(gridsize) + 0.5) * cell_px).astype(int), 0, size - 1)
+
+    grid = np.zeros((gridsize, gridsize), dtype=np.uint8)
+    for gy, py in enumerate(coords):
+        row_pixels = arr[py, coords]                                    # (gridsize, 3)
+        dists = ((row_pixels[:, None, :] - palette[None, :, :]) ** 2).sum(axis=2)
+        grid[gy] = np.argmin(dists, axis=1)
+    return grid
+
+
+def export_unity_grid(grid: np.ndarray, out_path: str) -> None:
+    """Write a classified grid as plain text, one space-separated row per line,
+    for GridManager (Assets/grid_manager.cs) to parse directly."""
+    with open(out_path, "w") as f:
+        f.write("\n".join(" ".join(str(v) for v in row) for row in grid) + "\n")
+
+
+def road_width_to_line_px(road_width_cells: float, size: int, gridsize: int) -> int:
+    """Convert a desired road width, in Unity grid cells, to the --line pixel
+    width to render at, given the render resolution and downsample grid size.
+    Road width in the exported grid is always quantised to whole cells (world
+    width = N * GridManager.cellSize) - to hit a specific real-world width,
+    tune GridManager.cellSize alongside this, not just --line/--road-width-cells.
+    """
+    cell_px = size / gridsize
+    return max(1, round(road_width_cells * cell_px))
+
+
 # ---------------------------------------------------------------- generate
 def generate(seed, p: Params) -> Result:
     size = p.size
@@ -297,24 +348,40 @@ def main():
     g.add_argument("--line", type=int, default=10)
     g.add_argument("--marks", type=int, default=2)
     g.add_argument("--gutter", type=int, default=12)
+
+    g = ap.add_argument_group("unity export")
+    g.add_argument("--gridsize", type=int, default=20,
+                   help="Unity GridManager.gridSize - resolution of the exported per-cell grid")
+    g.add_argument("--road-width-cells", type=float, default=None,
+                   help="Desired road width in Unity grid cells - overrides --line with the "
+                        "equivalent pixel width for the given --size/--gridsize")
     a = ap.parse_args()
 
     counts = None
     if a.reds is not None or a.greens is not None or a.blues is not None:
         counts = (a.reds or 4, a.greens or 4, a.blues or 4)
+    line = a.line
+    if a.road_width_cells is not None:
+        line = road_width_to_line_px(a.road_width_cells, a.size, a.gridsize)
     p = Params(size=a.size, counts=counts, min_sep=a.min_sep,
                meander=a.meander, anchors=a.anchors, max_off=a.max_off,
                fill=a.fill, wobble=a.wobble, buffer=a.buffer,
-               line=a.line, marks=a.marks)
+               line=line, marks=a.marks)
 
     tiles = os.path.join(a.out, "maps_curved")
+    unity_grids = os.path.join(a.out, "unity_grid_maps")
     os.makedirs(tiles, exist_ok=True)
+    os.makedirs(unity_grids, exist_ok=True)
 
     imgs = []
     for i in range(a.rows * a.cols):
         r = generate(a.seed + i, p)
         r.image.save(os.path.join(tiles, f"curved_{i + 1}.png"))
         imgs.append(r.image)
+
+        cell_grid = classify_grid(r.image, a.gridsize)
+        export_unity_grid(cell_grid, os.path.join(unity_grids, f"curved_{i + 1}.txt"))
+
         print(f"map {i + 1} (seed {a.seed + i}): R={r.counts[0]} G={r.counts[1]} "
               f"B={r.counts[2]} ({r.n_regions} regions) | gap {r.min_gap:.1f}px | "
               f"cover {r.cover:.0%} | wander {r.wander:.1f}px")
@@ -327,7 +394,7 @@ def main():
         grid.paste(img, (gt + c * (s + gt), gt + r * (s + gt)))
     out = os.path.join(a.out, f"grid_{a.rows}x{a.cols}_curved.png")
     grid.save(out)
-    print(f"\ngrid: {W}x{H} -> {out}  (tiles in {tiles})")
+    print(f"\ngrid: {W}x{H} -> {out}  (tiles in {tiles}, unity grids in {unity_grids})")
 
 
 if __name__ == "__main__":

@@ -33,6 +33,11 @@ import numpy as np
 from PIL import Image, ImageDraw
 from scipy import ndimage
 
+# Same BG/ROAD/COLORS palette as voronoi_curved.py (checked below), so the classification/export
+# logic is identical - reused from there rather than duplicated, same precedent as city_map.py
+# importing blob/curve_edge/draw_roads from voronoi_curved.
+from voronoi_curved import classify_grid, export_unity_grid, road_width_to_line_px
+
 COLORS = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
 COLOR_NAMES = ("red", "green", "blue")
 BG = (220, 220, 220)
@@ -396,21 +401,37 @@ def main():
     g.add_argument("--smooth", type=int, default=3)
     g.add_argument("--marks", type=int, default=2, help="yellow dots per map")
     g.add_argument("--gutter", type=int, default=12)
+
+    g = p.add_argument_group("unity export")
+    g.add_argument("--gridsize", type=int, default=20,
+                   help="Unity GridManager.gridSize - resolution of the exported per-cell grid")
+    g.add_argument("--road-width-cells", type=float, default=None,
+                   help="Desired road width in Unity grid cells - overrides --line with the "
+                        "equivalent pixel width for the given --size/--gridsize")
     a = p.parse_args()
+
+    if a.road_width_cells is not None:
+        a.line = road_width_to_line_px(a.road_width_cells, a.size, a.gridsize)
 
     par = params_from_args(a)
     tiles = os.path.join(a.out, "maps_highways")
+    unity_grids = os.path.join(a.out, "unity_grid_maps")
     os.makedirs(tiles, exist_ok=True)
+    os.makedirs(unity_grids, exist_ok=True)
 
     imgs = []
     for i in range(a.rows * a.cols):
         r = generate(a.seed + i, par)
         r.image.save(os.path.join(tiles, f"highway_{i + 1}.png"))
         imgs.append(r.image)
+
+        cell_grid = classify_grid(r.image, a.gridsize)
+        export_unity_grid(cell_grid, os.path.join(unity_grids, f"highway_{i + 1}.txt"))
+
         print(f"map {i + 1} (seed {a.seed + i}): "
               f"R={r.counts[0]} G={r.counts[1]} B={r.counts[2]} "
               f"({r.n_regions} regions) | gap {r.min_gap:.1f}px | "
-              f"cover {r.cover:.0%} | tortuosity {r.tortuosity:.2f}")
+              f"cover {r.cover:.0%} | wander {r.wander:.2f}px")
 
     s, gt = a.size, a.gutter
     W = a.cols * s + (a.cols + 1) * gt
@@ -421,7 +442,7 @@ def main():
         grid.paste(img, (gt + c * (s + gt), gt + r * (s + gt)))
     out = os.path.join(a.out, f"grid_{a.rows}x{a.cols}_highways.png")
     grid.save(out)
-    print(f"\ngrid: {W}x{H} -> {out}  (tiles in {tiles})")
+    print(f"\ngrid: {W}x{H} -> {out}  (tiles in {tiles}, unity grids in {unity_grids})")
 
 
 if __name__ == "__main__":

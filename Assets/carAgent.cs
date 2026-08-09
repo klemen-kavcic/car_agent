@@ -376,6 +376,12 @@ public class CarAgent : Agent
         if (carController.gridManager != null)
         {
             carController.gridManager.forceAllNormal = episodeBootstrapStage != BootstrapStage.None;
+            // Off (train pool) unless a connected client explicitly asks for the held-out set -
+            // eval_checkpoints.py sets this to force validation-only maps, so evaluation results
+            // reflect generalisation rather than memorisation of the training pool. mlagents-learn
+            // never sets it, so ordinary training always sees Maps/VoronoiTrain.
+            carController.gridManager.useValidationMaps =
+                Academy.Instance.EnvironmentParameters.GetWithDefault("use_validation_maps", 0f) >= 0.5f;
             carController.gridManager.Regenerate();
         }
 
@@ -385,9 +391,19 @@ public class CarAgent : Agent
             float spawnX = Random.Range(spawnAreaMin.x, spawnAreaMax.x);
             float spawnZ = Random.Range(spawnAreaMin.y, spawnAreaMax.y);
             spawnPos = new Vector3(spawnX, startPosition.y, spawnZ);
-        } while (!IsNormalTile(spawnPos) && ++attempts < 100);
+        } while (!IsSpawnableTile(spawnPos) && ++attempts < 100);
         transform.position = spawnPos;
-        transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
+
+        // On Voronoi maps, once bootstrap has finished (forceAllNormal - see above - would
+        // otherwise blanket the whole grid in Asphalt and make every direction look equally
+        // "road"), face the car along the local road direction instead of a fully random yaw, so
+        // it starts out driving down the road like a real car rather than parked sideways/facing
+        // off into the gravel shoulder.
+        bool useRoadAlignedHeading = carController.gridManager != null
+            && carController.gridManager.mapSource == MapSource.Voronoi
+            && episodeBootstrapStage == BootstrapStage.None;
+        transform.rotation = Quaternion.Euler(
+            0f, useRoadAlignedHeading ? ComputeRoadAlignedHeading(spawnPos) : Random.Range(0f, 360f), 0f);
 
         // DeadEnd stage: snap the spawn heading to one of the 4 grid-aligned cardinal
         // directions instead of a continuous random yaw. The pocket built further below is
@@ -459,7 +475,7 @@ public class CarAgent : Agent
         // forward - instead of reversing toward the goal behind - ends the episode immediately.
         // A much stronger, unambiguous signal than the reverse-spawn-probability trick above,
         // which only ever nudges the odds of trying reverse rather than actively punishing
-        // forward. Placed AFTER the goal so it can't affect the goal's own IsNormalTile retry loop.
+        // forward. Placed AFTER the goal so it can't affect the goal's own IsSpawnableTile retry loop.
         if (episodeBootstrapStage == BootstrapStage.Behind && carController.gridManager != null)
         {
             float terminalWallDistance = Academy.Instance.EnvironmentParameters.GetWithDefault(
@@ -500,28 +516,113 @@ public class CarAgent : Agent
         checkpointsAwarded = 0;
     }
 
-    bool IsNormalTile(Vector3 worldPos)
+    bool IsSpawnableTile(Vector3 worldPos)
     {
         if (carController.gridManager == null) return true;
-        return carController.gridManager.GetTileAt(worldPos) == TileType.Normal;
+        return carController.gridManager.GetTileAt(worldPos) == carController.gridManager.SpawnableTileType;
+    }
+
+    // Samples the 5x5 neighbourhood of Asphalt cells around worldPos (GridManager.
+    // GetNeighborhood5x5 - same helper CarSensor readings ultimately bottom out on) and averages
+    // their offset angles with the standard "doubled angle" circular-mean trick: a road segment is
+    // a line, not an arrow, so it's 180-degree ambiguous (facing either way along it is equally
+    // "aligned") - a plain vector average of offsets pointing opposite directions along a straight
+    // road would cancel to ~zero, but doubling each angle before averaging (then halving the
+    // result) correctly finds the dominant *line* orientation instead. Falls back to a uniformly
+    // random heading when too few Asphalt neighbours are found to give a reliable direction (e.g.
+    // an isolated patch), then picks one of the two directions along the road at random.
+    float ComputeRoadAlignedHeading(Vector3 worldPos)
+    {
+        var neighborhood = new TileType[25];
+        carController.gridManager.GetNeighborhood5x5(worldPos, neighborhood);
+
+        float sumSin = 0f, sumCos = 0f;
+        int count = 0;
+        int i = 0;
+        for (int dz = -2; dz <= 2; dz++)
+        {
+            for (int dx = -2; dx <= 2; dx++)
+            {
+                if ((dx != 0 || dz != 0) && neighborhood[i] == TileType.Asphalt)
+                {
+                    float angleRad = Mathf.Atan2(dx, dz); // matches Unity's yaw convention (0 deg = +Z)
+                    sumSin += Mathf.Sin(2f * angleRad);
+                    sumCos += Mathf.Cos(2f * angleRad);
+                    count++;
+                }
+                i++;
+            }
+        }
+
+        if (count < 2)
+            return Random.Range(0f, 360f);
+
+        float roadHeadingDeg = Mathf.Atan2(sumSin, sumCos) * 0.5f * Mathf.Rad2Deg;
+        return roadHeadingDeg + (Random.value < 0.5f ? 0f : 180f); // face either way along the road
     }
 
     // Bootstrap curriculum takes placement priority while active; once it's finished (or
-    // disabled), goal placement is pure full-random across the whole goal area.
+    // disabled), goal placement is pure full-random across the whole goal area - except under
+    // mapSource=Voronoi, where it's additionally capped to voronoiNearGoalMaxDistance (see
+    // VoronoiNearGoalMaxDistance below) for the first voronoi_near_goal_steps GLOBAL steps. Unlike
+    // Perlin's open blobs, a genuinely random point on a curving road network can be very far from
+    // spawn the instant bootstrap ends - a sudden difficulty spike right after the controls-only
+    // curriculum - so this ramps the cap from tight to unconstrained instead of dropping the agent
+    // straight into the hardest case.
     Vector3 PickGoalPosition(Vector3 spawnPos)
     {
         if (episodeBootstrapStage != BootstrapStage.None)
             return PickBootstrapGoalPosition(spawnPos);
 
+        float maxDistance = VoronoiNearGoalMaxDistance();
+
         Vector3 goalPos;
         int attempts = 0;
         do
         {
-            float goalX = Random.Range(goalAreaMin.x, goalAreaMax.x);
-            float goalZ = Random.Range(goalAreaMin.y, goalAreaMax.y);
-            goalPos = new Vector3(goalX, goal.position.y, goalZ);
-        } while (!IsNormalTile(goalPos) && ++attempts < 100);
+            if (float.IsPositiveInfinity(maxDistance))
+            {
+                float goalX = Random.Range(goalAreaMin.x, goalAreaMax.x);
+                float goalZ = Random.Range(goalAreaMin.y, goalAreaMax.y);
+                goalPos = new Vector3(goalX, goal.position.y, goalZ);
+            }
+            else
+            {
+                // Sample within a maxDistance disk around spawn directly, rather than uniformly
+                // across the whole goal area and rejecting anything too far - with a tight early
+                // cap plus the Asphalt-only requirement, rejection sampling over the full area
+                // would rarely land a valid point within 100 attempts.
+                Vector2 offset = Random.insideUnitCircle * maxDistance;
+                goalPos = new Vector3(
+                    Mathf.Clamp(spawnPos.x + offset.x, goalAreaMin.x, goalAreaMax.x),
+                    goal.position.y,
+                    Mathf.Clamp(spawnPos.z + offset.y, goalAreaMin.y, goalAreaMax.y));
+            }
+        } while (!IsSpawnableTile(goalPos) && ++attempts < 100);
         return goalPos;
+    }
+
+    // Returns +infinity (no cap) unless mapSource=Voronoi and voronoi_near_goal_enabled is set,
+    // in which case it linearly ramps from voronoi_near_goal_distance_start to _end over
+    // voronoi_near_goal_steps GLOBAL steps - same "GLOBAL steps / training_num_envs" convention as
+    // every other step-based curriculum in this file (see UpdateRewardWeights/DetermineBootstrapStage).
+    float VoronoiNearGoalMaxDistance()
+    {
+        if (carController.gridManager == null || carController.gridManager.mapSource != MapSource.Voronoi)
+            return float.PositiveInfinity;
+
+        var ep = Academy.Instance.EnvironmentParameters;
+        if (ep.GetWithDefault("voronoi_near_goal_enabled", 0f) < 0.5f)
+            return float.PositiveInfinity;
+
+        float numEnvs = Mathf.Max(1f, ep.GetWithDefault("training_num_envs", 1f));
+        float decisionPeriod = decisionRequester != null ? Mathf.Max(1, decisionRequester.DecisionPeriod) : 1f;
+        float rampSteps = ep.GetWithDefault("voronoi_near_goal_steps", 5_000_000f) * decisionPeriod / numEnvs;
+        float progress = rampSteps > 0f ? Mathf.Clamp01(Academy.Instance.TotalStepCount / rampSteps) : 1f;
+
+        float distStart = ep.GetWithDefault("voronoi_near_goal_distance_start", 15f);
+        float distEnd = ep.GetWithDefault("voronoi_near_goal_distance_end", 100f);
+        return Mathf.Lerp(distStart, distEnd, progress);
     }
 
     // Front: goal straight ahead (basic throttle+steering). Behind: goal straight behind (forces
@@ -547,7 +648,7 @@ public class CarAgent : Agent
                     goalPos.x = Mathf.Clamp(goalPos.x, goalAreaMin.x, goalAreaMax.x);
                     goalPos.y = goal.position.y;
                     goalPos.z = Mathf.Clamp(goalPos.z, goalAreaMin.y, goalAreaMax.y);
-                } while (!IsNormalTile(goalPos) && ++attempts < 100);
+                } while (!IsSpawnableTile(goalPos) && ++attempts < 100);
                 return goalPos;
             }
 
@@ -560,7 +661,7 @@ public class CarAgent : Agent
                     goalPos.x = Mathf.Clamp(goalPos.x, goalAreaMin.x, goalAreaMax.x);
                     goalPos.y = goal.position.y;
                     goalPos.z = Mathf.Clamp(goalPos.z, goalAreaMin.y, goalAreaMax.y);
-                } while (!IsNormalTile(goalPos) && ++attempts < 100);
+                } while (!IsSpawnableTile(goalPos) && ++attempts < 100);
                 return goalPos;
             }
 
@@ -580,7 +681,7 @@ public class CarAgent : Agent
                     goalPos.x = Mathf.Clamp(goalPos.x, goalAreaMin.x, goalAreaMax.x);
                     goalPos.y = goal.position.y;
                     goalPos.z = Mathf.Clamp(goalPos.z, goalAreaMin.y, goalAreaMax.y);
-                } while (!IsNormalTile(goalPos) && ++attempts < 100);
+                } while (!IsSpawnableTile(goalPos) && ++attempts < 100);
                 return goalPos;
             }
 
@@ -600,7 +701,7 @@ public class CarAgent : Agent
                     goalPos.x = Mathf.Clamp(goalPos.x, goalAreaMin.x, goalAreaMax.x);
                     goalPos.y = goal.position.y;
                     goalPos.z = Mathf.Clamp(goalPos.z, goalAreaMin.y, goalAreaMax.y);
-                } while (!IsNormalTile(goalPos) && ++attempts < 100);
+                } while (!IsSpawnableTile(goalPos) && ++attempts < 100);
                 return goalPos;
             }
         }
@@ -609,6 +710,16 @@ public class CarAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         carSensor?.UpdateReadings();
+
+        // One Sum-aggregated stat per decision step, tagged by whichever tile the car is
+        // currently on - same StatsRecorder pattern as Custom/GoalReached etc. above, so this
+        // shows up both live in TensorBoard during training and per-checkpoint in
+        // eval_checkpoints.py's StatsSideChannel readback (see run_checkpoint there). Answers
+        // "does the policy actually favour Asphalt, or drive straight through Gravel/blob
+        // regions regardless of what's ahead" - divide each Custom/TileTime<Type> by their sum
+        // for the fraction of time spent on that surface.
+        Academy.Instance.StatsRecorder.Add(
+            $"Custom/TileTime{carController.currentTileType}", 1f, StatAggregationMethod.Sum);
 
         Vector3 toGoal = goal.position - transform.position;
         sensor.AddObservation(transform.InverseTransformDirection(toGoal.normalized)); // 3
@@ -620,11 +731,11 @@ public class CarAgent : Agent
         sensor.AddObservation(pedalIsBrake ? 1f : 0f); // 1 - which pedal is selected
         sensor.AddObservation(carController.accelerationInput + carController.brakeInput); // 1 - pedal magnitude (only one is ever nonzero)
 
-        // Current tile type, one-hot (4 values)                                        // 4
+        // Current tile type, one-hot (5 values - see TileType.cs)                       // 5
         AddTileOneHot(sensor, carController.currentTileType);
 
-        // sensor readings: carSensor.SensorCount × 4 values (one-hot per point)
-        // If the sensor shape/radius/ring settings change, update Space Size to: 16 + SensorCount * 4
+        // sensor readings: carSensor.SensorCount × 5 values (one-hot per point)
+        // If the sensor shape/radius/ring settings change, update Space Size to: 17 + SensorCount * 5
         if (carSensor != null && carSensor.readings != null)
         {
             foreach (var t in carSensor.readings)
@@ -632,9 +743,9 @@ public class CarAgent : Agent
         }
         else
         {
-            // fallback: 13 zeros per reading × 4 (one-hot) for default circular radius=2
+            // fallback: 13 zeros per reading × 5 (one-hot) for default circular radius=2
             int count = carSensor != null ? carSensor.SensorCount : 13;
-            for (int i = 0; i < count * 4; i++)
+            for (int i = 0; i < count * 5; i++)
                 sensor.AddObservation(0f);
         }
     }
@@ -794,9 +905,10 @@ public class CarAgent : Agent
 
     void AddTileOneHot(VectorSensor sensor, TileType type)
     {
-        sensor.AddObservation(type == TileType.Normal       ? 1f : 0f);
         sensor.AddObservation(type == TileType.Slippery     ? 1f : 0f);
         sensor.AddObservation(type == TileType.SpeedLimited ? 1f : 0f);
         sensor.AddObservation(type == TileType.Terminal     ? 1f : 0f);
+        sensor.AddObservation(type == TileType.Asphalt      ? 1f : 0f);
+        sensor.AddObservation(type == TileType.Gravel       ? 1f : 0f);
     }
 }

@@ -174,19 +174,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d942db2aa40348e4db9822b4f5bb7dd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
-  gridSize: 33
-  cellSize: 3
+  gridSize: 66
+  cellSize: 1.5
   tilePrefab: {fileID: 7007912004559066973, guid: b1f9551b4fb86fa4985e01df976b0ba0, type: 3}
-  normalMaterial: {fileID: 2100000, guid: be57e34601602f3489269180b376882b, type: 2}
+  mapSource: 1
   slipperyMaterial: {fileID: 2100000, guid: 69d734055c7455a42a9c9733680e0cd4, type: 2}
   speedLimitedMaterial: {fileID: 2100000, guid: b8644423139de284887c4e7ff7bb6eb2, type: 2}
   terminalMaterial: {fileID: 2100000, guid: df4baff2293d61d4b9253a8069fbdcb6, type: 2}
+  asphaltMaterial: {fileID: 2100000, guid: 41b815bb11e31f64287a858ef5af297c, type: 2}
+  gravelMaterial: {fileID: 2100000, guid: 76080355fe9549146887ae54349ff769, type: 2}
   probNormal: 0.25
   probSpeedLimited: 0.25
   probSlippery: 0.25
   probTerminal: 0.25
   noiseScale: 0.15
   forceAllNormal: 0
+  useValidationMaps: 0
 --- !u!4 &201757389
 Transform:
   m_ObjectHideFlags: 0
@@ -1091,7 +1094,7 @@ MonoBehaviour:
   ring1FrontPoints: 3
   ring2FrontPoints: 5
   ring3FrontPoints: 7
-  frontHalfAngleDegrees: 70
+  frontHalfAngleDegrees: 50
   ring1RearPoints: 3
   ring2RearPoints: 1
   ring3RearPoints: 1
@@ -1162,7 +1165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Policies.BehaviorParameters
   m_BrainParameters:
-    VectorObservationSize: 112
+    VectorObservationSize: 137
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -1171,9 +1174,9 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 9693f16bf03e67d4ab15835d35872514, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 2
+  m_BehaviorType: 0
   m_BehaviorName: CarAgent
   TeamId: 0
   m_UseChildSensors: 1
@@ -1210,6 +1213,8 @@ MonoBehaviour:
   normalTopSpeedMS: 25
   grassSpeedFraction: 0.02
   speedLimitBrakeTorque: 100000
+  gravelSpeedFraction: 0.65
+  gravelFrictionMultiplier: 0.75
   reverseSpeedFraction: 0.15
   steerDeltaInput: 0
   accelerationInput: 0

@@ -22,6 +22,10 @@ public class car_component : MonoBehaviour
     public float normalTopSpeedMS = 25f;       // measure in play mode, set here
     [Range(0f, 1f)] public float grassSpeedFraction = 0.10f;
     public float speedLimitBrakeTorque = 100000f;
+    [Tooltip("Gravel tile top-speed cap, as a fraction of normalTopSpeedMS. Less restrictive than SpeedLimited/grassSpeedFraction - intended tunable range ~0.2-0.5.")]
+    [Range(0f, 1f)] public float gravelSpeedFraction = 0.35f;
+    [Tooltip("Gravel tile wheel friction multiplier. Only slightly reduced from full (1.0) grip, unlike Slippery's harsh slipperyFrictionMultiplier - no random disturbance force/torque on gravel.")]
+    [Range(0f, 1f)] public float gravelFrictionMultiplier = 0.85f;
     [Range(0f, 1f)] public float reverseSpeedFraction = 0.15f;
 
     public float steerDeltaInput;
@@ -38,7 +42,7 @@ public class car_component : MonoBehaviour
 
     [HideInInspector] public float currentSteerAngle = 0f;
     public float currentSpeedMS; // read-only display, shows live speed in Inspector during play
-    public TileType currentTileType = TileType.Normal;
+    public TileType currentTileType = TileType.Asphalt;
     public bool regenActive; // read-only display, true while regen braking is currently applied
 
     private float defaultSidewaysStiffness;
@@ -136,6 +140,14 @@ public class car_component : MonoBehaviour
                 if (rigid.linearVelocity.magnitude > normalTopSpeedMS * grassSpeedFraction)
                     tileBrakeTorque = speedLimitBrakeTorque;
                 break;
+            case TileType.Gravel:
+                sidewaysStiffness *= gravelFrictionMultiplier;
+                forwardStiffness *= gravelFrictionMultiplier;
+                if (rigid.linearVelocity.magnitude > normalTopSpeedMS * gravelSpeedFraction)
+                    tileBrakeTorque = speedLimitBrakeTorque;
+                break;
+            // TileType.Asphalt falls through with no special case - full default friction/speed,
+            // the "safe default" surface under both Perlin and Voronoi (see GridManager.SpawnableTileType).
         }
 
         regenActive = accelerationInput <= 0.01f;

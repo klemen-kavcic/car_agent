@@ -7,14 +7,26 @@ each CarAgent-<step>.onnx checkpoint in turn with onnxruntime, and drives the ag
 the model's *deterministic* action outputs (no sampling noise), so results reflect the
 greedy policy at that checkpoint rather than the exploring training-time policy.
 
-Per-episode outcome stats (Custom/GoalReached, Custom/Terminated, Custom/MaxStepReached)
-are read back from the same StatsSideChannel mechanism the trainer uses - carAgent.cs
-reports them unconditionally on every episode end, regardless of what is connected and
-driving the agent's actions, so no extra Unity-side instrumentation is needed for eval.
+Per-episode outcome stats (Custom/GoalReached, Custom/Terminated, Custom/MaxStepReached) and
+per-decision-step tile occupancy (Custom/TileTime<Type>) are read back from the same
+StatsSideChannel mechanism the trainer uses for TensorBoard - carAgent.cs reports them
+unconditionally every episode/step, regardless of what's connected and driving the agent's
+actions, so the same numbers are also visible live in TensorBoard during ordinary training.
 
 One CSV row is written per checkpoint:
-    run_id, step, episodes, mean_reward, std_reward,
-    goal_rate, terminated_rate, maxstep_rate, mean_episode_length
+    run_id, maps, step, episodes, mean_reward, std_reward,
+    goal_rate, terminated_rate, maxstep_rate, mean_episode_length,
+    time_frac_slippery, time_frac_speedlimited, time_frac_terminal,
+    time_frac_asphalt, time_frac_gravel
+The time_frac_* columns are the fraction of decision steps spent on each tile type - e.g. a
+policy that's actually learned to favour roads should show most of its time on asphalt rather
+than gravel/grass/ice, regardless of what's directly ahead of it.
+
+Under mapSource=Voronoi, --maps (default 'val') selects Resources/Maps/VoronoiVal - a set of
+maps never seen during training - via the use_validation_maps environment parameter, so results
+reflect generalisation rather than memorisation of the training pool. Pass --maps train to
+re-evaluate the training pool itself instead, for a direct train-vs-val comparison. No effect
+under mapSource=Perlin.
 
 Usage:
     python eval_checkpoints.py \
@@ -38,12 +50,17 @@ import onnxruntime as ort
 from mlagents_envs.base_env import ActionTuple, BehaviorSpec, DecisionSteps
 from mlagents_envs.environment import UnityEnvironment
 from mlagents_envs.side_channel.engine_configuration_channel import EngineConfigurationChannel
+from mlagents_envs.side_channel.environment_parameters_channel import EnvironmentParametersChannel
 from mlagents_envs.side_channel.stats_side_channel import StatsSideChannel
 
 logging.basicConfig(level=logging.INFO, format="[eval] %(message)s")
 log = logging.getLogger(__name__)
 
 CHECKPOINT_RE = re.compile(r"-(\d+)\.onnx$")
+
+# Must match Assets/TileType.cs exactly - used to read back the Custom/TileTime<Type> stats
+# carAgent.cs reports (CollectObservations), one per enum value.
+TILE_TYPES = ["Slippery", "SpeedLimited", "Terminal", "Asphalt", "Gravel"]
 
 # Names ML-Agents 4.x exports for greedy/no-exploration action selection. If your
 # onnxruntime session doesn't have these, the script will print the available output
@@ -159,7 +176,17 @@ def run_checkpoint(env: UnityEnvironment, stats_channel: StatsSideChannel, behav
     maxstep = sum(v for v, _ in stats.get("Custom/MaxStepReached", []))
     outcomes = goals + terminated + maxstep
 
-    return {
+    # Custom/TileTime<Type> (carAgent.cs CollectObservations) - one Sum-aggregated count per
+    # decision step tagged by whichever tile the car was on. Dividing each by their total gives
+    # the fraction of time spent on that surface - i.e. is the policy favouring Asphalt, or
+    # driving straight through Gravel/blob regions regardless of what's ahead.
+    tile_time = {
+        t: sum(v for v, _ in stats.get(f"Custom/TileTime{t}", []))
+        for t in TILE_TYPES
+    }
+    tile_time_total = sum(tile_time.values())
+
+    row = {
         "step": step_from_path(onnx_path),
         "episodes": len(episode_rewards),
         "mean_reward": float(np.mean(episode_rewards)) if episode_rewards else float("nan"),
@@ -169,6 +196,11 @@ def run_checkpoint(env: UnityEnvironment, stats_channel: StatsSideChannel, behav
         "maxstep_rate": maxstep / outcomes if outcomes else float("nan"),
         "mean_episode_length": float(np.mean(episode_lengths)) if episode_lengths else float("nan"),
     }
+    for t in TILE_TYPES:
+        row[f"time_frac_{t.lower()}"] = (
+            tile_time[t] / tile_time_total if tile_time_total else float("nan")
+        )
+    return row
 
 
 def main():
@@ -190,6 +222,12 @@ def main():
                      help="Evaluate only every Nth discovered checkpoint (subsample without retraining).")
     ap.add_argument("--limit", type=int, default=None, help="Evaluate only the first N checkpoints (testing).")
     ap.add_argument("--out", default=None, help="Output CSV path (default: <run-dir>/eval_results.csv).")
+    ap.add_argument("--maps", choices=["train", "val"], default="val",
+                     help="Which map pool to evaluate against under mapSource=Voronoi, via the "
+                          "use_validation_maps environment parameter (see grid_manager.cs/"
+                          "carAgent.cs) - 'val' (default) measures generalisation to the held-out "
+                          "set never seen during training, 'train' re-evaluates the training pool "
+                          "itself for comparison. Has no effect under mapSource=Perlin.")
     args = ap.parse_args()
 
     run_dir = Path(args.run_dir)
@@ -207,6 +245,10 @@ def main():
 
     engine_channel = EngineConfigurationChannel()
     stats_channel = StatsSideChannel()
+    env_params_channel = EnvironmentParametersChannel()
+    # Queued before the environment connects, so CarAgent.OnEpisodeBegin already sees this on the
+    # very first episode - no separate reset needed to make it take effect.
+    env_params_channel.set_float_parameter("use_validation_maps", 1.0 if args.maps == "val" else 0.0)
 
     env = UnityEnvironment(
         file_name=args.binary,
@@ -214,12 +256,14 @@ def main():
         base_port=args.base_port,
         seed=args.seed,
         no_graphics=args.no_graphics,
-        side_channels=[engine_channel, stats_channel],
+        side_channels=[engine_channel, stats_channel, env_params_channel],
     )
     engine_channel.set_configuration_parameters(time_scale=args.time_scale, target_frame_rate=-1)
+    log.info("Map pool: %s (use_validation_maps=%.0f)", args.maps, 1.0 if args.maps == "val" else 0.0)
 
-    fieldnames = ["run_id", "step", "episodes", "mean_reward", "std_reward",
-                  "goal_rate", "terminated_rate", "maxstep_rate", "mean_episode_length"]
+    fieldnames = ["run_id", "maps", "step", "episodes", "mean_reward", "std_reward",
+                  "goal_rate", "terminated_rate", "maxstep_rate", "mean_episode_length"] + \
+                 [f"time_frac_{t.lower()}" for t in TILE_TYPES]
     write_header = not out_path.exists()
 
     try:
@@ -236,12 +280,15 @@ def main():
                 row = run_checkpoint(env, stats_channel, behavior_name, spec, ckpt,
                                       args.episodes, args.max_steps_per_checkpoint)
                 row["run_id"] = run_id
+                row["maps"] = args.maps
                 writer.writerow(row)
                 f.flush()
                 log.info(
-                    "[%d/%d] step=%d episodes=%d mean_reward=%.3f goal_rate=%.3f (%.1fs)",
+                    "[%d/%d] step=%d episodes=%d mean_reward=%.3f goal_rate=%.3f "
+                    "time_on_asphalt=%.2f (%.1fs)",
                     i + 1, len(checkpoints), row["step"], row["episodes"],
-                    row["mean_reward"], row["goal_rate"], time.time() - t0,
+                    row["mean_reward"], row["goal_rate"], row["time_frac_asphalt"],
+                    time.time() - t0,
                 )
     finally:
         env.close()

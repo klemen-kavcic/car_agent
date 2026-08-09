@@ -7,8 +7,11 @@ behaviors:
     max_steps: &total_steps 30000000
     time_horizon: 1000
     summary_freq: 5000
-    keep_checkpoints: 10
-    checkpoint_interval: 1000000
+    # 300 checkpoints over the 30M-step run (every 100k steps), all kept - up from the original
+    # 1M/10 (which only kept the last 10M steps' worth), so eval_checkpoints.py actually has early-
+    # training checkpoints to plot a real reward-over-training curve from, not just the tail end.
+    keep_checkpoints: 300
+    checkpoint_interval: 100000
     threaded: false
 
     hyperparameters:
@@ -102,7 +105,7 @@ environment_parameters:
   # workers, so this MUST match whatever --num-envs value you pass on the mlagents-learn command
   # line, or the bootstrap curriculum stages below will silently run too long/short. Leave at 1
   # if you run with a single environment (i.e. no --num-envs flag, or --num-envs=1).
-  training_num_envs: 1
+  training_num_envs: 32
 
   # --- Bootstrap curriculum -------------------------------------------------------------
   # For the very first steps of training (before goal placement falls back to pure
@@ -126,7 +129,7 @@ environment_parameters:
   # Deliberately short - this is a quick "learn the controls" primer, not a long-running
   # curriculum. Once all four stages finish, goal placement is pure full-random across the
   # whole goal area. While ANY of the four stages is active, all grid tiles are also forced
-  # to TileType.Normal (no Terminal/Slippery/SpeedLimited) via GridManager.forceAllNormal,
+  # to TileType.Asphalt (no Terminal/Slippery/SpeedLimited/Gravel) via GridManager.forceAllNormal,
   # sharing this same enabled flag and stage-steps budget rather than being separately
   # configurable. Set bootstrap_curriculum_enabled to 0 to disable entirely.
   bootstrap_curriculum_enabled: 1
@@ -201,3 +204,26 @@ environment_parameters:
   bootstrap_side_distance_max: 15
   bootstrap_side_angle_min_deg: 30
   bootstrap_side_angle_max_deg: 150
+
+  # --- Voronoi near-goal ramp (post-bootstrap only, mapSource=Voronoi) ------------------------
+  # Full-random goal placement on a Voronoi road map is constrained to Asphalt cells within a
+  # network of curving roads (see grid_manager.cs SpawnableTileType/carAgent.cs IsSpawnableTile) -
+  # unlike Perlin's open blobs, a genuinely random point on that network can be very far from
+  # spawn the instant bootstrap ends, a sudden difficulty spike right after the controls-only
+  # curriculum above. This caps the candidate goal's distance from spawn, starting tight
+  # (voronoi_near_goal_distance_start) and relaxing linearly to voronoi_near_goal_distance_end
+  # over voronoi_near_goal_steps GLOBAL steps (same convention as every step count above - divided
+  # by training_num_envs internally). Has no effect under mapSource=Perlin. Set
+  # voronoi_near_goal_enabled to 0 to disable entirely (default off).
+  voronoi_near_goal_enabled: 0
+  voronoi_near_goal_steps: 5000000
+  voronoi_near_goal_distance_start: 15.0
+  voronoi_near_goal_distance_end: 100.0
+
+  # Train/validation map split (mapSource=Voronoi only). 0 (default) = load from
+  # Resources/Maps/VoronoiTrain, as ordinary training always should. 1 = load from
+  # Resources/Maps/VoronoiVal instead - a held-out set of maps never trained on, so
+  # eval_checkpoints.py can force it via the EnvironmentParametersChannel to measure
+  # generalisation instead of memorisation of the training pool. Never set this to 1 for an
+  # actual training run - leave at 0 here; it exists for the eval script to override at runtime.
+  use_validation_maps: 0

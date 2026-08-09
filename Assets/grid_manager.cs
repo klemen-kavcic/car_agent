@@ -1,18 +1,35 @@
 using UnityEngine;
 
+public enum MapSource { Perlin, Voronoi }
+
 public class GridManager : MonoBehaviour
 {
     public int gridSize = 20;
     public float cellSize = 5f;
     public GameObject tilePrefab;
 
+    [Tooltip("Perlin = existing procedural noise terrain. Voronoi = prebaked road-network maps " +
+        "loaded at random from Resources/Maps/Voronoi (see Map Gen/voronoi_curved.py's --gridsize " +
+        "export, which must match gridSize below).")]
+    public MapSource mapSource = MapSource.Perlin;
+
+    // The "safe default" tile type, used both as what forceAllNormal blanks the whole grid to
+    // (despite the name - see GenerateGrid) and as the type CarAgent's spawn/goal placement
+    // retries against (see IsSpawnableTile in carAgent.cs). Always Asphalt now that Normal has
+    // been merged into it - both were physics-identical (no special case in car_component.cs)
+    // and played this exact same role, just under different mapSources.
+    public TileType SpawnableTileType => TileType.Asphalt;
+
     [Header("Tile Materials")]
-    public Material normalMaterial;
     public Material slipperyMaterial;
     public Material speedLimitedMaterial;
     public Material terminalMaterial;
+    public Material asphaltMaterial;
+    public Material gravelMaterial;
 
-    [Header("Tile Distribution (auto-normalized to sum to 1)")]
+    // Field name kept as probNormal (not renamed to probAsphalt) so the value already set in the
+    // Inspector isn't silently reset to default - Unity matches serialized fields by name.
+    [Header("Tile Distribution (auto-normalized to sum to 1, Perlin source only - probNormal is Asphalt's weight)")]
     [Range(0f, 1f)] public float probNormal       = 0.40f;
     [Range(0f, 1f)] public float probSpeedLimited  = 0.20f;
     [Range(0f, 1f)] public float probSlippery      = 0.20f;
@@ -23,8 +40,8 @@ public class GridManager : MonoBehaviour
     [Range(0.02f, 0.8f)] public float noiseScale = 0.15f;
 
     [Tooltip("When true (set by CarAgent during its bootstrap curriculum), every generated tile is " +
-        "forced to TileType.Normal regardless of probXxx settings. GridManager has no ML-Agents " +
-        "dependency and doesn't know why - it just does what it's told.")]
+        "forced to SpawnableTileType (Asphalt) regardless of probXxx settings. GridManager has no " +
+        "ML-Agents dependency and doesn't know why - it just does what it's told.")]
     public bool forceAllNormal = false;
 
     [HideInInspector] public TileType[,] tileTypes;
@@ -34,6 +51,32 @@ public class GridManager : MonoBehaviour
     // Two independent noise offsets: one for passability, one for terrain type
     private float passOffsetX, passOffsetZ;
     private float terrainOffsetX, terrainOffsetZ;
+
+    [Tooltip("When true (set by CarAgent from the use_validation_maps environment parameter), " +
+        "Voronoi maps are loaded from Resources/Maps/VoronoiVal instead of Maps/VoronoiTrain - a " +
+        "held-out set never seen during training, for eval_checkpoints.py to measure " +
+        "generalisation against instead of memorisation of the training pool. GridManager has no " +
+        "ML-Agents dependency and doesn't know why - same pattern as forceAllNormal above.")]
+    public bool useValidationMaps = false;
+
+    // Cached separately on first use per set, so every Regenerate() doesn't re-hit
+    // Resources.LoadAll, and flipping useValidationMaps mid-run doesn't force a reload of the set
+    // that's already cached.
+    private TextAsset[] voronoiTrainMapAssets;
+    private TextAsset[] voronoiValMapAssets;
+
+    // Index = the integer code voronoi_curved.py's classify_grid()/export_unity_grid() writes
+    // per cell: 0=gravel(BG), 1=asphalt(road), 2=grass(green blob), 3=ice(blue blob),
+    // 4=terminal(red blob). Grass maps to SpeedLimited (not Normal) - same reduced-top-speed
+    // behaviour and material (Mat_grass) as SpeedLimited already has under Perlin.
+    private static readonly TileType[] VoronoiCodeToType =
+    {
+        TileType.Gravel,
+        TileType.Asphalt,
+        TileType.SpeedLimited,
+        TileType.Slippery,
+        TileType.Terminal,
+    };
 
     void Awake()
     {
@@ -65,48 +108,13 @@ public class GridManager : MonoBehaviour
 
     void GenerateGrid()
     {
-        float total = probNormal + probSpeedLimited + probSlippery + probTerminal;
-        if (total <= 0f) total = 1f;
-
-        // Noise 1 threshold: above this → Terminal (high noise = impassable blobs)
-        float terminalThreshold = 1f - (probTerminal / total);
-
-        // Noise 2 ordering: SpeedLimited → Normal → Slippery
-        // Road sits in the middle so ice can border it directly on one side, grass on the other.
-        float terrainTotal = probNormal + probSpeedLimited + probSlippery;
-        if (terrainTotal <= 0f) terrainTotal = 1f;
-        float tN  = probSpeedLimited / terrainTotal;          // below = SpeedLimited
-        float tNS = tN + probNormal / terrainTotal;           // below = Normal, above = Slippery
+        TileType[,] plan = mapSource == MapSource.Voronoi ? BuildVoronoiPlan() : BuildPerlinPlan();
 
         for (int x = 0; x < gridSize; x++)
         {
             for (int z = 0; z < gridSize; z++)
             {
-                float passNoise = Mathf.PerlinNoise(
-                    (x + passOffsetX) * noiseScale,
-                    (z + passOffsetZ) * noiseScale
-                );
-
-                TileType type;
-                if (forceAllNormal)
-                {
-                    type = TileType.Normal;
-                }
-                else if (passNoise >= terminalThreshold)
-                {
-                    type = TileType.Terminal;
-                }
-                else
-                {
-                    float terrainNoise = Mathf.PerlinNoise(
-                        (x + terrainOffsetX) * noiseScale,
-                        (z + terrainOffsetZ) * noiseScale
-                    );
-
-                    if      (terrainNoise < tN)  type = TileType.SpeedLimited;
-                    else if (terrainNoise < tNS) type = TileType.Normal;
-                    else                         type = TileType.Slippery;
-                }
+                TileType type = forceAllNormal ? SpawnableTileType : plan[x, z];
 
                 Vector3 pos = gridOrigin + new Vector3(
                     x * cellSize + cellSize * 0.5f,
@@ -131,15 +139,137 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    TileType[,] BuildPerlinPlan()
+    {
+        var plan = new TileType[gridSize, gridSize];
+
+        float total = probNormal + probSpeedLimited + probSlippery + probTerminal;
+        if (total <= 0f) total = 1f;
+
+        // Noise 1 threshold: above this → Terminal (high noise = impassable blobs)
+        float terminalThreshold = 1f - (probTerminal / total);
+
+        // Noise 2 ordering: SpeedLimited → Asphalt → Slippery
+        // Road sits in the middle so ice can border it directly on one side, grass on the other.
+        float terrainTotal = probNormal + probSpeedLimited + probSlippery;
+        if (terrainTotal <= 0f) terrainTotal = 1f;
+        float tN  = probSpeedLimited / terrainTotal;          // below = SpeedLimited
+        float tNS = tN + probNormal / terrainTotal;           // below = Asphalt, above = Slippery
+
+        for (int x = 0; x < gridSize; x++)
+        {
+            for (int z = 0; z < gridSize; z++)
+            {
+                float passNoise = Mathf.PerlinNoise(
+                    (x + passOffsetX) * noiseScale,
+                    (z + passOffsetZ) * noiseScale
+                );
+
+                if (passNoise >= terminalThreshold)
+                {
+                    plan[x, z] = TileType.Terminal;
+                }
+                else
+                {
+                    float terrainNoise = Mathf.PerlinNoise(
+                        (x + terrainOffsetX) * noiseScale,
+                        (z + terrainOffsetZ) * noiseScale
+                    );
+
+                    if      (terrainNoise < tN)  plan[x, z] = TileType.SpeedLimited;
+                    else if (terrainNoise < tNS) plan[x, z] = TileType.Asphalt;
+                    else                         plan[x, z] = TileType.Slippery;
+                }
+            }
+        }
+        return plan;
+    }
+
+    // Loads a random prebaked map exported by Map Gen/voronoi_curved.py or voronoi_highways.py
+    // (see VoronoiCodeToType for the code→TileType mapping) from Resources/Maps/VoronoiTrain, or
+    // Maps/VoronoiVal when useValidationMaps is set. Falls back to an all-Asphalt plan (logging a
+    // warning) if no maps are bundled or a file doesn't parse cleanly against the current
+    // gridSize - this deliberately never throws, since a bad map file shouldn't crash an HPC
+    // training run mid-episode.
+    TileType[,] BuildVoronoiPlan()
+    {
+        var plan = new TileType[gridSize, gridSize];
+
+        string resourceFolder = useValidationMaps ? "Maps/VoronoiVal" : "Maps/VoronoiTrain";
+        if (useValidationMaps)
+        {
+            if (voronoiValMapAssets == null)
+                voronoiValMapAssets = Resources.LoadAll<TextAsset>(resourceFolder);
+        }
+        else
+        {
+            if (voronoiTrainMapAssets == null)
+                voronoiTrainMapAssets = Resources.LoadAll<TextAsset>(resourceFolder);
+        }
+        TextAsset[] mapAssets = useValidationMaps ? voronoiValMapAssets : voronoiTrainMapAssets;
+
+        if (mapAssets == null || mapAssets.Length == 0)
+        {
+            Debug.LogWarning($"[GridManager] mapSource=Voronoi but no maps found under " +
+                $"Resources/{resourceFolder} - falling back to an all-Asphalt grid.");
+            FillAllAsphalt(plan);
+            return plan;
+        }
+
+        var asset = mapAssets[Random.Range(0, mapAssets.Length)];
+        string[] rows = asset.text.Trim().Split('\n');
+        if (rows.Length != gridSize)
+        {
+            Debug.LogWarning($"[GridManager] Voronoi map '{asset.name}' has {rows.Length} rows, " +
+                $"expected gridSize={gridSize} - falling back to an all-Asphalt grid. Was it " +
+                "exported with a matching --gridsize?");
+            FillAllAsphalt(plan);
+            return plan;
+        }
+
+        for (int z = 0; z < gridSize; z++)
+        {
+            string[] cols = rows[z].Trim().Split(' ');
+            if (cols.Length != gridSize)
+            {
+                Debug.LogWarning($"[GridManager] Voronoi map '{asset.name}' row {z} has " +
+                    $"{cols.Length} cells, expected gridSize={gridSize} - falling back to an " +
+                    "all-Asphalt grid.");
+                FillAllAsphalt(plan);
+                return plan;
+            }
+
+            for (int x = 0; x < gridSize; x++)
+            {
+                if (!int.TryParse(cols[x], out int code) || code < 0 || code >= VoronoiCodeToType.Length)
+                {
+                    Debug.LogWarning($"[GridManager] Voronoi map '{asset.name}' has an invalid " +
+                        $"cell code '{cols[x]}' at ({x},{z}) - treating as Gravel.");
+                    code = 0;
+                }
+                plan[x, z] = VoronoiCodeToType[code];
+            }
+        }
+        return plan;
+    }
+
+    void FillAllAsphalt(TileType[,] plan)
+    {
+        for (int x = 0; x < gridSize; x++)
+            for (int z = 0; z < gridSize; z++)
+                plan[x, z] = TileType.Asphalt;
+    }
+
     Material MaterialForType(TileType type)
     {
         switch (type)
         {
-            case TileType.Normal:       return normalMaterial;
             case TileType.Slippery:     return slipperyMaterial;
             case TileType.SpeedLimited: return speedLimitedMaterial;
             case TileType.Terminal:     return terminalMaterial;
-            default:                    return normalMaterial;
+            case TileType.Asphalt:      return asphaltMaterial;
+            case TileType.Gravel:       return gravelMaterial;
+            default:                    return asphaltMaterial;
         }
     }
 
@@ -154,7 +284,7 @@ public class GridManager : MonoBehaviour
     public TileType GetTileAt(Vector3 worldPos)
     {
         var grid = tileTypes;
-        if (grid == null) return TileType.Normal;
+        if (grid == null) return TileType.Asphalt;
         var c = WorldToGrid(worldPos);
         if (c.x < 0 || c.x >= grid.GetLength(0) || c.y < 0 || c.y >= grid.GetLength(1))
             return TileType.Terminal; // off the map — treated as a hazard so the agent can see/avoid the edge

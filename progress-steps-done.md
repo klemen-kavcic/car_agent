@@ -109,3 +109,7 @@
     - checked if observations and inputs are in correct order
     - hopefully eliminated the unnacounted for episodes, the counter counted just action steps not all of them, i think all of the unnacounted for were timeouts
     - make random seeds
+    
+0802
+    - added code for testing partially made models
+    - started the new maps
