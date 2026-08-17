@@ -98,6 +98,7 @@ public class CarAgent : Agent
     private float rwTimePenalty;
     private float rwCheckpoint;
     private float rwTerminalPenalty;
+    private float rwMaxStepPenalty;
     private float rwTimePenaltyGrowth;
 
     // Idle penalty: escalating cost for standing still too long, on top of the flat time
@@ -187,6 +188,21 @@ public class CarAgent : Agent
         }
         rwTerminalPenalty = terminalPenaltyEscalated ? terminalPenaltyEscalatedValue : terminalPenaltyBase;
 
+        // Applied once, the step a MaxStepReached timeout fires (see FixedUpdate) - on top of,
+        // not instead of, the flat per-step reward_time_penalty/idle penalty already accumulated
+        // over the episode. 0 by default (no behavior change) unless set by hand or pushed
+        // adaptively by trainer_controller_patched.py's lagrangian_maxstep_* mechanism.
+        rwMaxStepPenalty = ep.GetWithDefault("reward_maxstep_penalty", 0.0f);
+
+        // Episode time budget (built-in Agent.MaxStep, read fresh each episode). Defaults to
+        // 5000, matching the Inspector's static value, so leaving max_step_budget out of the yaml
+        // changes nothing. Works as a plain fixed override on its own; trainer_controller_patched
+        // .py's adaptive_step_budget_enabled mechanism can additionally drive it - see
+        // car_agent.yaml's "Adaptive step-time budget" block, which is NOT the same technique as
+        // the Lagrangian-style penalties above despite living in the same neighbourhood (it
+        // adjusts the episode's actual task structure, not a reward coefficient).
+        MaxStep = Mathf.RoundToInt(ep.GetWithDefault("max_step_budget", 5000f));
+
         rwTimePenalty = timePenaltyBase;
         rwCheckpoint  = checkpointRewardBase;
 
@@ -246,6 +262,7 @@ public class CarAgent : Agent
     {
         if (MaxStep > 0 && StepCount >= MaxStep - 1 && !episodeOutcomeLogged)
         {
+            AddReward(rwMaxStepPenalty);
             Academy.Instance.StatsRecorder.Add("Custom/MaxStepReached", 1.0f, StatAggregationMethod.Sum);
             episodeOutcomeLogged = true;
             // The Academy ends this episode automatically right after this step (no explicit
@@ -290,8 +307,21 @@ public class CarAgent : Agent
     // Side, then None forever after (full-random placement, normal tile mix resumes).
     BootstrapStage DetermineBootstrapStage()
     {
-        if (forceStageInEditor) return editorForcedStage;
-        if (disableCurriculumInEditor) return BootstrapStage.None;
+        // Guarded by Application.isEditor so a stray true value left on the Inspector can never
+        // silently reach a real build again - these two are documented as editor-only testing
+        // conveniences (see their tooltips), but neither was actually gated on being in the
+        // Editor, so a scene saved with forceStageInEditor=true baked it into every build,
+        // permanently forcing every episode (training AND eval) into a single fixed bootstrap
+        // stage regardless of bootstrap_curriculum_enabled - this was live in the checked-in
+        // scene (forceStageInEditor=1, editorForcedStage=3/DeadEnd) and explains the CSV symptoms
+        // that led here: 100% Custom/TileTimeGravel=0 (forceAllNormal blanking the whole grid),
+        // ~14-16 tick average episodes (crashing out of the walled DeadEnd pocket), and 0% goal
+        // rate even at ~13M/30M training steps.
+        if (Application.isEditor)
+        {
+            if (forceStageInEditor) return editorForcedStage;
+            if (disableCurriculumInEditor) return BootstrapStage.None;
+        }
 
         var ep = Academy.Instance.EnvironmentParameters;
         if (ep.GetWithDefault("bootstrap_curriculum_enabled", 1f) < 0.5f) return BootstrapStage.None;

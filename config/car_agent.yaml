@@ -90,6 +90,82 @@ environment_parameters:
   terminal_penalty_escalation_step: 10000000
   terminal_penalty_escalated_value: -15.0
 
+  # --- Adaptive Lagrangian-style penalty (replaces manual reward_terminal_penalty tuning) -----
+  # Instead of a fixed hand-picked reward_terminal_penalty (see the PENALTY_MODE grid search in
+  # hpc/train_grid.sh), lambda self-tunes toward lagrangian_target_crash_rate via dual ascent -
+  # every summary window (see stats_patched.py's LATEST_CRASH_RATE /
+  # trainer_controller_patched.py's _update_lagrangian_penalty):
+  #   lambda <- clamp(lambda + lagrangian_lambda_lr * (measured_crash_rate - target), 0, lambda_max)
+  # then pushed to Unity as reward_terminal_penalty = -lambda, via the exact same
+  # EnvironmentParameters wire reward_terminal_penalty already reads every episode
+  # (carAgent.cs UpdateRewardWeights) - no C# changes needed, no cost critic, this does NOT touch
+  # PPO's advantage calculation. This is an adaptive-penalty APPROXIMATION of Lagrangian PPO, not
+  # the textbook dual-critic method - be precise about that distinction in any thesis writeup.
+  #
+  # target_crash_rate MUST be a realistic target for this task, not an aspirational one - it's not
+  # a hard cap, it's the rate the *unconstrained* baseline policy naturally converges to under
+  # dual ascent. Set it far below what a functional policy can actually achieve (5% was tried
+  # against a baseline that converges to ~15-20% during training) and lambda has nothing to
+  # equilibrate against: rate > target on almost every summary window forever, so lambda climbs
+  # without bound, the resulting penalty comes to dwarf reward_goal, and the policy's only rational
+  # response is to stop attempting the task at all (observed: lambda reached 100-500+, policy
+  # collapsed to ~0% goal rate on grid runs 3-5). lambda_max is now also clamped (previously only
+  # floored at 0) as a hard backstop against this even with a still-too-aggressive target.
+  #
+  # Also gated to only start once the bootstrap curriculum (bootstrap_stage_*_steps below)
+  # finishes: during bootstrap the crash rate reflects artificial drills (esp. DeadEnd's walled
+  # reverse-out pocket), not the real task, and is naturally far higher than any sane target -
+  # letting lambda react to that early noise was part of what caused the runaway climb above.
+  #
+  # MUTUALLY EXCLUSIVE with terminal_penalty_escalation_enabled above - both write
+  # reward_terminal_penalty, so enabling both means they fight over the same value. Requires
+  # trainer_controller_patched.py to be bound over mlagents/trainers/trainer_controller.py (same
+  # apptainer --bind pattern already used for stats_patched.py) - without that bind, this whole
+  # block is silently inert (samplers.get("lagrangian_penalty_enabled") never gets read by
+  # anything). Set lagrangian_penalty_enabled to 0 to disable entirely (default off).
+  lagrangian_penalty_enabled: 0
+  lagrangian_target_crash_rate: 0.15
+  lagrangian_lambda_init: 5.0
+  lagrangian_lambda_lr: 10.0
+  lagrangian_lambda_max: 30.0
+
+  # --- Adaptive Lagrangian-style penalty for MaxStepReached (timeout, no crash, no goal) -------
+  # Same dual-ascent mechanism as lagrangian_penalty_* above, fully independent lambda/target/lr,
+  # pushed as reward_maxstep_penalty instead of reward_terminal_penalty. Unlike the crash penalty,
+  # this DID need a small C# change (carAgent.cs FixedUpdate now applies reward_maxstep_penalty
+  # the step MaxStepReached fires - previously a timeout got no penalty beyond whatever flat
+  # reward_time_penalty/idle penalty had already accumulated over the episode). Same realistic-
+  # target and lambda_max caveats as lagrangian_target_crash_rate above apply here too. Set
+  # lagrangian_maxstep_enabled to 0 to disable entirely (default off).
+  lagrangian_maxstep_enabled: 0
+  lagrangian_maxstep_target_rate: 0.15
+  lagrangian_maxstep_lambda_init: 2.0
+  lagrangian_maxstep_lambda_lr: 10.0
+  lagrangian_maxstep_lambda_max: 30.0
+  reward_maxstep_penalty: 0.0
+
+  # --- Adaptive step-time budget (self-paced curriculum, NOT a Lagrangian penalty) -------------
+  # Agent.MaxStep (carAgent.cs UpdateRewardWeights - see max_step_budget below) adjusts itself
+  # based on the same maxstep-timeout rate lagrangian_maxstep_* tracks above, but this is a
+  # different technique: it changes the episode's actual time budget/task structure, not a reward
+  # coefficient - keep it conceptually separate from the Lagrangian-style penalties above in any
+  # writeup even though the update-rule shape looks similar:
+  #   max_step_budget <- clamp(max_step_budget + adaptive_step_budget_lr *
+  #                             (maxstep_rate - lagrangian_maxstep_target_rate), min, max)
+  # i.e. too many timeouts -> more time given; comfortably under budget -> tightened for
+  # efficiency. Changing episode length mid-training is more disruptive than a reward tweak (the
+  # value function implicitly learns under whatever horizon it's been trained on), hence the
+  # min/max clamp - this can never shrink or grow unboundedly. adaptive_step_budget_lr=2000.0 is
+  # an unvalidated starting guess (same caveat as lagrangian_lambda_lr) - calibrate against real
+  # maxstep-rate variance from a smoke test. Set adaptive_step_budget_enabled to 0 to disable
+  # entirely (default off); max_step_budget still works as a plain fixed override of the Agent's
+  # Inspector-set MaxStep (5000) even with the adaptive mechanism off.
+  adaptive_step_budget_enabled: 0
+  max_step_budget: 5000
+  adaptive_step_budget_lr: 2000.0
+  adaptive_step_budget_min: 2500
+  adaptive_step_budget_max: 8000
+
   # --- Goal reward escalation (one-time step-up, not a gradual ramp) ---
   # Same mechanism as terminal_penalty_escalation above, applied to reward_goal instead: once
   # GLOBAL training step goal_reward_escalation_step is reached, reward_goal switches permanently

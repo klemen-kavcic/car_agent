@@ -1094,7 +1094,7 @@ MonoBehaviour:
   ring1FrontPoints: 3
   ring2FrontPoints: 5
   ring3FrontPoints: 7
-  frontHalfAngleDegrees: 50
+  frontHalfAngleDegrees: 60
   ring1RearPoints: 3
   ring2RearPoints: 1
   ring3RearPoints: 1
@@ -1143,7 +1143,7 @@ MonoBehaviour:
   goalAreaMin: {x: -45, y: -45}
   goalAreaMax: {x: 45, y: 45}
   disableCurriculumInEditor: 1
-  forceStageInEditor: 1
+  forceStageInEditor: 0
   editorForcedStage: 3
   currentBootstrapStageDisplay: None
   currentEpisodeReward: 0
@@ -1213,8 +1213,8 @@ MonoBehaviour:
   normalTopSpeedMS: 25
   grassSpeedFraction: 0.02
   speedLimitBrakeTorque: 100000
-  gravelSpeedFraction: 0.65
-  gravelFrictionMultiplier: 0.75
+  gravelSpeedFraction: 0.5
+  gravelFrictionMultiplier: 0.65
   reverseSpeedFraction: 0.15
   steerDeltaInput: 0
   accelerationInput: 0

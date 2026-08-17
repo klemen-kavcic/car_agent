@@ -16,6 +16,15 @@ from mlagents.torch_utils.globals import get_rank
 
 logger = get_logger(__name__)
 
+# Updated by ConsoleWriter.write_stats every summary window from the same Custom/GoalReached
+# /Terminated/MaxStepReached counts it already parses below - trainer_controller_patched.py reads
+# these (via `import mlagents.trainers.stats as stats_module; stats_module.LATEST_CRASH_RATE`, NOT
+# `from ... import LATEST_CRASH_RATE`, since the latter would only snapshot the value at import
+# time and never see updates) to drive the two independent Lagrangian dual-ascent penalty updates
+# (crash and maxstep-timeout). None until the first window with at least one completed episode.
+LATEST_CRASH_RATE: Optional[float] = None
+LATEST_MAXSTEP_RATE: Optional[float] = None
+
 
 def _dict_to_str(param_dict: Dict[str, Any], num_tabs: int) -> str:
     """
@@ -216,6 +225,19 @@ class ConsoleWriter(StatsWriter):
                 log_info.append(f"Terminated: {int(values['Custom/Terminated'].sum)}")
             if "Custom/MaxStepReached" in values:
                 log_info.append(f"MaxStep: {int(values['Custom/MaxStepReached'].sum)}")
+            # Cache this window's crash/maxstep rates for trainer_controller_patched.py's two
+            # independent Lagrangian dual-ascent penalty updates - see LATEST_CRASH_RATE/
+            # LATEST_MAXSTEP_RATE above. Computed from the same three outcome stats just parsed
+            # above; skipped if none were reported this window (e.g. no episodes completed yet)
+            # rather than caching a division-by-zero/stale value.
+            goals = int(values["Custom/GoalReached"].sum) if "Custom/GoalReached" in values else 0
+            terminated = int(values["Custom/Terminated"].sum) if "Custom/Terminated" in values else 0
+            maxstep = int(values["Custom/MaxStepReached"].sum) if "Custom/MaxStepReached" in values else 0
+            outcomes = goals + terminated + maxstep
+            if outcomes > 0:
+                global LATEST_CRASH_RATE, LATEST_MAXSTEP_RATE
+                LATEST_CRASH_RATE = terminated / outcomes
+                LATEST_MAXSTEP_RATE = maxstep / outcomes
             if "Custom/UntrackedEpisodeEnd" in values:
                 log_info.append(f"Untracked: {int(values['Custom/UntrackedEpisodeEnd'].sum)}")
             if "Custom/NumEnvs" in values:
