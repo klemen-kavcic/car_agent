@@ -59,3 +59,10 @@ hpc/**
 !hpc/**/*.png
 !hpc/**/*.jpg
 !hpc/**/*.jpeg
+
+# progress0802/ predates the hpc/-wide whitelist above and had model checkpoints and full
+# run logs committed directly - same "keep the analysis, not the training artifacts" rule,
+# just as a blacklist here since the rest of the folder (notebooks/csv/png) stays trackable.
+progress0802/**/*.onnx
+progress0802/**/*.pt
+progress0802/**/*.log
