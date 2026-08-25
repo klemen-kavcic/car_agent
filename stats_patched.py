@@ -20,10 +20,21 @@ logger = get_logger(__name__)
 # /Terminated/MaxStepReached counts it already parses below - trainer_controller_patched.py reads
 # these (via `import mlagents.trainers.stats as stats_module; stats_module.LATEST_CRASH_RATE`, NOT
 # `from ... import LATEST_CRASH_RATE`, since the latter would only snapshot the value at import
-# time and never see updates) to drive the two independent Lagrangian dual-ascent penalty updates
-# (crash and maxstep-timeout). None until the first window with at least one completed episode.
+# time and never see updates) to drive the Lagrangian dual-ascent crash-penalty update
+# (LATEST_CRASH_RATE) and the adaptive step-time budget (LATEST_MAXSTEP_RATE) - see
+# trainer_controller_patched.py's _update_lagrangian_penalties / _update_adaptive_step_budget.
+# None until the first window with at least one completed episode.
 LATEST_CRASH_RATE: Optional[float] = None
 LATEST_MAXSTEP_RATE: Optional[float] = None
+
+# Mean of Custom/ForwardLineTerminalExposure (carAgent.cs's dense terminal-avoidance shaping -
+# see its own comment) across this summary window's decision steps - StatsSummary.mean already
+# averages over every .Add() call regardless of aggregation method, so no separate step-count stat
+# is needed. Drives sensor_terminal_lagrangian_*'s own independent dual-ascent update in
+# trainer_controller_patched.py - deliberately NOT the same target as LATEST_CRASH_RATE, since the
+# shaping reward itself telescopes to ~0 over a full approach/retreat and so can't measure ongoing
+# risk exposure the way an episode-outcome rate can. None until at least one decision step has run.
+LATEST_SENSOR_TERMINAL_EXPOSURE: Optional[float] = None
 
 
 def _dict_to_str(param_dict: Dict[str, Any], num_tabs: int) -> str:
@@ -238,6 +249,10 @@ class ConsoleWriter(StatsWriter):
                 global LATEST_CRASH_RATE, LATEST_MAXSTEP_RATE
                 LATEST_CRASH_RATE = terminated / outcomes
                 LATEST_MAXSTEP_RATE = maxstep / outcomes
+            if "Custom/ForwardLineTerminalExposure" in values:
+                global LATEST_SENSOR_TERMINAL_EXPOSURE
+                LATEST_SENSOR_TERMINAL_EXPOSURE = float(values["Custom/ForwardLineTerminalExposure"].mean)
+                log_info.append(f"FwdTerminalExposure: {LATEST_SENSOR_TERMINAL_EXPOSURE:0.3f}")
             if "Custom/UntrackedEpisodeEnd" in values:
                 log_info.append(f"Untracked: {int(values['Custom/UntrackedEpisodeEnd'].sum)}")
             if "Custom/NumEnvs" in values:

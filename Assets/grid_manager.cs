@@ -59,6 +59,15 @@ public class GridManager : MonoBehaviour
         "ML-Agents dependency and doesn't know why - same pattern as forceAllNormal above.")]
     public bool useValidationMaps = false;
 
+    [Tooltip("When >= 0 (set by CarAgent from the fixed_map_index environment parameter, only " +
+        "while fixed_eval_enabled is set), forces BuildVoronoiPlan() to load this exact index " +
+        "from the active mapAssets array (train or val, per useValidationMaps) instead of picking " +
+        "randomly - used by eval_trajectories.py so the same fixed map is reloaded on every " +
+        "episode/rollout. -1 (default) preserves the existing random behavior. Falls back to " +
+        "random (with a warning) if out of range for the currently-loaded array. Same " +
+        "GridManager-doesn't-know-why pattern as useValidationMaps above.")]
+    public int forcedMapIndex = -1;
+
     // Cached separately on first use per set, so every Regenerate() doesn't re-hit
     // Resources.LoadAll, and flipping useValidationMaps mid-run doesn't force a reload of the set
     // that's already cached.
@@ -185,6 +194,17 @@ public class GridManager : MonoBehaviour
         return plan;
     }
 
+    // Resources.LoadAll's return order isn't formally guaranteed by Unity across platforms/builds.
+    // Sorting by asset name here makes forcedMapIndex mean something stable and predictable
+    // (matching whatever sorted-filename order eval_trajectories.py's candidate generator used),
+    // instead of relying on LoadAll's incidental order happening to match.
+    static TextAsset[] SortedMapAssets(string resourceFolder)
+    {
+        var assets = Resources.LoadAll<TextAsset>(resourceFolder);
+        System.Array.Sort(assets, (a, b) => string.CompareOrdinal(a.name, b.name));
+        return assets;
+    }
+
     // Loads a random prebaked map exported by Map Gen/voronoi_curved.py or voronoi_highways.py
     // (see VoronoiCodeToType for the code→TileType mapping) from Resources/Maps/VoronoiTrain, or
     // Maps/VoronoiVal when useValidationMaps is set. Falls back to an all-Asphalt plan (logging a
@@ -199,12 +219,12 @@ public class GridManager : MonoBehaviour
         if (useValidationMaps)
         {
             if (voronoiValMapAssets == null)
-                voronoiValMapAssets = Resources.LoadAll<TextAsset>(resourceFolder);
+                voronoiValMapAssets = SortedMapAssets(resourceFolder);
         }
         else
         {
             if (voronoiTrainMapAssets == null)
-                voronoiTrainMapAssets = Resources.LoadAll<TextAsset>(resourceFolder);
+                voronoiTrainMapAssets = SortedMapAssets(resourceFolder);
         }
         TextAsset[] mapAssets = useValidationMaps ? voronoiValMapAssets : voronoiTrainMapAssets;
 
@@ -216,7 +236,28 @@ public class GridManager : MonoBehaviour
             return plan;
         }
 
-        var asset = mapAssets[Random.Range(0, mapAssets.Length)];
+        int mapIndex = Random.Range(0, mapAssets.Length);
+        if (forcedMapIndex >= 0)
+        {
+            if (forcedMapIndex < mapAssets.Length)
+            {
+                mapIndex = forcedMapIndex;
+            }
+            else
+            {
+                Debug.LogWarning($"[GridManager] forcedMapIndex={forcedMapIndex} out of range for " +
+                    $"{mapAssets.Length} maps in Resources/{resourceFolder} - falling back to random.");
+            }
+        }
+        var asset = mapAssets[mapIndex];
+        if (forcedMapIndex >= 0)
+        {
+            // eval_trajectories.py's candidate generator assigns map_index by the SAME sorted-by-
+            // name order SortedMapAssets() below produces, so index N here should always resolve
+            // to the same map that generator meant - logged every time so a human can cross-check
+            // (see the plan's verification step) rather than trusting that silently.
+            Debug.Log($"[GridManager] forcedMapIndex={forcedMapIndex} resolved to map '{asset.name}'.");
+        }
         string[] rows = asset.text.Trim().Split('\n');
         if (rows.Length != gridSize)
         {

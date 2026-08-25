@@ -74,22 +74,26 @@ class TrainerController:
         torch_utils.torch.manual_seed(training_seed)
         self.rank = get_rank()
 
-        # Adaptive Lagrangian-style penalty state (see car_agent.yaml's lagrangian_* /
-        # lagrangian_maxstep_* keys) - one independent (lambda, last-consumed-rate) pair per
-        # constraint, keyed by constraint name. lambda starts uninitialised (None) so the first
-        # update seeds it from that constraint's lambda_init rather than some arbitrary default;
-        # last-consumed-rate is tracked so a lesson-change-free, data-free loop iteration doesn't
-        # redundantly recompute and re-push the same value every single iteration between summary
-        # windows.
-        self._lagrangian_lambda: Dict[str, Optional[float]] = {"crash": None, "maxstep": None}
+        # Adaptive Lagrangian-style penalty state (see car_agent.yaml's lagrangian_*/
+        # sensor_terminal_lagrangian_* keys) - one independent (lambda, last-consumed-rate) pair
+        # per constraint, keyed by constraint name. lambda starts uninitialised (None) so the
+        # first update seeds it from that constraint's lambda_init rather than some arbitrary
+        # default; last-consumed-rate is tracked so a lesson-change-free, data-free loop iteration
+        # doesn't redundantly recompute and re-push the same value every single iteration between
+        # summary windows. "maxstep" (lagrangian_maxstep_*) was removed, it never converged to a
+        # useful policy. "sensor_terminal" drives carAgent.cs's dense forward-sensor terminal-
+        # avoidance shaping (see CarSensor.isForwardLineSensor) - deliberately its OWN constraint,
+        # not sharing "crash"'s lambda, since it targets a different metric (mean per-step sensor
+        # exposure, not episode-outcome crash rate - the shaping reward itself telescopes to ~0
+        # over a full approach/retreat, so it can't be used as its own target).
+        self._lagrangian_lambda: Dict[str, Optional[float]] = {"crash": None, "sensor_terminal": None}
         self._lagrangian_last_consumed_rate: Dict[str, Optional[float]] = {
-            "crash": None,
-            "maxstep": None,
+            "crash": None, "sensor_terminal": None,
         }
         # One-time "just activated" log per constraint, once curr_step first clears the bootstrap
         # gate (see _bootstrap_total_steps) - lets a run confirm from the log alone that Lagrangian
         # actually started, without having to cross-reference step counts by hand.
-        self._lagrangian_gate_logged: Dict[str, bool] = {"crash": False, "maxstep": False}
+        self._lagrangian_gate_logged: Dict[str, bool] = {"crash": False, "sensor_terminal": False}
 
         # Adaptive step-time budget state (car_agent.yaml's adaptive_step_budget_* keys) - kept
         # separate from _lagrangian_lambda/_lagrangian_last_consumed_rate above despite the
@@ -352,22 +356,22 @@ class TrainerController:
         )
         self._update_lagrangian_constraint(
             env_manager,
-            constraint_name="maxstep",
-            enabled_key="lagrangian_maxstep_enabled",
-            target_key="lagrangian_maxstep_target_rate",
-            lambda_init_key="lagrangian_maxstep_lambda_init",
-            lambda_lr_key="lagrangian_maxstep_lambda_lr",
-            lambda_max_key="lagrangian_maxstep_lambda_max",
-            latest_rate=stats_module.LATEST_MAXSTEP_RATE,
-            penalty_param_name="reward_maxstep_penalty",
+            constraint_name="sensor_terminal",
+            enabled_key="sensor_terminal_lagrangian_enabled",
+            target_key="sensor_terminal_target_exposure",
+            lambda_init_key="sensor_terminal_lambda_init",
+            lambda_lr_key="sensor_terminal_lambda_lr",
+            lambda_max_key="sensor_terminal_lambda_max",
+            latest_rate=stats_module.LATEST_SENSOR_TERMINAL_EXPOSURE,
+            penalty_param_name="sensor_terminal_penalty_lambda",
             curr_step=curr_step,
         )
 
     # Self-paced curriculum on Agent.MaxStep (carAgent.cs reads max_step_budget every episode) -
-    # NOT a Lagrangian penalty despite reusing lagrangian_maxstep_target_rate as its target and a
+    # NOT a Lagrangian penalty despite reusing maxstep_target_rate as its target and a
     # similar-looking update rule: this adjusts the episode's actual time budget/task structure,
     # not a reward coefficient. Clamped both directions (adaptive_step_budget_min/max), unlike the
-    # penalty lambdas which only floor at 0 - a step budget can't be allowed to grow unboundedly
+    # penalty lambda which only floors at 0 - a step budget can't be allowed to grow unboundedly
     # either. No-ops entirely if adaptive_step_budget_enabled isn't set.
     def _update_adaptive_step_budget(self, env_manager: EnvManager, curr_step: float) -> None:
         samplers = self.param_manager.get_current_samplers()
@@ -390,7 +394,7 @@ class TrainerController:
             return
         self._step_budget_last_consumed_rate = rate
 
-        target = samplers["lagrangian_maxstep_target_rate"].value
+        target = samplers["maxstep_target_rate"].value
         lr = samplers["adaptive_step_budget_lr"].value
         lo = samplers["adaptive_step_budget_min"].value
         hi = samplers["adaptive_step_budget_max"].value

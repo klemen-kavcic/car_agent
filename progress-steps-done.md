@@ -113,3 +113,35 @@
 0802
     - added code for testing partially made models
     - started the new maps
+    - generated pool of train and eval maps
+    - implemented changeable penatly for termination, for max step and adaptive max step
+    - lagrangian for termination the only one that has better results
+    - max step lagrangian has significantly worse results - remove it
+    - adaptive max step doesnt show any improvements - removed
+    - lagrangian for termination stays
+    - added stat for how much time agent spends on a given surface (problem for slow surfaces - more time)
+    
+
+0821
+    - added stat how many times it switches surface on the map
+    - added std deviation that was missing before
+    - removed the two lagrangians that did not work
+    - added 10 fixed maps with fixed start/end to compare the different trajectories
+    how wide is the road?
+
+
+ this is essentially potential-based reward shaping (Ng, Harada & Russell 1999): define a "danger potential" Φ(s) = (terminal sensors currently triggered)/7, and reward the change in it each step (−ΔΦ). That framing matters because it's the one variant of reward shaping that's provably policy-invariant — a full round trip (approach then fully retreat) always nets to exactly zero, no matter how many steps it takes or how the car oscillates in between, since the intermediate terms telescope away
+
+
+ Yes — here's exactly how a size gets computed, so you can verify it against what you're seeing:
+
+Offline (export_sensor_weights.py), for sensor i sensing tile type T: value = ||W_first_layer[:, i's 5 columns] · normalized_onehot(T)||₂ — the L2 norm of that sensor's contribution to all 128 first-hidden-layer units, given it's reading T right now. That's the raw number sitting in the JSON's values array.
+Live (SensorWeightOverlay.Update()): looks up that sensor's value for its current reading, normalizes it against max_value — the single largest entry across the whole table (all 24 sensors × all 5 possible tile types = 120 numbers) — giving a 0–1 fraction t.
+diameter = lerp(minDotRadius=3, maxDotRadius=22, t) * 2.
+For your loaded checkpoint, max_value = 6.4600. So a dot at max size means that (sensor, currently-sensed-tile) combination is at or near the single strongest first-layer pull anywhere in this network — not an absolute physical unit, just relative to this checkpoint's own biggest entry. Two things worth knowing when judging "does this look right":
+
+Sizes are relative to this one checkpoint's table, not comparable across different checkpoints — a "big" dot in one export isn't necessarily the same raw value as a "big" dot in another.
+If several sensors look similarly sized, that's plausible, not necessarily a bug — many forward sensors are likely reading the same tile type (Asphalt) simultaneously, so they're all looking up the same handful of table entries.
+To actually verify a specific dot rather than eyeball it: open Assets/CarAgent.sensor_weights.json — it's flat, values[sensor_index * 5 + tile_type_index] (tile_type order: Slippery=0, SpeedLimited=1, Terminal=2, Asphalt=3, Gravel=4). Pick a sensor, note what color it's showing (= what tile it's reading), look up that entry, and check it's proportionally where you'd expect relative to max_value=6.46.
+
+If most values cluster tightly and the dots end up hard to tell apart visually, I can switch the size mapping from linear to something like sqrt(t) to spread out the low end — want me to add that, or does the current spread look fine?

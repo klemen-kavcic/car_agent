@@ -15,12 +15,37 @@ actions, so the same numbers are also visible live in TensorBoard during ordinar
 
 One CSV row is written per checkpoint (per --action-mode, if --action-mode=both):
     run_id, maps, action_mode, step, episodes, mean_reward, std_reward,
-    goal_rate, terminated_rate, maxstep_rate, mean_episode_length,
+    goal_rate, terminated_rate, maxstep_rate,
+    goal_rate_std, terminated_rate_std, maxstep_rate_std,
+    mean_episode_length, std_episode_length,
     time_frac_slippery, time_frac_speedlimited, time_frac_terminal,
-    time_frac_asphalt, time_frac_gravel
+    time_frac_asphalt, time_frac_gravel,
+    visits_per_episode_slippery, visits_per_episode_speedlimited, visits_per_episode_terminal,
+    visits_per_episode_asphalt, visits_per_episode_gravel,
+    episode_tile_time_std_slippery, episode_tile_time_std_speedlimited,
+    episode_tile_time_std_terminal, episode_tile_time_std_asphalt, episode_tile_time_std_gravel,
+    episode_tile_visits_std_slippery, episode_tile_visits_std_speedlimited,
+    episode_tile_visits_std_terminal, episode_tile_visits_std_asphalt, episode_tile_visits_std_gravel
 The time_frac_* columns are the fraction of decision steps spent on each tile type - e.g. a
 policy that's actually learned to favour roads should show most of its time on asphalt rather
-than gravel/grass/ice, regardless of what's directly ahead of it.
+than gravel/grass/ice, regardless of what's directly ahead of it. time_frac_* is biased by how
+fast the car moves on each surface, though - Slippery/Gravel inherently take longer to cross than
+Asphalt at the same crossing frequency, so a slow surface racks up more time just by being slow.
+visits_per_episode_* counts genuine surface *changes* instead (including the episode's starting
+tile) divided by episode count - how many times each surface was crossed onto per episode,
+independent of how long the car then lingered there.
+
+*_std columns (all additive, none change what any existing column measures):
+    - goal_rate_std/terminated_rate_std/maxstep_rate_std: sqrt(p*(1-p)) for rate p - the std of a
+      per-episode 0/1 outcome indicator, the binomial analogue of std_reward/std_episode_length.
+    - std_episode_length: same population-std treatment as std_reward, just for episode length.
+    - episode_tile_time_std_*/episode_tile_visits_std_*: std ACROSS EPISODES of the raw per-episode
+      step-count/visit-count on that tile (same units as std_episode_length - NOT a std of the
+      time_frac_*/visits_per_episode_* fraction/mean, which stay pooled-window quantities exactly
+      as before). Sourced from carAgent.cs's Custom/EpisodeTileTime<Type>/
+      Custom/EpisodeTileVisit<Type>, reported once per episode (see OnEpisodeBegin there) alongside
+      the existing per-step Custom/TileTime<Type>/Custom/TileVisit<Type> this script already read -
+      requires a rebuilt binary to appear (new StatsRecorder keys), same as visits_per_episode_*.
 
 Under mapSource=Voronoi, --maps (default 'val') selects Resources/Maps/VoronoiVal - a set of
 maps never seen during training - via the use_validation_maps environment parameter, so results
@@ -99,6 +124,56 @@ STOCHASTIC_DISCRETE_OUTPUT = "discrete_actions"
 # --max-steps-per-checkpoint safety cap generously enough that it's never hit in normal
 # operation, even if every single requested episode happened to run to a full timeout.
 ASSUMED_MAX_EPISODE_LENGTH = 5000
+
+
+def load_completed_rows(out_path: Path, maps: str) -> set:
+    """Reads an existing --out CSV from a previous (possibly SLURM-timeout-killed) invocation
+    and returns the (step, action_mode) pairs already written for THIS --maps pool, so a re-run
+    with the same --out path resumes instead of re-evaluating every checkpoint from scratch.
+
+    Keyed on --maps too, not just (step, action_mode): the sbatch scripts run this script twice
+    per run (once for the train pool, once for val), both appending to the same eval_results.csv -
+    without the maps filter, a completed train-pool row would wrongly make the val-pool pass skip
+    that same step.
+
+    Safe to resume: each row is one independent, complete, inference-only evaluation of a frozen
+    checkpoint - nothing is carried or averaged across rows, so which process invocation wrote a
+    given row doesn't affect what it measures. The only difference a resumed process introduces is
+    that its Unity workers reseed from --seed fresh rather than continuing the original process's
+    RNG stream partway through - episodes still come from the same underlying random distribution
+    (map/spawn draws), so this changes which specific samples are drawn, not their distribution -
+    no systematic bias, i.e. no skew.
+
+    A SLURM kill can land mid-write and leave a torn final line (killed after some bytes were
+    flushed but before the row/newline completed). Detected here (a row that fails to parse into
+    every expected field) and the file truncated to drop it, so that checkpoint gets cleanly
+    re-evaluated rather than silently skipped or counted as done.
+    """
+    if not out_path.exists():
+        return set()
+    with open(out_path, newline="") as f:
+        lines = f.readlines()
+    if not lines:
+        return set()
+    completed = set()
+    good_line_count = 1  # header line is always kept as-is
+    with open(out_path, newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row.get(None) is not None or row.get("step") is None or row.get("action_mode") is None \
+                    or row.get("maps") is None:
+                log.warning(
+                    "Dropping malformed trailing row in %s (likely torn by a killed process) - "
+                    "that checkpoint will be re-evaluated.", out_path,
+                )
+                break
+            if row["maps"] == maps:
+                completed.add((int(row["step"]), row["action_mode"]))
+            good_line_count += 1
+    if good_line_count < len(lines):
+        with open(out_path, "w", newline="") as f:
+            f.writelines(lines[:good_line_count])
+    return completed
 
 
 def discover_checkpoints(run_dir: Path, behavior_name: str) -> List[Path]:
@@ -303,6 +378,13 @@ def run_checkpoint(workers: List[EvalWorker], onnx_path: Path, n_episodes: int,
     # counts (rather than averaging pre-computed per-worker rates) is the correct aggregation.
     goals = terminated = maxstep = 0
     tile_time = {t: 0.0 for t in TILE_TYPES}
+    tile_visits = {t: 0.0 for t in TILE_TYPES}
+    # Per-episode breakdowns (one list entry per episode per type, from carAgent.cs's
+    # Custom/EpisodeTileTime<Type>/Custom/EpisodeTileVisit<Type> - see the field comments in
+    # OnEpisodeBegin there) - used only to compute a std-across-episodes below; the pooled
+    # tile_time/tile_visits totals above (and everything derived from them) are unaffected.
+    episode_tile_time = {t: [] for t in TILE_TYPES}
+    episode_tile_visits = {t: [] for t in TILE_TYPES}
     for w in workers:
         stats = w.stats_channel.get_and_reset_stats()
         goals += sum(v for v, _ in stats.get("Custom/GoalReached", []))
@@ -310,8 +392,15 @@ def run_checkpoint(workers: List[EvalWorker], onnx_path: Path, n_episodes: int,
         maxstep += sum(v for v, _ in stats.get("Custom/MaxStepReached", []))
         for t in TILE_TYPES:
             tile_time[t] += sum(v for v, _ in stats.get(f"Custom/TileTime{t}", []))
+            tile_visits[t] += sum(v for v, _ in stats.get(f"Custom/TileVisit{t}", []))
+            episode_tile_time[t] += [v for v, _ in stats.get(f"Custom/EpisodeTileTime{t}", [])]
+            episode_tile_visits[t] += [v for v, _ in stats.get(f"Custom/EpisodeTileVisit{t}", [])]
     outcomes = goals + terminated + maxstep
     tile_time_total = sum(tile_time.values())
+
+    goal_rate = goals / outcomes if outcomes else float("nan")
+    terminated_rate = terminated / outcomes if outcomes else float("nan")
+    maxstep_rate = maxstep / outcomes if outcomes else float("nan")
 
     row = {
         "step": step_from_path(onnx_path),
@@ -319,14 +408,35 @@ def run_checkpoint(workers: List[EvalWorker], onnx_path: Path, n_episodes: int,
         "episodes": len(episode_rewards),
         "mean_reward": float(np.mean(episode_rewards)) if episode_rewards else float("nan"),
         "std_reward": float(np.std(episode_rewards)) if episode_rewards else float("nan"),
-        "goal_rate": goals / outcomes if outcomes else float("nan"),
-        "terminated_rate": terminated / outcomes if outcomes else float("nan"),
-        "maxstep_rate": maxstep / outcomes if outcomes else float("nan"),
+        "goal_rate": goal_rate,
+        "terminated_rate": terminated_rate,
+        "maxstep_rate": maxstep_rate,
+        # Std of a per-episode 0/1 outcome indicator, i.e. sqrt(p*(1-p)) for rate p - the binomial
+        # analogue of std_reward/std_episode_length above (population std, not a mean's standard
+        # error), computed straight from the pooled rate rather than needing per-episode outcome
+        # tracking.
+        "goal_rate_std": float(np.sqrt(goal_rate * (1 - goal_rate))) if outcomes else float("nan"),
+        "terminated_rate_std": float(np.sqrt(terminated_rate * (1 - terminated_rate))) if outcomes else float("nan"),
+        "maxstep_rate_std": float(np.sqrt(maxstep_rate * (1 - maxstep_rate))) if outcomes else float("nan"),
         "mean_episode_length": float(np.mean(episode_lengths)) if episode_lengths else float("nan"),
+        "std_episode_length": float(np.std(episode_lengths)) if episode_lengths else float("nan"),
     }
+    n_episodes = len(episode_rewards)
     for t in TILE_TYPES:
         row[f"time_frac_{t.lower()}"] = (
             tile_time[t] / tile_time_total if tile_time_total else float("nan")
+        )
+        row[f"visits_per_episode_{t.lower()}"] = (
+            tile_visits[t] / n_episodes if n_episodes else float("nan")
+        )
+        # Std across episodes of the RAW per-episode step-count/visit-count on this tile (same
+        # units as std_episode_length, i.e. not a std of the time_frac_*/visits_per_episode_*
+        # fraction/mean above - those stay pooled-window quantities exactly as before).
+        row[f"episode_tile_time_std_{t.lower()}"] = (
+            float(np.std(episode_tile_time[t])) if episode_tile_time[t] else float("nan")
+        )
+        row[f"episode_tile_visits_std_{t.lower()}"] = (
+            float(np.std(episode_tile_visits[t])) if episode_tile_visits[t] else float("nan")
         )
     return row
 
@@ -434,9 +544,21 @@ def main():
     action_modes = ["deterministic", "stochastic"] if args.action_mode == "both" else [args.action_mode]
 
     fieldnames = ["run_id", "maps", "action_mode", "step", "episodes", "mean_reward", "std_reward",
-                  "goal_rate", "terminated_rate", "maxstep_rate", "mean_episode_length"] + \
-                 [f"time_frac_{t.lower()}" for t in TILE_TYPES]
-    write_header = not out_path.exists()
+                  "goal_rate", "terminated_rate", "maxstep_rate",
+                  "goal_rate_std", "terminated_rate_std", "maxstep_rate_std",
+                  "mean_episode_length", "std_episode_length"] + \
+                 [f"time_frac_{t.lower()}" for t in TILE_TYPES] + \
+                 [f"visits_per_episode_{t.lower()}" for t in TILE_TYPES] + \
+                 [f"episode_tile_time_std_{t.lower()}" for t in TILE_TYPES] + \
+                 [f"episode_tile_visits_std_{t.lower()}" for t in TILE_TYPES]
+    completed = load_completed_rows(out_path, args.maps)
+    # size==0 case: a previous invocation was killed before even writing the header row.
+    write_header = not out_path.exists() or out_path.stat().st_size == 0
+    if completed:
+        log.info(
+            "Resuming %s - %d (step, action_mode) row(s) already present for maps=%s, will be "
+            "skipped.", out_path, len(completed), args.maps,
+        )
 
     try:
         for w in workers:
@@ -447,7 +569,12 @@ def main():
             if write_header:
                 writer.writeheader()
             for i, ckpt in enumerate(checkpoints):
+                step = step_from_path(ckpt)
                 for mode in action_modes:
+                    if (step, mode) in completed:
+                        log.info("[%d/%d] mode=%s step=%d - already done, skipping.",
+                                  i + 1, len(checkpoints), mode, step)
+                        continue
                     t0 = time.time()
                     row = run_checkpoint(workers, ckpt, args.episodes, args.max_steps_per_checkpoint, mode)
                     row["run_id"] = run_id

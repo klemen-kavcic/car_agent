@@ -57,6 +57,26 @@ public class CarSensor : MonoBehaviour
     private Vector2[] sensorOffsets;
     public TileType[] readings;
     public int SensorCount => sensorOffsets != null ? sensorOffsets.Length : 0;
+    // Read-only view for SensorWeightOverlay.cs's live layout (same array OnDrawGizmosSelected
+    // already draws from) - exposed rather than duplicated so a shape/Inspector change here is
+    // automatically reflected everywhere without any second place to keep in sync.
+    public System.Collections.ObjectModel.ReadOnlyCollection<Vector2> SensorOffsets =>
+        sensorOffsets != null ? System.Array.AsReadOnly(sensorOffsets) : null;
+
+    // The dead-ahead LINE through the fan, Fan shape only (null for Stadium/Circle, which have no
+    // ring/arc concept) - used by carAgent.cs's dense terminal-avoidance shaping (see
+    // UpdateRewardWeights/CollectObservations there). This is NOT "every front-facing point" (that
+    // would be 15 points spread across 3 arcs at the current Inspector settings) - it's just the
+    // single on-axis (angle=0) point from each front arc, plus the straight-ahead fill points
+    // between rings, which together form one straight forward-facing line at increasing distances.
+    // At the current Inspector config (front points 3/5/7, fill points 1/3) that's exactly 7 points
+    // at 3/6/9/12/15/18/21m. Built in lockstep with sensorOffsets in BuildFanOffsets() so it stays
+    // correct automatically if ring/point-count Inspector values change - never hardcode index
+    // ranges against these counts elsewhere. An arc only contributes its on-axis point when its
+    // count is odd (an even-count arc has no point exactly at angle=0); fill-line points are always
+    // on-axis by construction so they're unconditionally included.
+    public bool[] isForwardLineSensor;
+    public int ForwardLineSensorCount { get; private set; }
 
     void Awake() => BuildOffsets();
 
@@ -66,9 +86,32 @@ public class CarSensor : MonoBehaviour
 
     void BuildOffsets()
     {
-        sensorOffsets = sensorShape == Shape.Fan ? BuildFanOffsets() : BuildGridOffsets();
+        if (sensorShape == Shape.Fan)
+        {
+            sensorOffsets = BuildFanOffsets(out isForwardLineSensor);
+        }
+        else
+        {
+            sensorOffsets = BuildGridOffsets();
+            isForwardLineSensor = null;
+        }
         readings = new TileType[sensorOffsets.Length];
         currentTotalPoints = sensorOffsets.Length;
+        ForwardLineSensorCount = 0;
+        if (isForwardLineSensor != null)
+            foreach (var f in isForwardLineSensor)
+                if (f) ForwardLineSensorCount++;
+    }
+
+    // Number of isForwardLineSensor entries currently reading Terminal - 0 if this isn't a Fan
+    // sensor (isForwardLineSensor null) or readings aren't populated yet.
+    public int CountForwardLineTerminal()
+    {
+        if (readings == null || isForwardLineSensor == null) return 0;
+        int count = 0;
+        for (int i = 0; i < readings.Length; i++)
+            if (isForwardLineSensor[i] && readings[i] == TileType.Terminal) count++;
+        return count;
     }
 
     Vector2[] BuildGridOffsets()
@@ -93,20 +136,33 @@ public class CarSensor : MonoBehaviour
     // reversing only needs short-range awareness, so the rear stays cheap at every ring.
     // Default point count: 3+5+7 = 15 front + 3+3+3 = 9 rear = 24 total, plus whatever
     // pointsBetweenRing1And2/pointsBetweenRing2And3 add (0 by default).
-    Vector2[] BuildFanOffsets()
+    Vector2[] BuildFanOffsets(out bool[] isForwardLine)
     {
         var offsets = new List<Vector2>();
+        var forwardLine = new List<bool>();
         float[] distances = { ring1Distance, ring2Distance, ring3Distance };
         int[] frontCounts = { ring1FrontPoints, ring2FrontPoints, ring3FrontPoints };
         int[] rearCounts = { ring1RearPoints, ring2RearPoints, ring3RearPoints };
 
         for (int ring = 0; ring < distances.Length; ring++)
         {
+            int frontStart = offsets.Count;
             AddArc(offsets, distances[ring], frontCounts[ring], frontHalfAngleDegrees, forward: true);
+            // Only an ODD-count arc has a point exactly on-axis (angle=0) - that's the arc's
+            // middle index. An even count straddles the centerline with no point exactly on it.
+            int frontCenter = frontCounts[ring] % 2 == 1 ? frontStart + frontCounts[ring] / 2 : -1;
+            for (int i = frontStart; i < offsets.Count; i++) forwardLine.Add(i == frontCenter);
+
+            int rearStart = offsets.Count;
             AddArc(offsets, distances[ring], rearCounts[ring], rearHalfAngleDegrees, forward: false);
+            for (int i = rearStart; i < offsets.Count; i++) forwardLine.Add(false); // rear never counts as forward-line
         }
+        int fillStart = offsets.Count;
         AddStraightLine(offsets, ring1Distance, ring2Distance, pointsBetweenRing1And2);
         AddStraightLine(offsets, ring2Distance, ring3Distance, pointsBetweenRing2And3);
+        for (int i = fillStart; i < offsets.Count; i++) forwardLine.Add(true); // always on-axis by construction
+
+        isForwardLine = forwardLine.ToArray();
         return offsets.ToArray();
     }
 

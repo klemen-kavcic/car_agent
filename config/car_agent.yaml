@@ -129,29 +129,73 @@ environment_parameters:
   lagrangian_lambda_lr: 10.0
   lagrangian_lambda_max: 30.0
 
-  # --- Adaptive Lagrangian-style penalty for MaxStepReached (timeout, no crash, no goal) -------
-  # Same dual-ascent mechanism as lagrangian_penalty_* above, fully independent lambda/target/lr,
-  # pushed as reward_maxstep_penalty instead of reward_terminal_penalty. Unlike the crash penalty,
-  # this DID need a small C# change (carAgent.cs FixedUpdate now applies reward_maxstep_penalty
-  # the step MaxStepReached fires - previously a timeout got no penalty beyond whatever flat
-  # reward_time_penalty/idle penalty had already accumulated over the episode). Same realistic-
-  # target and lambda_max caveats as lagrangian_target_crash_rate above apply here too. Set
-  # lagrangian_maxstep_enabled to 0 to disable entirely (default off).
-  lagrangian_maxstep_enabled: 0
-  lagrangian_maxstep_target_rate: 0.15
-  lagrangian_maxstep_lambda_init: 2.0
-  lagrangian_maxstep_lambda_lr: 10.0
-  lagrangian_maxstep_lambda_max: 30.0
+  # --- Dense forward-sensor terminal-avoidance shaping (potential-based, Ng/Harada/Russell 1999) -
+  # ADDITIVE to lagrangian_penalty_*/reward_terminal_penalty above, not a replacement: that one
+  # only fires once, at the moment of an actual collision - this one fires every decision step the
+  # car is approaching or retreating from a Terminal tile, well before any collision happens, so it
+  # gives the policy gradient earlier than a sparse collision-only penalty can.
+  #
+  # CarSensor's Fan shape has a dead-ahead LINE running through it: the on-axis (angle=0) point of
+  # each front arc, plus the straight-ahead fill points between rings (pointsBetweenRing1And2/
+  # pointsBetweenRing2And3) - at the current Inspector config (front points 3/5/7, fill points
+  # 1/3) that's exactly 7 points at 3/6/9/12/15/18/21m (see CarSensor.isForwardLineSensor). Define
+  # Phi(s) = (of those, how many currently read Terminal) / 7 - a "danger potential" in [0, 1].
+  # Every decision step, carAgent.cs applies reward = sensor_terminal_penalty_lambda *
+  # (Phi(s_now) - Phi(s_previous)) - i.e. lambda itself is negative (same "already a penalty value"
+  # convention as reward_terminal_penalty), so an INCREASING Phi (approaching, more of the 7 points
+  # newly see Terminal) is penalized, a DECREASING Phi (retreating) is rewarded by the same amount.
+  # This form is provably policy-invariant reward shaping: because it's the CHANGE in Phi (not its
+  # absolute level) that's rewarded, a full approach-then-retreat telescopes to exactly zero net
+  # reward regardless of path length or how many steps it takes, and the total contribution over an
+  # entire episode is bounded to [-|lambda|, +|lambda|] (Phi only ever ranges 0 to 1) - it cannot
+  # blow up with episode length the way the crash lagrangian's runaway-lambda failure mode did.
+  #
+  # sensor_terminal_lagrangian_enabled runs its OWN independent dual-ascent lambda (see
+  # trainer_controller_patched.py's _update_lagrangian_penalties, "sensor_terminal" constraint) -
+  # deliberately separate from lagrangian_penalty_*'s "crash" lambda/target, since this constraint
+  # targets a genuinely different metric: mean Phi across all decision steps in a summary window
+  # (stats_patched.py's LATEST_SENSOR_TERMINAL_EXPOSURE, i.e. Custom/ForwardLineTerminalExposure's
+  # mean) - NOT crash rate. The shaping reward ITSELF can't serve as its own dual-ascent target
+  # since it telescopes toward ~0 over a full approach/retreat even for a policy that spends a lot
+  # of time right at the edge of danger; mean exposure instead directly measures how much time, on
+  # average, the policy spends with forward sensors seeing Terminal, independent of the reward's
+  # own cancellation. sensor_terminal_target_exposure is an UNVALIDATED starting guess (same
+  # calibrate-against-a-real-run caveat as lagrangian_target_crash_rate above) - watch
+  # "Environment/Lagrangian Lambda/sensor_terminal" in TensorBoard for runaway growth the same way,
+  # and lower the target or raise sensor_terminal_lambda_max if it climbs without bound. Also gated
+  # behind the bootstrap curriculum finishing, same rationale as lagrangian_penalty_* above. Set
+  # sensor_terminal_lagrangian_enabled to 0 to disable entirely (default off) - fully inert without
+  # trainer_controller_patched.py bound, same as lagrangian_penalty_enabled.
+  sensor_terminal_lagrangian_enabled: 0
+  sensor_terminal_target_exposure: 0.02
+  sensor_terminal_lambda_init: 1.0
+  sensor_terminal_lambda_lr: 10.0
+  sensor_terminal_lambda_max: 30.0
+
+  # The actual pushed multiplier carAgent.cs reads (see rwSensorTerminalPenalty above) - already
+  # negative ("a penalty value"), same convention as reward_terminal_penalty. 0 = inert (matches
+  # the C# default when this key is absent entirely). Leave at 0 and use
+  # sensor_terminal_lagrangian_enabled above for the adaptive version; set this directly to a fixed
+  # negative value instead (e.g. -1.0) to test a plain, non-adaptive constant multiplier - the two
+  # are mutually exclusive in the sense that enabling the lagrangian will overwrite whatever's set
+  # here every summary window.
+  sensor_terminal_penalty_lambda: 0.0
+
+  # Flat, fixed penalty applied once when a MaxStepReached timeout fires (carAgent.cs FixedUpdate),
+  # on top of whatever flat reward_time_penalty/idle penalty already accumulated over the episode.
+  # 0 by default (no behavior change). This used to also be adaptively auto-tuned by a Lagrangian
+  # dual-ascent mechanism (lagrangian_maxstep_*, mirroring lagrangian_penalty_* below) - removed,
+  # it never converged to a useful policy; this is now purely a manual override.
   reward_maxstep_penalty: 0.0
 
   # --- Adaptive step-time budget (self-paced curriculum, NOT a Lagrangian penalty) -------------
   # Agent.MaxStep (carAgent.cs UpdateRewardWeights - see max_step_budget below) adjusts itself
-  # based on the same maxstep-timeout rate lagrangian_maxstep_* tracks above, but this is a
-  # different technique: it changes the episode's actual time budget/task structure, not a reward
-  # coefficient - keep it conceptually separate from the Lagrangian-style penalties above in any
-  # writeup even though the update-rule shape looks similar:
+  # based on the maxstep-timeout rate (maxstep_target_rate below), but this is a different
+  # technique from the Lagrangian-style penalty below: it changes the episode's actual time
+  # budget/task structure, not a reward coefficient - keep it conceptually separate in any writeup
+  # even though the update-rule shape looks similar:
   #   max_step_budget <- clamp(max_step_budget + adaptive_step_budget_lr *
-  #                             (maxstep_rate - lagrangian_maxstep_target_rate), min, max)
+  #                             (maxstep_rate - maxstep_target_rate), min, max)
   # i.e. too many timeouts -> more time given; comfortably under budget -> tightened for
   # efficiency. Changing episode length mid-training is more disruptive than a reward tweak (the
   # value function implicitly learns under whatever horizon it's been trained on), hence the
@@ -161,6 +205,7 @@ environment_parameters:
   # entirely (default off); max_step_budget still works as a plain fixed override of the Agent's
   # Inspector-set MaxStep (5000) even with the adaptive mechanism off.
   adaptive_step_budget_enabled: 0
+  maxstep_target_rate: 0.15
   max_step_budget: 5000
   adaptive_step_budget_lr: 2000.0
   adaptive_step_budget_min: 2500

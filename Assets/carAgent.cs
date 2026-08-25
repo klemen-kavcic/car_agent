@@ -48,6 +48,18 @@ public class CarAgent : Agent
     private BootstrapStage previousEpisodeBootstrapStage = BootstrapStage.None;
     private bool hasBootstrapStageHistory = false;
 
+    // Fixed-map trajectory-comparison eval mode (see eval_trajectories.py) - when enabled via the
+    // fixed_eval_enabled environment parameter, OnEpisodeBegin skips all the normal random spawn/
+    // goal placement below and uses fixed_spawn_x/z, fixed_goal_x/z, fixed_spawn_heading_deg
+    // instead, and CollectObservations reports Custom/PosX/Custom/PosZ/Custom/ReverseGear every
+    // decision step so the eval script can reconstruct the exact path driven (and tell a genuine
+    // reverse maneuver apart from a tight forward turn). Fields (not locals) since both
+    // OnEpisodeBegin and CollectObservations need to read them. Never set during ordinary
+    // training/eval (mlagents-learn and eval_checkpoints.py never touch this parameter), so this
+    // mode is fully opt-in and costs nothing when off.
+    private bool fixedEvalEnabled = false;
+    private float fixedSpawnHeadingDeg = 0f;
+
     [Tooltip("Live cumulative reward for the episode in progress — read-only display, shows in Inspector during Play.")]
     public float currentEpisodeReward;
     [Tooltip("Cumulative reward from the most recently ended episode — read-only display.")]
@@ -69,6 +81,31 @@ public class CarAgent : Agent
     // Starts true so the very first OnEpisodeBegin() call (no real "previous episode" yet) doesn't
     // spuriously report itself as untracked.
     private bool episodeOutcomeLogged = true;
+
+    // Tracks the tile the car was on as of the previous decision step, so CollectObservations can
+    // report a "visit" (Custom/TileVisit<Type>) only on a genuine change of surface, not once per
+    // step the way Custom/TileTime<Type> already does - answers "how often does the policy cross
+    // onto each surface" independent of how long it then lingers there (a slow surface like
+    // Gravel/Slippery racks up more TileTime just by physically taking longer to cross, even at
+    // the same crossing frequency as Asphalt). Null at the start of each episode (reset in
+    // OnEpisodeBegin) specifically so the very first CollectObservations call of the episode - the
+    // car's starting tile - always counts as a visit too, not just later changes.
+    private TileType? previousTileType = null;
+
+    // Per-episode accumulators for the same two tile stats, reported once at the START of the
+    // NEXT OnEpisodeBegin (for the episode that just ended, before being reset below) as
+    // Custom/EpisodeTileTime<Type>/Custom/EpisodeTileVisit<Type> - one Sum-aggregated value per
+    // type PER EPISODE, unlike the step-level Custom/TileTime</Visit<Type> stats above (which stay
+    // exactly as they were - this is purely additive). Gives eval_checkpoints.py one list entry
+    // per episode per type, so it can take a genuine std-across-episodes the same way it already
+    // does for episode_rewards/episode_lengths. Indexed by (int)TileType (5 contiguous values, see
+    // TileType.cs) rather than a Dictionary, to avoid a new using directive for one small
+    // fixed-size lookup.
+    private readonly float[] episodeTileTimeSteps = new float[5];
+    private readonly int[] episodeTileVisits = new int[5];
+    // False only before the run's first episode has actually happened, so that first OnEpisodeBegin
+    // doesn't report a bogus all-zero "episode" - same guard shape as hasBootstrapStageHistory above.
+    private bool hasEpisodeTileStatsToReport = false;
 
     // Guards OnTriggerEnter against firing more than once for the same goal arrival. If the car's
     // Rigidbody hierarchy has more than one non-wheel Collider (e.g. separate chassis/body-panel
@@ -100,6 +137,14 @@ public class CarAgent : Agent
     private float rwTerminalPenalty;
     private float rwMaxStepPenalty;
     private float rwTimePenaltyGrowth;
+    private float rwSensorTerminalPenalty;
+
+    // Dense forward-sensor terminal-avoidance shaping state (see UpdateRewardWeights/
+    // CollectObservations, car_agent.yaml's sensor_terminal_lagrangian_* block) - -1 sentinel means
+    // "no reading yet this episode", reset in OnEpisodeBegin. The very first decision step of an
+    // episode only seeds this baseline, no reward fires (there's no genuine "previous" state to
+    // compare against yet).
+    private int previousForwardLineTerminalCount = -1;
 
     // Idle penalty: escalating cost for standing still too long, on top of the flat time
     // penalty. See UpdateRewardWeights() / OnActionReceived() for why this needs its own
@@ -190,9 +235,18 @@ public class CarAgent : Agent
 
         // Applied once, the step a MaxStepReached timeout fires (see FixedUpdate) - on top of,
         // not instead of, the flat per-step reward_time_penalty/idle penalty already accumulated
-        // over the episode. 0 by default (no behavior change) unless set by hand or pushed
-        // adaptively by trainer_controller_patched.py's lagrangian_maxstep_* mechanism.
+        // over the episode. 0 by default (no behavior change); purely a manual override now - the
+        // adaptive (Lagrangian dual-ascent) auto-tuning that used to drive this was removed, it
+        // never converged to a useful policy.
         rwMaxStepPenalty = ep.GetWithDefault("reward_maxstep_penalty", 0.0f);
+
+        // Dense forward-sensor terminal-avoidance shaping (potential-based) - pushed by
+        // trainer_controller_patched.py's "sensor_terminal" Lagrangian constraint, same
+        // already-negative "penalty value" convention as reward_terminal_penalty/rwTerminalPenalty
+        // above (0 = inert, no behavior change, unless that mechanism is bound and enabled). See
+        // car_agent.yaml's sensor_terminal_lagrangian_* block and CollectObservations() below for
+        // the full mechanism.
+        rwSensorTerminalPenalty = ep.GetWithDefault("sensor_terminal_penalty_lambda", 0.0f);
 
         // Episode time budget (built-in Agent.MaxStep, read fresh each episode). Defaults to
         // 5000, matching the Inspector's static value, so leaving max_step_budget out of the yaml
@@ -365,11 +419,34 @@ public class CarAgent : Agent
         }
         episodeOutcomeLogged = false;
         goalTriggeredThisEpisode = false;
+        previousForwardLineTerminalCount = -1;
+
+        // Report the just-finished episode's per-tile-type totals before resetting them for the
+        // new episode - see the field comments above for why this lives here rather than at each
+        // of the several episode-ending call sites (Goal/Terminated/MaxStep) scattered below.
+        if (hasEpisodeTileStatsToReport)
+        {
+            for (int i = 0; i < episodeTileTimeSteps.Length; i++)
+            {
+                var t = (TileType)i;
+                Academy.Instance.StatsRecorder.Add(
+                    $"Custom/EpisodeTileTime{t}", episodeTileTimeSteps[i], StatAggregationMethod.Sum);
+                Academy.Instance.StatsRecorder.Add(
+                    $"Custom/EpisodeTileVisit{t}", episodeTileVisits[i], StatAggregationMethod.Sum);
+            }
+        }
+        for (int i = 0; i < episodeTileTimeSteps.Length; i++)
+        {
+            episodeTileTimeSteps[i] = 0f;
+            episodeTileVisits[i] = 0;
+        }
+        hasEpisodeTileStatsToReport = true;
 
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         episodeStepCount = 0;
         idleStepCounter = 0;
+        previousTileType = null;
 
         // Neither of these is reset by anything else - car_component has no episode concept of
         // its own, so without this, wheels/gear silently carry over whatever they were at the
@@ -412,28 +489,63 @@ public class CarAgent : Agent
             // never sets it, so ordinary training always sees Maps/VoronoiTrain.
             carController.gridManager.useValidationMaps =
                 Academy.Instance.EnvironmentParameters.GetWithDefault("use_validation_maps", 0f) >= 0.5f;
+
+            // See the fixedEvalEnabled field comment above - eval_trajectories.py sets these two
+            // to pin a specific pre-baked map instead of GridManager's usual random pick.
+            // Ordinary training/eval never sets fixed_eval_enabled, so forcedMapIndex stays at
+            // its default -1 (unchanged random behavior) for every other code path.
+            fixedEvalEnabled =
+                Academy.Instance.EnvironmentParameters.GetWithDefault("fixed_eval_enabled", 0f) >= 0.5f;
+            carController.gridManager.forcedMapIndex = fixedEvalEnabled
+                ? Mathf.RoundToInt(Academy.Instance.EnvironmentParameters.GetWithDefault("fixed_map_index", -1f))
+                : -1;
+
             carController.gridManager.Regenerate();
+        }
+        else
+        {
+            fixedEvalEnabled =
+                Academy.Instance.EnvironmentParameters.GetWithDefault("fixed_eval_enabled", 0f) >= 0.5f;
         }
 
         Vector3 spawnPos;
-        int attempts = 0;
-        do {
-            float spawnX = Random.Range(spawnAreaMin.x, spawnAreaMax.x);
-            float spawnZ = Random.Range(spawnAreaMin.y, spawnAreaMax.y);
-            spawnPos = new Vector3(spawnX, startPosition.y, spawnZ);
-        } while (!IsSpawnableTile(spawnPos) && ++attempts < 100);
+        if (fixedEvalEnabled)
+        {
+            float fixedSpawnX = Academy.Instance.EnvironmentParameters.GetWithDefault("fixed_spawn_x", 0f);
+            float fixedSpawnZ = Academy.Instance.EnvironmentParameters.GetWithDefault("fixed_spawn_z", 0f);
+            spawnPos = new Vector3(fixedSpawnX, startPosition.y, fixedSpawnZ);
+            fixedSpawnHeadingDeg = Academy.Instance.EnvironmentParameters.GetWithDefault("fixed_spawn_heading_deg", 0f);
+        }
+        else
+        {
+            int attempts = 0;
+            do {
+                float spawnX = Random.Range(spawnAreaMin.x, spawnAreaMax.x);
+                float spawnZ = Random.Range(spawnAreaMin.y, spawnAreaMax.y);
+                spawnPos = new Vector3(spawnX, startPosition.y, spawnZ);
+            } while (!IsSpawnableTile(spawnPos) && ++attempts < 100);
+        }
         transform.position = spawnPos;
 
         // On Voronoi maps, once bootstrap has finished (forceAllNormal - see above - would
         // otherwise blanket the whole grid in Asphalt and make every direction look equally
         // "road"), face the car along the local road direction instead of a fully random yaw, so
         // it starts out driving down the road like a real car rather than parked sideways/facing
-        // off into the gravel shoulder.
-        bool useRoadAlignedHeading = carController.gridManager != null
+        // off into the gravel shoulder. In fixed-eval mode, ComputeRoadAlignedHeading's internal
+        // coin-flip between the two facings along a road (see its own comment) would otherwise
+        // make the deterministic and stochastic rollouts of the SAME candidate start facing
+        // opposite directions on different runs - a spurious source of "divergence" that's really
+        // just a different starting orientation, not a policy difference - so fixed-eval always
+        // uses the externally-supplied fixedSpawnHeadingDeg instead.
+        bool useRoadAlignedHeading = !fixedEvalEnabled
+            && carController.gridManager != null
             && carController.gridManager.mapSource == MapSource.Voronoi
             && episodeBootstrapStage == BootstrapStage.None;
         transform.rotation = Quaternion.Euler(
-            0f, useRoadAlignedHeading ? ComputeRoadAlignedHeading(spawnPos) : Random.Range(0f, 360f), 0f);
+            0f,
+            fixedEvalEnabled ? fixedSpawnHeadingDeg
+                : (useRoadAlignedHeading ? ComputeRoadAlignedHeading(spawnPos) : Random.Range(0f, 360f)),
+            0f);
 
         // DeadEnd stage: snap the spawn heading to one of the 4 grid-aligned cardinal
         // directions instead of a continuous random yaw. The pocket built further below is
@@ -601,6 +713,12 @@ public class CarAgent : Agent
     // straight into the hardest case.
     Vector3 PickGoalPosition(Vector3 spawnPos)
     {
+        if (fixedEvalEnabled)
+        {
+            float fixedGoalX = Academy.Instance.EnvironmentParameters.GetWithDefault("fixed_goal_x", 0f);
+            float fixedGoalZ = Academy.Instance.EnvironmentParameters.GetWithDefault("fixed_goal_z", 0f);
+            return new Vector3(fixedGoalX, goal.position.y, fixedGoalZ);
+        }
         if (episodeBootstrapStage != BootstrapStage.None)
             return PickBootstrapGoalPosition(spawnPos);
 
@@ -741,6 +859,30 @@ public class CarAgent : Agent
     {
         carSensor?.UpdateReadings();
 
+        // Dense forward-sensor terminal-avoidance shaping - see car_agent.yaml's
+        // sensor_terminal_lagrangian_* block for the full mechanism/derivation. Phi(s) = fraction
+        // of CarSensor's dead-ahead 7-point line currently reading Terminal; reward this step =
+        // rwSensorTerminalPenalty * (Phi(s_now) - Phi(s_previous)) - rwSensorTerminalPenalty is
+        // already negative (same convention as rwTerminalPenalty) when the mechanism is active, so
+        // an INCREASING Phi (approaching) is penalized and a DECREASING Phi (retreating) is
+        // rewarded, by the same magnitude. Fan-shape-only (ForwardLineSensorCount is 0 for
+        // Stadium/Circle, where this silently no-ops). Custom/ForwardLineTerminalExposure is
+        // reported unconditionally (not gated behind rwSensorTerminalPenalty != 0) so
+        // trainer_controller_patched.py's dual-ascent loop can see real exposure data even before
+        // the lambda it drives has been pushed back for the first time.
+        if (carSensor != null && carSensor.ForwardLineSensorCount > 0)
+        {
+            int currentCount = carSensor.CountForwardLineTerminal();
+            float phi = (float)currentCount / carSensor.ForwardLineSensorCount;
+            Academy.Instance.StatsRecorder.Add("Custom/ForwardLineTerminalExposure", phi, StatAggregationMethod.Average);
+            if (previousForwardLineTerminalCount >= 0)
+            {
+                float previousPhi = (float)previousForwardLineTerminalCount / carSensor.ForwardLineSensorCount;
+                AddReward(rwSensorTerminalPenalty * (phi - previousPhi));
+            }
+            previousForwardLineTerminalCount = currentCount;
+        }
+
         // One Sum-aggregated stat per decision step, tagged by whichever tile the car is
         // currently on - same StatsRecorder pattern as Custom/GoalReached etc. above, so this
         // shows up both live in TensorBoard during training and per-checkpoint in
@@ -750,6 +892,37 @@ public class CarAgent : Agent
         // for the fraction of time spent on that surface.
         Academy.Instance.StatsRecorder.Add(
             $"Custom/TileTime{carController.currentTileType}", 1f, StatAggregationMethod.Sum);
+        episodeTileTimeSteps[(int)carController.currentTileType] += 1f;
+
+        // One Sum-aggregated stat per genuine surface change (including the episode's starting
+        // tile - previousTileType is null only right after OnEpisodeBegin) - unlike TileTime
+        // above, this doesn't grow just because the car sat on a slow surface longer, so it's a
+        // speed-independent count of how often each surface is actually crossed onto.
+        if (previousTileType == null || previousTileType.Value != carController.currentTileType)
+        {
+            Academy.Instance.StatsRecorder.Add(
+                $"Custom/TileVisit{carController.currentTileType}", 1f, StatAggregationMethod.Sum);
+            episodeTileVisits[(int)carController.currentTileType] += 1;
+            previousTileType = carController.currentTileType;
+        }
+
+        // Raw per-decision-step (x, z) position stream, for eval_trajectories.py's path-comparison
+        // plots - ONLY reported in fixed-eval mode (see fixedEvalEnabled/OnEpisodeBegin above).
+        // Unconditional reporting (like TileTime/TileVisit) would be meaningless during ordinary
+        // parallel training/eval, where many maps/episodes' positions would interleave in the same
+        // StatsSideChannel list with no way to tell them apart - fixed-eval mode is deliberately
+        // restricted to one agent/one episode at a time so this stream stays unambiguous.
+        // MostRecent (not Sum) since this is a raw coordinate, not something to accumulate.
+        // Custom/ReverseGear rides along the same stream (same cadence, same MostRecent semantics)
+        // so eval_trajectories.py can tell a genuine reverse maneuver apart from a tight forward
+        // turn/near-U-turn - both look like a loop in (x, z) alone, position data can't distinguish
+        // them without this.
+        if (fixedEvalEnabled)
+        {
+            Academy.Instance.StatsRecorder.Add("Custom/PosX", transform.position.x, StatAggregationMethod.MostRecent);
+            Academy.Instance.StatsRecorder.Add("Custom/PosZ", transform.position.z, StatAggregationMethod.MostRecent);
+            Academy.Instance.StatsRecorder.Add("Custom/ReverseGear", carController.reverseGear ? 1f : 0f, StatAggregationMethod.MostRecent);
+        }
 
         Vector3 toGoal = goal.position - transform.position;
         sensor.AddObservation(transform.InverseTransformDirection(toGoal.normalized)); // 3
