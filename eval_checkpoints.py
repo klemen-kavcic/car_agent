@@ -83,7 +83,7 @@ import re
 import sys
 import time
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import onnxruntime as ort
@@ -187,6 +187,42 @@ def discover_checkpoints(run_dir: Path, behavior_name: str) -> List[Path]:
             checkpoints.append((int(m.group(1)), f))
     checkpoints.sort(key=lambda t: t[0])
     return [f for _, f in checkpoints]
+
+
+def parse_checkpoint_schedule(spec: str) -> List[Tuple[int, int, int]]:
+    """Parses "start:end:interval,start:end:interval,..." (steps) into a list of segments - lets
+    checkpoint density vary by training phase (e.g. coarse early, fine near the end where "final
+    window" analysis needs the most resolution) without touching checkpoint_interval, which is a
+    single fixed value for the whole training run and can't vary by phase. Training already saves
+    every checkpoint_interval steps regardless (typically 100k) - this only changes which of those
+    ALREADY-SAVED checkpoints get evaluated, so any interval here should be a multiple of the
+    training run's actual checkpoint_interval or the "nearest available" selection below will
+    silently coarsen it to whatever's really on disk."""
+    segments = []
+    for part in spec.split(","):
+        start_s, end_s, interval_s = part.split(":")
+        segments.append((int(start_s), int(end_s), int(interval_s)))
+    return segments
+
+
+def select_checkpoints_by_schedule(checkpoints: List[Path],
+                                    schedule: List[Tuple[int, int, int]]) -> List[Path]:
+    """For each segment (start, end, interval), picks the closest ACTUALLY-SAVED checkpoint to
+    every target step start, start+interval, ..., up to end inclusive - not an exact-match filter,
+    since real checkpoint step counts jitter slightly off round numbers (num_envs/decision-period
+    granularity, e.g. 199952 not 200000). Overlapping segments/targets landing on the same nearest
+    checkpoint are deduplicated. Returns checkpoints in their original sorted (by step) order."""
+    steps = [step_from_path(p) for p in checkpoints]
+    selected = set()
+    for start, end, interval in schedule:
+        if interval <= 0:
+            raise ValueError(f"Schedule segment interval must be positive, got {interval} in {(start, end, interval)}")
+        target = start
+        while target <= end:
+            idx = min(range(len(steps)), key=lambda i: abs(steps[i] - target))
+            selected.add(idx)
+            target += interval
+    return [checkpoints[i] for i in sorted(selected)]
 
 
 def step_from_path(p: Path) -> int:
@@ -487,7 +523,16 @@ def main():
     ap.add_argument("--graphics", dest="no_graphics", action="store_false",
                      help="Run with graphics on (local debugging only).")
     ap.add_argument("--every-nth-checkpoint", type=int, default=1,
-                     help="Evaluate only every Nth discovered checkpoint (subsample without retraining).")
+                     help="Evaluate only every Nth discovered checkpoint (subsample without retraining). "
+                          "Ignored if --checkpoint-schedule is given.")
+    ap.add_argument("--checkpoint-schedule", default=None,
+                     help="Non-uniform checkpoint density instead of a flat --every-nth-checkpoint: "
+                          "\"start:end:interval,start:end:interval,...\" in steps, e.g. "
+                          "\"0:13000000:1000000,13000000:18000000:500000,18000000:20000000:100000\" "
+                          "for coarse early / fine near the end. Each target step picks the nearest "
+                          "ACTUALLY-SAVED checkpoint (real step counts jitter off round numbers), so "
+                          "an interval finer than the training run's own checkpoint_interval just "
+                          "gets silently coarsened to whatever's really on disk.")
     ap.add_argument("--limit", type=int, default=None, help="Evaluate only the first N checkpoints (testing).")
     ap.add_argument("--out", default=None, help="Output CSV path (default: <run-dir>/eval_results.csv).")
     ap.add_argument("--maps", choices=["train", "val"], default="val",
@@ -529,7 +574,13 @@ def main():
     out_path = Path(args.out) if args.out else run_dir / "eval_results.csv"
 
     checkpoints = discover_checkpoints(run_dir, args.behavior_name)
-    checkpoints = checkpoints[:: args.every_nth_checkpoint]
+    if args.checkpoint_schedule:
+        schedule = parse_checkpoint_schedule(args.checkpoint_schedule)
+        checkpoints = select_checkpoints_by_schedule(checkpoints, schedule)
+        log.info("Using --checkpoint-schedule %s -> %d checkpoints selected (--every-nth-checkpoint ignored).",
+                  args.checkpoint_schedule, len(checkpoints))
+    else:
+        checkpoints = checkpoints[:: args.every_nth_checkpoint]
     if args.limit:
         checkpoints = checkpoints[: args.limit]
     if not checkpoints:

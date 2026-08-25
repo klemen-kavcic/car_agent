@@ -1,0 +1,2 @@
+Found 85 run dir(s) across job ID(s): 18645514 18645665
+SKIP: /d/hpc/home/kk42117/mag/car/results/car_vgrid_18645665_sensorfixed1_s4 has no CarAgent.onnx - training itself hasn't finished (still running, or  genuinely failed - check its original .out/.err before assuming this script will fix it).

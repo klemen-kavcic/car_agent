@@ -145,3 +145,6 @@ If several sensors look similarly sized, that's plausible, not necessarily a bug
 To actually verify a specific dot rather than eyeball it: open Assets/CarAgent.sensor_weights.json — it's flat, values[sensor_index * 5 + tile_type_index] (tile_type order: Slippery=0, SpeedLimited=1, Terminal=2, Asphalt=3, Gravel=4). Pick a sensor, note what color it's showing (= what tile it's reading), look up that entry, and check it's proportionally where you'd expect relative to max_value=6.46.
 
 If most values cluster tightly and the dots end up hard to tell apart visually, I can switch the size mapping from linear to something like sqrt(t) to spread out the low end — want me to add that, or does the current spread look fine?
+
+
+it's a known RL failure mode (Pardo et al., "Time Limits in Reinforcement Learning," 2018): without a way to observe remaining time, the optimal action in an identical physical state can depend on how much time is lef

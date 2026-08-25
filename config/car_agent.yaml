@@ -2,58 +2,53 @@ behaviors:
   CarAgent:
     trainer_type: ppo
 
-    # 30M-step plan. Anchored (&total_steps) so environment_parameters.total_training_steps
-    # below can reference this exact value via *total_steps — change it in one place only.
-    max_steps: &total_steps 30000000
-    time_horizon: 1000
-    summary_freq: 5000
-    # 300 checkpoints over the 30M-step run (every 100k steps), all kept - up from the original
-    # 1M/10 (which only kept the last 10M steps' worth), so eval_checkpoints.py actually has early-
-    # training checkpoints to plot a real reward-over-training curve from, not just the tail end.
-    keep_checkpoints: 300
+    # 20M-step plan, 128 hidden units, time_horizon=128 - reverted from the earlier 256/30M/1000
+    # experiment back to this project's established baseline (matches every lr-sweep/sensor-test
+    # run analyzed this session) specifically so the new reward-sweep results stay directly
+    # comparable to that existing analysis.
+    max_steps: 20000000
+    time_horizon: 128
+    summary_freq: 10000
+    keep_checkpoints: 200
     checkpoint_interval: 100000
-    threaded: false
 
     hyperparameters:
-      learning_rate: 3.0e-4
-      learning_rate_schedule: linear
-      batch_size: 2048
-      buffer_size: 20480
-      beta: 5.0e-3
-      beta_schedule: linear
-      epsilon: 0.2
-      epsilon_schedule: linear
-      lambd: 0.95
-      num_epoch: 3
+      batch_size: 1024
+      buffer_size: 8192
+      learning_rate: 0.0003
 
     network_settings:
-      hidden_units: 256
+      hidden_units: 128
       num_layers: 2
       normalize: true
-      vis_encode_type: simple
 
     reward_signals:
       extrinsic:
-        strength: 1.0
         gamma: 0.99
+        strength: 1.0
 
 environment_parameters:
   # --- Core reward weights (car_component.cs / carAgent.cs) ---
-  reward_goal: 5.0
-  reward_approach_bonus: 1.0
-  reward_terminal_penalty: -15.0
+  # Reward-sweep variant 1 (the new default): terminal -10 (was -15), time penalty -0.001 (was
+  # -0.01), goal +4 with the 100-band checkpoint/partial reward summing to +1 (0.01/band) instead
+  # of the old +5 (0.05/band) - approach_bonus (the one-time straight-on-approach bonus at goal
+  # time, carAgent.cs:1090) left at 0, not part of this sweep. See hpc/reward_sweep.sh for variants
+  # 2 (goal +5, no partial reward) and 3 (goal 0, partial reward sums to +5) alongside this one.
+  reward_goal: 4.0
+  reward_approach_bonus: 0.0
+  reward_terminal_penalty: -10.0
 
   # Flat per-step time cost, no compounding (growth left at 0 — see the reward-balance
   # discussion: a growing rate made a full unsuccessful episode cost far more than crashing).
-  reward_time_penalty: -0.01
+  reward_time_penalty: -0.001
   reward_time_penalty_growth: 0.0
 
   # Checkpoint reward: spawn-to-goal distance is divided into 100 equal bands. The car's
   # minimum distance-to-goal so far this episode only ever shrinks, so each band is awarded
   # exactly once, whenever that minimum first crosses into it. Tune this value to try
-  # different checkpoint reward magnitudes (default sums to 5.0 across all 100 checkpoints,
-  # matching reward_goal's order of magnitude).
-  reward_checkpoint: 0.05
+  # different checkpoint reward magnitudes (reward-sweep variant 1: sums to 1.0 across all 100
+  # checkpoints, down from the old 5.0 - see hpc/reward_sweep.sh for variants 2/3).
+  reward_checkpoint: 0.01
 
   # --- Idle penalty (escalating, not flat) -----------------------------------------------
   # Standing still costs the same flat reward_time_penalty as driving, so a policy that's
