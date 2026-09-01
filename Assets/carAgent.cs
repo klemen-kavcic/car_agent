@@ -60,6 +60,16 @@ public class CarAgent : Agent
     private bool fixedEvalEnabled = false;
     private float fixedSpawnHeadingDeg = 0f;
 
+    [Tooltip("Adds one extra observation - fraction of this episode's step budget remaining " +
+        "(1 = just started, 0 = about to hit MaxStep) - so the policy can actually condition on " +
+        "how close it is to a MaxStep timeout (e.g. useful alongside reward_maxstep_penalty, which " +
+        "otherwise has no way to be anticipated). CHANGES THE OBSERVATION VECTOR SIZE, which is " +
+        "baked into the trained network's input layer - this cannot be toggled on/off for an " +
+        "already-trained model/build, only decided BEFORE training (set here, then bump this " +
+        "Agent's BehaviorParameters -> Vector Observation Space Size by +1 to match, then build). " +
+        "To compare with/without, build and train two separate binaries, one with each setting.")]
+    public bool includeRemainingStepsObservation = false;
+
     [Tooltip("Live cumulative reward for the episode in progress — read-only display, shows in Inspector during Play.")]
     public float currentEpisodeReward;
     [Tooltip("Cumulative reward from the most recently ended episode — read-only display.")]
@@ -138,13 +148,35 @@ public class CarAgent : Agent
     private float rwMaxStepPenalty;
     private float rwTimePenaltyGrowth;
     private float rwSensorTerminalPenalty;
+    private float sensorSeverityExponent = 1f;
 
     // Dense forward-sensor terminal-avoidance shaping state (see UpdateRewardWeights/
-    // CollectObservations, car_agent.yaml's sensor_terminal_lagrangian_* block) - -1 sentinel means
-    // "no reading yet this episode", reset in OnEpisodeBegin. The very first decision step of an
-    // episode only seeds this baseline, no reward fires (there's no genuine "previous" state to
+    // CollectObservations, car_agent.yaml's sensor_terminal_lagrangian_* block) - severity is
+    // always in [0, 1] (CarSensor.GetNearestForwardLineTerminalSeverity), so -1f is a safe "no
+    // reading yet this episode" sentinel, reset in OnEpisodeBegin. The very first decision step of
+    // an episode only seeds this baseline, no reward fires (there's no genuine "previous" state to
     // compare against yet).
-    private int previousForwardLineTerminalCount = -1;
+    private float previousForwardLineTerminalSeverity = -1f;
+
+    // Rank (0=nearest, see CarSensor.GetNearestForwardLineTerminalRank) of the nearest dead-ahead-
+    // line sensor reading Terminal as of the last CollectObservations call, or -1 if none were red.
+    // Tracked alongside previousForwardLineTerminalSeverity (updated every step regardless of
+    // whether that step's reward fires) purely so OnEpisodeBegin can gate the MaxStep-outcome
+    // handling on RANK rather than severity value - see episodeCumulativeSensorSeverity's comment
+    // and CarSensor.GetNearestForwardLineTerminalRank's own comment for why rank stays correct
+    // across exponent changes when a fixed severity threshold wouldn't.
+    private int previousForwardLineTerminalRank = -1;
+
+    // Running per-episode sum of the SAME (phi_now - phi_previous) deltas the reward shaping above
+    // uses, but UNSCALED by rwSensorTerminalPenalty (lambda) - deliberately lambda-independent, so
+    // the Lagrangian dual-ascent's target-tracking metric doesn't itself inflate as lambda rises
+    // (see the Custom/ForwardLineTerminalExposure reporting in OnEpisodeBegin, which reads this).
+    // Telescopes to (phi_at_episode_end - phi_at_first_reading) by construction, same as the reward
+    // shaping's own telescoping property - a car that approaches danger and fully recovers nets to
+    // ~0 here (not some nonzero cumulative "time spent near danger"), matching the design intent
+    // that only the NET/final outcome should count, not transient exposure that gets corrected.
+    // Reset to 0 in OnEpisodeBegin, alongside previousForwardLineTerminalSeverity.
+    private float episodeCumulativeSensorSeverity = 0f;
 
     // Idle penalty: escalating cost for standing still too long, on top of the flat time
     // penalty. See UpdateRewardWeights() / OnActionReceived() for why this needs its own
@@ -247,6 +279,11 @@ public class CarAgent : Agent
         // car_agent.yaml's sensor_terminal_lagrangian_* block and CollectObservations() below for
         // the full mechanism.
         rwSensorTerminalPenalty = ep.GetWithDefault("sensor_terminal_penalty_lambda", 0.0f);
+
+        // See CarSensor.GetNearestForwardLineTerminalSeverity's exponent parameter comment - 1.0
+        // (default) is the original plain linear fraction, unchanged from before this parameter
+        // existed. Read here (not in CarSensor) since CarSensor has no ML-Agents dependency by design.
+        sensorSeverityExponent = ep.GetWithDefault("sensor_severity_exponent", 1.0f);
 
         // Episode time budget (built-in Agent.MaxStep, read fresh each episode). Defaults to
         // 5000, matching the Inspector's static value, so leaving max_step_budget out of the yaml
@@ -419,7 +456,59 @@ public class CarAgent : Agent
         }
         episodeOutcomeLogged = false;
         goalTriggeredThisEpisode = false;
-        previousForwardLineTerminalCount = -1;
+
+        // Report the just-finished episode's cumulative sensor severity BEFORE resetting the
+        // accumulator below - see episodeCumulativeSensorSeverity's field comment for the
+        // lambda-independence rationale. Three-way outcome logic:
+        //   Terminated - forced to 1.0 (worst) REGARDLESS of what episodeCumulativeSensorSeverity
+        //     actually accumulated - the nearest forward-line sensor point sits 3m ahead of the car
+        //     (not at its own position), so a crash via wall-tag collision, flipping, or reversing
+        //     into a hazard wouldn't reliably show a red forward-line reading even though it's
+        //     exactly the outcome this metric should flag as worst-case.
+        //   MaxStep, nearest red sensor at rank 0 or 1 (nearest or 2nd-nearest of the 7) - uses the
+        //     actual last-recorded severity directly (NOT the telescoped cumulative) - a policy that
+        //     times out while frozen right in front of a hazard is a real failure the telescoped net
+        //     can hide (e.g. it oscillated near the hazard all episode and just happened to be at a
+        //     lower reading the exact instant the clock ran out - net looks like "handled it fine"
+        //     even though it never actually resolved anything). Gated on RANK, not a fixed severity
+        //     threshold, so this means the same thing regardless of sensor_severity_exponent.
+        //   MaxStep, nearest red at rank >= 2 or no red sensor at all - 0 ("probably wasn't the
+        //     hazard's fault" that it timed out - too far away to plausibly be why).
+        //   Goal - the telescoped net cumulative (episodeCumulativeSensorSeverity), unchanged -
+        //     successfully reaching the goal after passing near a hazard earlier in the episode is a
+        //     genuinely handled outcome, so this stays "goes to danger and back nets to ~0".
+        // hasBootstrapStageHistory guards "has a previous episode actually happened" (same role as
+        // hasEpisodeTileStatsToReport below, reused here since it's already set at this exact point
+        // in the very first episode). Keeps the OLD stat name (Custom/ForwardLineTerminalExposure) -
+        // previously reported every decision step as the instantaneous reading, now reported once
+        // per episode as this three-way value - so stats_patched.py/trainer_controller_patched.py's
+        // dual-ascent wiring and sensor_terminal_target_exposure keep working with zero Python-side
+        // changes, same "redefine the meaning, keep the name" pattern as
+        // GetNearestForwardLineTerminalSeverity() itself.
+        if (hasBootstrapStageHistory && carSensor != null && carSensor.ForwardLineSensorCount > 0)
+        {
+            float episodeEndSeverity;
+            if (lastEpisodeEndReason == "Terminated")
+            {
+                episodeEndSeverity = 1f;
+            }
+            else if (lastEpisodeEndReason == "MaxStep" && previousForwardLineTerminalRank >= 0 && previousForwardLineTerminalRank <= 1)
+            {
+                episodeEndSeverity = Mathf.Clamp01(previousForwardLineTerminalSeverity);
+            }
+            else if (lastEpisodeEndReason == "MaxStep")
+            {
+                episodeEndSeverity = 0f;
+            }
+            else
+            {
+                episodeEndSeverity = Mathf.Clamp01(episodeCumulativeSensorSeverity);
+            }
+            Academy.Instance.StatsRecorder.Add("Custom/ForwardLineTerminalExposure", episodeEndSeverity, StatAggregationMethod.Average);
+        }
+        previousForwardLineTerminalSeverity = -1f;
+        previousForwardLineTerminalRank = -1;
+        episodeCumulativeSensorSeverity = 0f;
 
         // Report the just-finished episode's per-tile-type totals before resetting them for the
         // new episode - see the field comments above for why this lives here rather than at each
@@ -750,10 +839,39 @@ public class CarAgent : Agent
         return goalPos;
     }
 
+    // Total length of the bootstrap curriculum (Front+Behind+DeadEnd+Side), in the same "GLOBAL
+    // steps / training_num_envs, corrected for DecisionPeriod" units as Academy.TotalStepCount -
+    // same convention/formula as DetermineBootstrapStage(), computed independently here so
+    // VoronoiNearGoalMaxDistance can anchor its own ramp to "steps since bootstrap ended" without
+    // depending on DetermineBootstrapStage having already run earlier in the same OnEpisodeBegin.
+    // Returns 0 when bootstrap_curriculum_enabled is off, so the voronoi ramp then starts counting
+    // from step 0 - correct, since there's no bootstrap period to wait out in that case.
+    float BootstrapTotalSteps()
+    {
+        var ep = Academy.Instance.EnvironmentParameters;
+        if (ep.GetWithDefault("bootstrap_curriculum_enabled", 1f) < 0.5f) return 0f;
+
+        float numEnvs = Mathf.Max(1f, ep.GetWithDefault("training_num_envs", 1f));
+        float decisionPeriod = decisionRequester != null ? Mathf.Max(1, decisionRequester.DecisionPeriod) : 1f;
+        float frontSteps   = ep.GetWithDefault("bootstrap_stage_front_steps", 20_000f) * decisionPeriod / numEnvs;
+        float behindSteps  = ep.GetWithDefault("bootstrap_stage_behind_steps", 20_000f) * decisionPeriod / numEnvs;
+        float deadEndSteps = ep.GetWithDefault("bootstrap_stage_deadend_steps", 20_000f) * decisionPeriod / numEnvs;
+        float sideSteps    = ep.GetWithDefault("bootstrap_stage_side_steps", 20_000f) * decisionPeriod / numEnvs;
+        return frontSteps + behindSteps + deadEndSteps + sideSteps;
+    }
+
     // Returns +infinity (no cap) unless mapSource=Voronoi and voronoi_near_goal_enabled is set,
     // in which case it linearly ramps from voronoi_near_goal_distance_start to _end over
     // voronoi_near_goal_steps GLOBAL steps - same "GLOBAL steps / training_num_envs" convention as
     // every other step-based curriculum in this file (see UpdateRewardWeights/DetermineBootstrapStage).
+    // Anchored to steps SINCE BOOTSTRAP ENDED (Academy.TotalStepCount - BootstrapTotalSteps()), not
+    // raw TotalStepCount - the ramp only ever matters once bootstrap stops overriding goal placement
+    // (see PickGoalPosition), so counting from absolute step 0 was silently burning part of the ramp
+    // during bootstrap itself: e.g. bootstrap=1.5M/voronoi=3M meant the cap was already at progress
+    // 0.5 (not the intended tight 15-unit start) the instant bootstrap ended, and the ramp finished
+    // 1.5M steps early - exactly the "sudden difficulty spike right after bootstrap" this mechanism
+    // was built to avoid. Anchoring here restores the intended sequential handoff: full ramp length,
+    // starting fresh right when full-random placement actually begins.
     float VoronoiNearGoalMaxDistance()
     {
         if (carController.gridManager == null || carController.gridManager.mapSource != MapSource.Voronoi)
@@ -766,7 +884,8 @@ public class CarAgent : Agent
         float numEnvs = Mathf.Max(1f, ep.GetWithDefault("training_num_envs", 1f));
         float decisionPeriod = decisionRequester != null ? Mathf.Max(1, decisionRequester.DecisionPeriod) : 1f;
         float rampSteps = ep.GetWithDefault("voronoi_near_goal_steps", 5_000_000f) * decisionPeriod / numEnvs;
-        float progress = rampSteps > 0f ? Mathf.Clamp01(Academy.Instance.TotalStepCount / rampSteps) : 1f;
+        float stepsSinceBootstrapEnd = Mathf.Max(0f, Academy.Instance.TotalStepCount - BootstrapTotalSteps());
+        float progress = rampSteps > 0f ? Mathf.Clamp01(stepsSinceBootstrapEnd / rampSteps) : 1f;
 
         float distStart = ep.GetWithDefault("voronoi_near_goal_distance_start", 15f);
         float distEnd = ep.GetWithDefault("voronoi_near_goal_distance_end", 100f);
@@ -860,27 +979,40 @@ public class CarAgent : Agent
         carSensor?.UpdateReadings();
 
         // Dense forward-sensor terminal-avoidance shaping - see car_agent.yaml's
-        // sensor_terminal_lagrangian_* block for the full mechanism/derivation. Phi(s) = fraction
-        // of CarSensor's dead-ahead 7-point line currently reading Terminal; reward this step =
-        // rwSensorTerminalPenalty * (Phi(s_now) - Phi(s_previous)) - rwSensorTerminalPenalty is
-        // already negative (same convention as rwTerminalPenalty) when the mechanism is active, so
-        // an INCREASING Phi (approaching) is penalized and a DECREASING Phi (retreating) is
-        // rewarded, by the same magnitude. Fan-shape-only (ForwardLineSensorCount is 0 for
-        // Stadium/Circle, where this silently no-ops). Custom/ForwardLineTerminalExposure is
-        // reported unconditionally (not gated behind rwSensorTerminalPenalty != 0) so
-        // trainer_controller_patched.py's dual-ascent loop can see real exposure data even before
-        // the lambda it drives has been pushed back for the first time.
+        // sensor_terminal_lagrangian_* block for the mechanism/derivation this still follows.
+        // Phi(s) is now a PROXIMITY-based severity, not the old raw fraction-of-7-sensors-red: it's
+        // driven by whichever dead-ahead-line sensor currently reading Terminal is NEAREST the car
+        // (CarSensor.GetNearestForwardLineTerminalSeverity - severity 1.0 if the closest point
+        // itself is red, down to 1/7 if only the farthest point is, 0 if none are) - a hazard read
+        // by the 3m point is far more urgent than one only visible at 21m, which the old plain
+        // count couldn't distinguish (2 hazards read scored the same regardless of whether they
+        // were the two nearest or two farthest points). Reward this step = rwSensorTerminalPenalty
+        // * (Phi(s_now) - Phi(s_previous)) - UNCHANGED potential-based-shaping structure/telescoping
+        // property from before, only what Phi measures changed. rwSensorTerminalPenalty is already
+        // negative (same convention as rwTerminalPenalty) when the mechanism is active, so Phi
+        // INCREASING (a nearer sensor just went red, i.e. approaching/already-closer danger) is
+        // penalized and Phi DECREASING (retreating to only-farther-or-no hazard) is rewarded, by the
+        // same magnitude. Fan-shape-only (ForwardLineSensorCount is 0 for Stadium/Circle, where this
+        // silently no-ops).
+        //
+        // Custom/ForwardLineTerminalExposure is no longer reported here per-step - see OnEpisodeBegin,
+        // where it's now reported ONCE per just-ended episode as the net accumulated severity
+        // (episodeCumulativeSensorSeverity), not the instantaneous per-step reading. Any
+        // sensor_terminal_target_exposure value calibrated against either the old count-based metric
+        // OR the earlier per-step-average proximity metric is not a sane target under this episode-
+        // cumulative one - recalibrate against a fresh baseline run before trusting an old target
+        // number here again.
         if (carSensor != null && carSensor.ForwardLineSensorCount > 0)
         {
-            int currentCount = carSensor.CountForwardLineTerminal();
-            float phi = (float)currentCount / carSensor.ForwardLineSensorCount;
-            Academy.Instance.StatsRecorder.Add("Custom/ForwardLineTerminalExposure", phi, StatAggregationMethod.Average);
-            if (previousForwardLineTerminalCount >= 0)
+            float phi = carSensor.GetNearestForwardLineTerminalSeverity(sensorSeverityExponent);
+            if (previousForwardLineTerminalSeverity >= 0f)
             {
-                float previousPhi = (float)previousForwardLineTerminalCount / carSensor.ForwardLineSensorCount;
-                AddReward(rwSensorTerminalPenalty * (phi - previousPhi));
+                float delta = phi - previousForwardLineTerminalSeverity;
+                AddReward(rwSensorTerminalPenalty * delta);
+                episodeCumulativeSensorSeverity += delta;
             }
-            previousForwardLineTerminalCount = currentCount;
+            previousForwardLineTerminalSeverity = phi;
+            previousForwardLineTerminalRank = carSensor.GetNearestForwardLineTerminalRank();
         }
 
         // One Sum-aggregated stat per decision step, tagged by whichever tile the car is
@@ -934,11 +1066,22 @@ public class CarAgent : Agent
         sensor.AddObservation(pedalIsBrake ? 1f : 0f); // 1 - which pedal is selected
         sensor.AddObservation(carController.accelerationInput + carController.brakeInput); // 1 - pedal magnitude (only one is ever nonzero)
 
+        // Optional: fraction of this episode's MaxStep budget remaining, 1=start -> 0=timeout.
+        // Gated behind includeRemainingStepsObservation - see its field comment above for why this
+        // must be decided before training, not toggled at runtime. When off (default), this adds
+        // nothing and the observation vector is unchanged from before.
+        if (includeRemainingStepsObservation)
+        {
+            float remainingStepsFraction = MaxStep > 0 ? Mathf.Clamp01(1f - (float)StepCount / MaxStep) : 1f;
+            sensor.AddObservation(remainingStepsFraction); // 1 (only present if includeRemainingStepsObservation)
+        }
+
         // Current tile type, one-hot (5 values - see TileType.cs)                       // 5
         AddTileOneHot(sensor, carController.currentTileType);
 
         // sensor readings: carSensor.SensorCount × 5 values (one-hot per point)
         // If the sensor shape/radius/ring settings change, update Space Size to: 17 + SensorCount * 5
+        // (+1 more if includeRemainingStepsObservation is enabled)
         if (carSensor != null && carSensor.readings != null)
         {
             foreach (var t in carSensor.readings)

@@ -86,14 +86,18 @@ class TrainerController:
         # not sharing "crash"'s lambda, since it targets a different metric (mean per-step sensor
         # exposure, not episode-outcome crash rate - the shaping reward itself telescopes to ~0
         # over a full approach/retreat, so it can't be used as its own target).
-        self._lagrangian_lambda: Dict[str, Optional[float]] = {"crash": None, "sensor_terminal": None}
+        self._lagrangian_lambda: Dict[str, Optional[float]] = {
+            "crash": None, "sensor_terminal": None, "maxstep_timepenalty": None,
+        }
         self._lagrangian_last_consumed_rate: Dict[str, Optional[float]] = {
-            "crash": None, "sensor_terminal": None,
+            "crash": None, "sensor_terminal": None, "maxstep_timepenalty": None,
         }
         # One-time "just activated" log per constraint, once curr_step first clears the bootstrap
         # gate (see _bootstrap_total_steps) - lets a run confirm from the log alone that Lagrangian
         # actually started, without having to cross-reference step counts by hand.
-        self._lagrangian_gate_logged: Dict[str, bool] = {"crash": False, "sensor_terminal": False}
+        self._lagrangian_gate_logged: Dict[str, bool] = {
+            "crash": False, "sensor_terminal": False, "maxstep_timepenalty": False,
+        }
 
         # Adaptive step-time budget state (car_agent.yaml's adaptive_step_budget_* keys) - kept
         # separate from _lagrangian_lambda/_lagrangian_last_consumed_rate above despite the
@@ -364,6 +368,26 @@ class TrainerController:
             lambda_max_key="sensor_terminal_lambda_max",
             latest_rate=stats_module.LATEST_SENSOR_TERMINAL_EXPOSURE,
             penalty_param_name="sensor_terminal_penalty_lambda",
+            curr_step=curr_step,
+        )
+        # Re-adds maxstep-rate-driven adaptive tuning, removed previously when it targeted
+        # reward_maxstep_penalty (a one-time end-of-episode charge) and "never converged to a
+        # useful policy" (see carAgent.cs's rwMaxStepPenalty comment) - this version targets
+        # reward_time_penalty instead (the flat PER-STEP cost, already accumulating the whole
+        # episode), a continuous lever that should react faster/more smoothly to maxstep_rate than
+        # a one-shot terminal charge could. Independent constraint/lambda from "crash" despite both
+        # ultimately feeding a "reward_*_penalty" parameter - different target metric (maxstep_rate,
+        # not crash_rate) and different parameter (reward_time_penalty, not reward_terminal_penalty).
+        self._update_lagrangian_constraint(
+            env_manager,
+            constraint_name="maxstep_timepenalty",
+            enabled_key="lagrangian_maxstep_enabled",
+            target_key="lagrangian_target_maxstep_rate",
+            lambda_init_key="lagrangian_maxstep_lambda_init",
+            lambda_lr_key="lagrangian_maxstep_lambda_lr",
+            lambda_max_key="lagrangian_maxstep_lambda_max",
+            latest_rate=stats_module.LATEST_MAXSTEP_RATE,
+            penalty_param_name="reward_time_penalty",
             curr_step=curr_step,
         )
 

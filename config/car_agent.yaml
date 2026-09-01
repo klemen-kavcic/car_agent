@@ -124,6 +124,32 @@ environment_parameters:
   lagrangian_lambda_lr: 10.0
   lagrangian_lambda_max: 30.0
 
+  # --- MaxStep-rate lagrangian, drives reward_time_penalty (NOT reward_maxstep_penalty) ----------
+  # Same _update_lagrangian_constraint machinery as the crash lagrangian above (trainer_controller_
+  # patched.py), independent lambda/target, targeting maxstep_rate instead of crash_rate and
+  # pushing reward_time_penalty (the flat PER-STEP cost) instead of reward_terminal_penalty. An
+  # earlier version of this idea targeted reward_maxstep_penalty (a one-time end-of-episode charge)
+  # and was removed - "never converged to a useful policy" (see carAgent.cs's rwMaxStepPenalty
+  # comment). This version reacts through the continuous per-step lever instead, on the theory that
+  # a one-shot terminal charge gives no gradient except right at the 5000th step, while the per-step
+  # cost is felt (and can be adapted) throughout the whole episode.
+  # lambda_init=0.002 deliberately matches this round's fixed reward_time_penalty baseline (-0.002)
+  # so an enabled run starts exactly where the fixed-penalty comparison combos sit, then adapts from
+  # there - lambda_lr/lambda_max are UNVALIDATED first guesses (same calibrate-against-a-real-run
+  # caveat as every other Lagrangian block here), scaled down ~1000x from the crash lagrangian's
+  # lr=10.0/max=30.0 to match reward_time_penalty's tiny magnitude versus reward_terminal_penalty's
+  # -10-ish scale - watch Environment/Lagrangian Lambda/maxstep_timepenalty in TensorBoard for
+  # runaway growth same as the others. MUTUALLY EXCLUSIVE with adaptive_step_budget_enabled in the
+  # sense that both react to maxstep_rate, but they push different things (a reward coefficient
+  # here vs the actual episode step budget there) and CAN run simultaneously if you want to test
+  # that combination on purpose - not automatically incompatible the way lagrangian_penalty_enabled
+  # and terminal_penalty_escalation_enabled are (those both write the same field).
+  lagrangian_maxstep_enabled: 0
+  lagrangian_target_maxstep_rate: 0.15
+  lagrangian_maxstep_lambda_init: 0.002
+  lagrangian_maxstep_lambda_lr: 0.01
+  lagrangian_maxstep_lambda_max: 0.01
+
   # --- Dense forward-sensor terminal-avoidance shaping (potential-based, Ng/Harada/Russell 1999) -
   # ADDITIVE to lagrangian_penalty_*/reward_terminal_penalty above, not a replacement: that one
   # only fires once, at the moment of an actual collision - this one fires every decision step the
@@ -162,7 +188,7 @@ environment_parameters:
   # sensor_terminal_lagrangian_enabled to 0 to disable entirely (default off) - fully inert without
   # trainer_controller_patched.py bound, same as lagrangian_penalty_enabled.
   sensor_terminal_lagrangian_enabled: 0
-  sensor_terminal_target_exposure: 0.02
+  sensor_terminal_target_exposure: 0.15
   sensor_terminal_lambda_init: 1.0
   sensor_terminal_lambda_lr: 10.0
   sensor_terminal_lambda_max: 30.0
@@ -175,6 +201,20 @@ environment_parameters:
   # are mutually exclusive in the sense that enabling the lagrangian will overwrite whatever's set
   # here every summary window.
   sensor_terminal_penalty_lambda: 0.0
+
+  # Exponent applied to the linear (N-rank)/N severity fraction in CarSensor.
+  # GetNearestForwardLineTerminalSeverity - Mathf.Pow(linear, exponent). 1.0 (default) is the
+  # original plain linear scale, unchanged: rank 0..6 (nearest..farthest of 7) give 1.0, 0.857,
+  # 0.714, 0.571, 0.429, 0.286, 0.143. exponent > 1 skews weight toward the near end instead - the
+  # nearest point always stays exactly 1.0 (1^x = 1), only farther points shrink:
+  #   exponent=2: 1.0, 0.735, 0.510, 0.327, 0.184, 0.082, 0.020
+  #   exponent=3: 1.0, 0.630, 0.364, 0.187, 0.079, 0.023, 0.003
+  # Motivated by real driving urgency being nonlinear in distance (a hazard 3m out deserves
+  # outsized concern vs one 18m out) - tradeoff is a weaker early-warning gradient from the farther
+  # points the higher this goes, potentially undercutting the point of having 7 graduated points
+  # instead of 1. Applies to BOTH the per-step reward shaping AND the episode-cumulative
+  # Custom/ForwardLineTerminalExposure metric (same phi value feeds both).
+  sensor_severity_exponent: 1.0
 
   # Flat, fixed penalty applied once when a MaxStepReached timeout fires (carAgent.cs FixedUpdate),
   # on top of whatever flat reward_time_penalty/idle penalty already accumulated over the episode.

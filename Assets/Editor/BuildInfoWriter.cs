@@ -83,10 +83,20 @@ public static class BuildInfoWriter
         sb.AppendLine($"Built: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
         sb.AppendLine($"Target: {target}, Unity {Application.unityVersion}");
 
+        // Tracks the same "17 fixed + SensorCount*5 (+1 if includeRemainingStepsObservation)"
+        // formula CarAgent.CollectObservations actually builds, so a mismatch against the
+        // BehaviorParameters' Configured Vector Observation Size below (e.g. forgot to bump Space
+        // Size after flipping includeRemainingStepsObservation, or after a sensor shape change)
+        // shows up here explicitly instead of only surfacing as a cryptic training-time crash.
+        int? expectedObsSize = null;
+
         if (sensor != null)
         {
             sb.AppendLine($"Sensor shape: {sensor.sensorShape}, {sensor.SensorCount} points");
-            sb.AppendLine($"Expected observation size (16 fixed + points*4 one-hot): {16 + sensor.SensorCount * 4}");
+            bool remainingSteps = agent != null && agent.includeRemainingStepsObservation;
+            expectedObsSize = 17 + sensor.SensorCount * 5 + (remainingSteps ? 1 : 0);
+            sb.AppendLine($"Expected observation size (17 fixed + points*5 one-hot" +
+                (remainingSteps ? " + 1 remaining-steps" : "") + $"): {expectedObsSize}");
         }
         else
         {
@@ -100,7 +110,10 @@ public static class BuildInfoWriter
             string branches = actionSpec.BranchSizes != null && actionSpec.BranchSizes.Length > 0
                 ? string.Join(",", actionSpec.BranchSizes)
                 : "none";
-            sb.AppendLine($"Configured Vector Observation Size: {brain.VectorObservationSize}");
+            sb.AppendLine($"Configured Vector Observation Size: {brain.VectorObservationSize}" +
+                (expectedObsSize.HasValue
+                    ? (brain.VectorObservationSize == expectedObsSize.Value ? "  [MATCH]" : "  [MISMATCH - check Space Size!]")
+                    : ""));
             sb.AppendLine($"Actions: {actionSpec.NumContinuousActions} continuous, discrete branches [{branches}]");
         }
         else
@@ -109,8 +122,11 @@ public static class BuildInfoWriter
         }
 
         if (agent != null)
+        {
             sb.AppendLine($"Agent Max Step: {agent.MaxStep}" +
                 (decisionRequester != null ? $", Decision Period: {decisionRequester.DecisionPeriod}" : ""));
+            sb.AppendLine($"includeRemainingStepsObservation: {agent.includeRemainingStepsObservation}");
+        }
 
         if (carController != null)
         {
@@ -120,6 +136,8 @@ public static class BuildInfoWriter
             sb.AppendLine($"Slippery tile: friction x{carController.slipperyFrictionMultiplier}, " +
                 $"disturbance force {carController.slipperyDisturbanceForce} N / torque " +
                 $"{carController.slipperyDisturbanceTorque} N·m every {carController.slipperyDisturbanceInterval}s");
+            sb.AppendLine($"Gravel tile: {carController.gravelSpeedFraction:P0} of top speed, " +
+                $"friction x{carController.gravelFrictionMultiplier}");
         }
         else
         {
@@ -129,10 +147,19 @@ public static class BuildInfoWriter
         if (gridManager != null)
         {
             sb.AppendLine($"Grid: {gridManager.gridSize}x{gridManager.gridSize}, cell size {gridManager.cellSize}m, " +
-                $"noise scale {gridManager.noiseScale}");
-            sb.AppendLine($"Tile mix (raw weights, auto-normalized): Normal {gridManager.probNormal}, " +
-                $"SpeedLimited {gridManager.probSpeedLimited}, Slippery {gridManager.probSlippery}, " +
-                $"Terminal {gridManager.probTerminal}");
+                $"mapSource {gridManager.mapSource}" +
+                (gridManager.mapSource == MapSource.Perlin ? $", noise scale {gridManager.noiseScale}" : ""));
+            if (gridManager.mapSource == MapSource.Perlin)
+            {
+                sb.AppendLine($"Tile mix (raw weights, auto-normalized): Normal {gridManager.probNormal}, " +
+                    $"SpeedLimited {gridManager.probSpeedLimited}, Slippery {gridManager.probSlippery}, " +
+                    $"Terminal {gridManager.probTerminal} (Gravel is the Perlin background, not a weighted blob)");
+            }
+            else
+            {
+                sb.AppendLine("Tile mix: N/A - Voronoi loads prebaked maps from Resources/Maps/Voronoi* " +
+                    "(this GridManager's probNormal/SpeedLimited/Slippery/Terminal fields are Perlin-only and unused)");
+            }
         }
         else
         {

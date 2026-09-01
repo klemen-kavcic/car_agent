@@ -78,6 +78,16 @@ public class CarSensor : MonoBehaviour
     public bool[] isForwardLineSensor;
     public int ForwardLineSensorCount { get; private set; }
 
+    // The dead-ahead-line indices (a subset of isForwardLineSensor==true), ordered NEAREST-FIRST
+    // by actual world distance (sensorOffsets[i].magnitude) - NOT the same as ascending array
+    // index order, since BuildFanOffsets() appends indices ring-by-ring (front+rear arcs) and only
+    // appends the straight-ahead fill points at the very end, so a fill point sitting BETWEEN
+    // ring1 and ring2 has a smaller array index than ring2's own on-axis point despite being
+    // farther away in some configs. Rebuilt alongside isForwardLineSensor in BuildOffsets() -
+    // used by GetNearestForwardLineTerminalSeverity() below, never assume index order = distance
+    // order anywhere else either.
+    private int[] forwardLineIndicesByDistance;
+
     void Awake() => BuildOffsets();
 
     // Keeps currentTotalPoints correct in the Inspector the moment any count/shape field changes,
@@ -101,17 +111,74 @@ public class CarSensor : MonoBehaviour
         if (isForwardLineSensor != null)
             foreach (var f in isForwardLineSensor)
                 if (f) ForwardLineSensorCount++;
+
+        if (isForwardLineSensor != null && ForwardLineSensorCount > 0)
+        {
+            var indices = new List<int>(ForwardLineSensorCount);
+            for (int i = 0; i < isForwardLineSensor.Length; i++)
+                if (isForwardLineSensor[i]) indices.Add(i);
+            indices.Sort((a, b) => sensorOffsets[a].magnitude.CompareTo(sensorOffsets[b].magnitude));
+            forwardLineIndicesByDistance = indices.ToArray();
+        }
+        else
+        {
+            forwardLineIndicesByDistance = null;
+        }
     }
 
-    // Number of isForwardLineSensor entries currently reading Terminal - 0 if this isn't a Fan
-    // sensor (isForwardLineSensor null) or readings aren't populated yet.
-    public int CountForwardLineTerminal()
+    // Severity based on PROXIMITY of the nearest dead-ahead-line sensor currently reading
+    // Terminal, not a raw count - a hazard read by the 3m point is far more urgent than one only
+    // visible at 21m, and the old count-based Phi treated them identically (2 hazards read = same
+    // severity whether they're the two nearest points or the two farthest). Base linear fraction is
+    // (N - rank) / N (N = ForwardLineSensorCount, 7 at the current Inspector config):
+    //   0                              - no dead-ahead-line sensor currently reads Terminal
+    //   1/N                            - only reached by the FARTHEST dead-ahead sensor
+    //   ...
+    //   N/N (= 1.0)                    - the NEAREST dead-ahead sensor itself reads Terminal
+    // where rank is the nearest red sensor's 0-based position in forwardLineIndicesByDistance
+    // (rank 0 = nearest = severity 1.0). 0 if this isn't a Fan sensor or readings aren't populated
+    // yet.
+    //
+    // exponent (default 1 = the plain linear fraction above, unchanged from before this parameter
+    // existed) raises that fraction to a power: Mathf.Pow((N-rank)/N, exponent). exponent > 1 skews
+    // weight toward the near end - e.g. at exponent=2 the farthest point's severity drops from 1/7
+    // (~0.143) to (1/7)^2 (~0.020), while the nearest point stays exactly 1.0 regardless of
+    // exponent (1^exponent = 1 always) - motivated by real driving urgency being nonlinear in
+    // distance (a hazard 3m out deserves outsized concern vs one 18m out), at the cost of a weaker
+    // early-warning gradient from the farther points the higher exponent goes. CarSensor has no
+    // ML-Agents dependency by design (see class-level convention), so this is a plain parameter
+    // supplied by the caller (carAgent.cs reads sensor_severity_exponent from environment_parameters
+    // and passes it in) rather than read from Academy directly here.
+    // 0-based position (in forwardLineIndicesByDistance, i.e. by actual world distance - rank 0 =
+    // nearest) of the nearest dead-ahead-line sensor currently reading Terminal, or -1 if none are.
+    // Exists as its own method (not just inlined into GetNearestForwardLineTerminalSeverity below)
+    // so a caller can gate logic on RANK directly - e.g. carAgent.cs's MaxStep-outcome handling
+    // treats "nearest or 2nd-nearest sensor red" as a plausibly-hazard-caused timeout, which needs
+    // to stay correct regardless of sensor_severity_exponent - a fixed threshold on the SEVERITY
+    // VALUE would silently mean something different at exponent=1 vs exponent=2 (rank 1's severity
+    // is 6/7~=0.857 at exponent=1 but (6/7)^2~=0.735 at exponent=2), whereas "rank <= 1" means the
+    // same thing - nearest or second-nearest - no matter what exponent is in effect.
+    public int GetNearestForwardLineTerminalRank()
     {
-        if (readings == null || isForwardLineSensor == null) return 0;
-        int count = 0;
-        for (int i = 0; i < readings.Length; i++)
-            if (isForwardLineSensor[i] && readings[i] == TileType.Terminal) count++;
-        return count;
+        if (readings == null || forwardLineIndicesByDistance == null || forwardLineIndicesByDistance.Length == 0)
+            return -1;
+        int n = forwardLineIndicesByDistance.Length;
+        for (int rank = 0; rank < n; rank++)
+        {
+            if (readings[forwardLineIndicesByDistance[rank]] == TileType.Terminal)
+                return rank;
+        }
+        return -1;
+    }
+
+    public float GetNearestForwardLineTerminalSeverity(float exponent = 1f)
+    {
+        int rank = GetNearestForwardLineTerminalRank();
+        if (rank < 0 || forwardLineIndicesByDistance == null)
+            return 0f;
+        int n = forwardLineIndicesByDistance.Length;
+        float linear = (n - rank) / (float)n;
+        return exponent == 1f ? linear : Mathf.Pow(linear, exponent);
     }
 
     Vector2[] BuildGridOffsets()
