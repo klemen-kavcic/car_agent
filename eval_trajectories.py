@@ -41,6 +41,7 @@ Three subcommands, meant to be run in order:
            python eval_trajectories.py run \\
                --binary /path/to/Linux/car.x86_64 \\
                --run-dir /path/to/results/<run_id> \\
+               --config /path/to/configs/<run_id>.yaml \\
                --candidates candidates.json --stochastic-rollouts 5 \\
                --out trajectories.csv
 
@@ -685,10 +686,25 @@ def run_one_rollout(worker: EvalWorker, session: ort.InferenceSession, cont_out,
     xs = [v for v, _ in stats.get("Custom/PosX", [])]
     zs = [v for v, _ in stats.get("Custom/PosZ", [])]
     reverse_flags = [bool(v) for v, _ in stats.get("Custom/ReverseGear", [])]
-    if len(xs) != len(zs) or len(xs) != len(reverse_flags):
-        log.warning("Custom/PosX (%d), Custom/PosZ (%d), Custom/ReverseGear (%d) length mismatch "
-                    "for map=%s mode=%s - truncating to the shortest.", len(xs), len(zs),
-                    len(reverse_flags), candidate["map_file"], action_mode)
+    speeds = [v for v, _ in stats.get("Custom/SpeedMS", [])]
+    tile_types = [int(v) for v, _ in stats.get("Custom/TileType", [])]
+    tile_targets = [v for v, _ in stats.get("Custom/TileTargetSpeedMS", [])]
+    effective_tops = [v for v, _ in stats.get("Custom/EffectiveTopSpeedMS", [])]
+
+    # These are emitted by the current Unity build.  Failing explicitly is
+    # safer than writing an apparently valid but empty trajectory CSV when an
+    # older executable is used for evaluation.
+    if xs and any(len(values) == 0 for values in (speeds, tile_types, tile_targets, effective_tops)):
+        raise RuntimeError(
+            "The Unity executable did not report speed telemetry. Rebuild the "
+            "player with the current carAgent.cs before running trajectories."
+        )
+    lengths = [len(xs), len(zs), len(reverse_flags), len(speeds), len(tile_types), len(tile_targets), len(effective_tops)]
+    if len(set(lengths)) != 1:
+        raise RuntimeError(
+            "Inconsistent trajectory statistic lengths "
+            f"{lengths}; aborting rather than writing misaligned samples."
+        )
     # episode_length counts this episode's regular decision steps (agent_len, incremented once per
     # decision_steps appearance) - that prefix is always genuine, never leaked (leaking can only
     # happen strictly after termination is detected). Whatever comes after it is one of two things:
@@ -704,8 +720,8 @@ def run_one_rollout(worker: EvalWorker, session: ort.InferenceSession, cont_out,
     # spawn - safe because that prefix is never touched, so a genuinely-real terminal position is
     # never at risk of being stripped, only true leaked echoes are (which are bit-exact spawn
     # coordinates, not just nearby).
-    n_real = min(episode_length, len(xs), len(zs), len(reverse_flags))
-    full_path = list(zip(xs, zs, reverse_flags))
+    n_real = min(episode_length, *lengths)
+    full_path = list(zip(xs, zs, reverse_flags, speeds, tile_types, tile_targets, effective_tops))
     tail = full_path[n_real:]
     spawn_x, spawn_z = candidate["world_spawn_x"], candidate["world_spawn_z"]
     while tail and (n_real + len(tail) > 1) \
@@ -724,7 +740,10 @@ def run_one_rollout(worker: EvalWorker, session: ort.InferenceSession, cont_out,
 
 def cmd_run(args):
     import onnxruntime as ort
-    from eval_checkpoints import EvalWorker, resolve_action_outputs, CHECKPOINT_RE, step_from_path
+    from eval_checkpoints import (
+        CHECKPOINT_RE, EvalWorker, environment_parameters_from_config,
+        resolve_action_outputs, step_from_path,
+    )
 
     if not args.checkpoint and not args.run_dir:
         log.error("Provide --checkpoint or --run-dir.")
@@ -740,6 +759,22 @@ def cmd_run(args):
     if not candidates:
         log.error("No candidates in %s.", args.candidates)
         sys.exit(1)
+
+    args.environment_parameters = {}
+    if args.config:
+        config_path = Path(args.config)
+        if not config_path.is_file():
+            log.error("--config does not exist: %s", config_path)
+            sys.exit(1)
+        args.environment_parameters = environment_parameters_from_config(config_path)
+        log.info("Loaded %d constant environment parameter(s) from %s.",
+                 len(args.environment_parameters), config_path)
+        for name in (
+            "vehicle_speed_cap_enabled", "vehicle_speed_cap_ms", "regen_brake_torque",
+            "sensor_observations_enabled",
+        ):
+            if name in args.environment_parameters:
+                log.info("Evaluation parameter %s=%s", name, args.environment_parameters[name])
 
     worker = EvalWorker(args, args.worker_id, args.seed)
     rows: List[dict] = []
@@ -762,16 +797,27 @@ def cmd_run(args):
                 t0 = time.time()
                 result = run_one_rollout(worker, session, cont_out, disc_out, continuous_size,
                                           discrete_size, candidate, action_mode, args.max_steps_per_episode)
+                requested_cap_enabled = args.environment_parameters.get("vehicle_speed_cap_enabled", 0.0) >= 0.5
+                requested_cap = args.environment_parameters.get("vehicle_speed_cap_ms")
+                if requested_cap_enabled and requested_cap is not None:
+                    observed_top_speeds = [point[6] for point in result["path"]]
+                    if observed_top_speeds and max(observed_top_speeds) > requested_cap + 0.05:
+                        raise RuntimeError(
+                            "Unity did not apply the requested vehicle speed cap before trajectory "
+                            f"evaluation: config requested {requested_cap:.3f} m/s but "
+                            f"EffectiveTopSpeedMS reported {max(observed_top_speeds):.3f} m/s."
+                        )
                 log.info("map=%s candidate=%d mode=%s rollout=%d outcome=%s steps=%d (%.1fs)",
                           candidate["map_file"], candidate["candidate_id"], action_mode, rollout_index,
                           result["outcome"], len(result["path"]), time.time() - t0)
-                for step_index, (x, z, reverse) in enumerate(result["path"]):
+                for step_index, (x, z, reverse, speed, tile_type, tile_target, effective_top) in enumerate(result["path"]):
                     rows.append(dict(
                         run_id=run_id, checkpoint_step=checkpoint_step,
                         map_file=candidate["map_file"], map_index=candidate["map_index"],
                         candidate_id=candidate["candidate_id"], action_mode=action_mode,
                         rollout_index=rollout_index, step_index=step_index, x=x, z=z,
-                        reverse_gear=int(reverse),
+                        reverse_gear=int(reverse), speed_mps=speed, tile_type=tile_type,
+                        tile_target_speed_mps=tile_target, effective_top_speed_mps=effective_top,
                         outcome=result["outcome"], episode_length=result["episode_length"],
                     ))
     finally:
@@ -781,7 +827,8 @@ def cmd_run(args):
     with open(out_path, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=[
             "run_id", "checkpoint_step", "map_file", "map_index", "candidate_id", "action_mode",
-            "rollout_index", "step_index", "x", "z", "reverse_gear", "outcome", "episode_length",
+            "rollout_index", "step_index", "x", "z", "reverse_gear", "speed_mps", "tile_type",
+            "tile_target_speed_mps", "effective_top_speed_mps", "outcome", "episode_length",
         ])
         writer.writeheader()
         writer.writerows(rows)
@@ -868,6 +915,10 @@ def main():
                       help="results/<run_id> dir - defaults --checkpoint to <run-dir>/CarAgent.onnx "
                            "and the CSV's run_id column to <run-dir>'s name.")
     run.add_argument("--checkpoint", default=None, help="Explicit .onnx path - overrides --run-dir's default.")
+    run.add_argument("--config", default=None,
+                     help="Exact training YAML for this run. Its constant environment_parameters "
+                          "are applied before the first episode so trajectory dynamics match "
+                          "training (speed cap, regen, sensor mask, rewards, etc.).")
     run.add_argument("--candidates", default="candidates.json")
     run.add_argument("--stochastic-rollouts", type=int, default=5)
     run.add_argument("--maps", choices=["train", "val"], default="val",
@@ -881,6 +932,8 @@ def main():
     run.add_argument("--worker-id", type=int, default=0)
     run.add_argument("--seed", type=int, default=0)
     run.add_argument("--time-scale", type=float, default=20.0)
+    run.add_argument("--unity-job-worker-count", type=int, default=1,
+                      help="Unity internal job-worker threads for the executable (default: 1).")
     run.add_argument("--no-graphics", action="store_true", default=True)
     run.add_argument("--graphics", dest="no_graphics", action="store_false",
                       help="Run with graphics on (local debugging only).")

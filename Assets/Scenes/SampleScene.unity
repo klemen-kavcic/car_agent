@@ -637,10 +637,19 @@ PrefabInstance:
       addedObject: {fileID: 1583814002}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bc3b2acb0b80b654b8a0badee0599321, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1583814010}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bc3b2acb0b80b654b8a0badee0599321, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1583814007}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bc3b2acb0b80b654b8a0badee0599321, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1583814008}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bc3b2acb0b80b654b8a0badee0599321, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1583814011}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bc3b2acb0b80b654b8a0badee0599321, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1583814012}
     - targetCorrespondingSourceObject: {fileID: -816551263422503074, guid: bc3b2acb0b80b654b8a0badee0599321, type: 3}
       insertIndex: -1
       addedObject: {fileID: 172409375}
@@ -1108,6 +1117,25 @@ MonoBehaviour:
   currentTotalPoints: 24
   readings: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   isForwardLineSensor: 000100000000000001000000000000010000000001010101
+--- !u!114 &1583814010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583813999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f3f5c75d8d3485a9432d76340a1524e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::LaserTileSensor
+  gridManager: {fileID: 201757388}
+  specialDistanceScaleM: 50
+  roadBoundaryDistanceScaleM: 3
+  showGizmos: 1
+  showRuntimeLasers: 0
+  runtimeLineWidth: 0.07
+  runtimeLineHeight: 0.16
 --- !u!114 &1583814003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1152,6 +1180,9 @@ MonoBehaviour:
   editorForcedStage: 3
   currentBootstrapStageDisplay: None
   includeRemainingStepsObservation: 0
+  includeSensorObservations: 1
+  tileObservationMode: 1
+  laserTileSensor: {fileID: 1583814010}
   currentEpisodeReward: 0
   lastEpisodeReward: 0
   lastEpisodeEndReason: 
@@ -1171,7 +1202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Policies.BehaviorParameters
   m_BrainParameters:
-    VectorObservationSize: 137
+    VectorObservationSize: 77
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -1217,6 +1248,11 @@ MonoBehaviour:
   slipperyDisturbanceTorque: 4000
   slipperyDisturbanceInterval: 0.4
   normalTopSpeedMS: 25
+  vehicleSpeedCapEnabled: 0
+  vehicleSpeedCapMS: 14
+  vehicleSpeedCapGovernorStartFraction: 0.9
+  vehicleSpeedCapOverspeedMarginMS: 0.5
+  vehicleSpeedCapBrakeTorque: 900
   grassSpeedFraction: 0.02
   speedLimitBrakeTorque: 100000
   gravelSpeedFraction: 0.5
@@ -1276,11 +1312,61 @@ MonoBehaviour:
   panelAnchoredPosition: {x: -20, y: 20}
   minDotRadius: 3
   maxDotRadius: 22
+  laserDisplayRangeMeters: 35
   colorSlippery: {r: 0.337, g: 0.702, b: 0.914, a: 1}
   colorSpeedLimited: {r: 0.082, g: 0.655, b: 0.082, a: 1}
   colorTerminal: {r: 0.839, g: 0.153, b: 0.157, a: 1}
   colorAsphalt: {r: 0.3, g: 0.3, b: 0.3, a: 1}
   colorGravel: {r: 0.627, g: 0.604, b: 0.561, a: 1}
+--- !u!114 &1583814011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583813999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b67349e5d1c4a1d9c487a3b7e0f9d26, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::ManualDrivingView
+  agent: {fileID: 1583814004}
+  carController: {fileID: 1583814006}
+  overviewCamera: {fileID: 1255257122}
+  drivingCamera: {fileID: 330585545}
+  manualDrivingViewEnabled: 0
+  showWorldLaserRaysInManualView: 1
+  hideMapTilesInManualView: 1
+  showWheelSteeringIndicator: 1
+  steeringIndicatorLength: 2.2
+  steeringIndicatorWidth: 0.09
+  steeringIndicatorHeight: 0.28
+  localFollowOffset: {x: 0, y: 4.5, z: -7.5}
+  lookAheadMeters: 7
+  cameraPositionSmoothTime: 0.15
+  cameraRotationSharpness: 10
+--- !u!114 &1583814012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583813999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ec7c81fa5d748ba9e6153db8792f402, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::BrakeDistanceTest
+  agent: {fileID: 1583814004}
+  carController: {fileID: 1583814006}
+  gridManager: {fileID: 201757388}
+  startSpeedMS: 14
+  stoppedSpeedMS: 0.05
+  timeoutSeconds: 20
+  lastResult:
+  lastStoppingDistanceM: 0
+  lastStoppingTimeS: 0
+  testRunning: 0
 --- !u!1 &1691170581 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 732831887424131955, guid: bc3b2acb0b80b654b8a0badee0599321, type: 3}

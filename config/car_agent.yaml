@@ -28,6 +28,25 @@ behaviors:
         strength: 1.0
 
 environment_parameters:
+  # --- Optional vehicle-wide speed cap (car_component.cs) -------------------------------
+  # 0 = force cap off, 1 = force it on. Use -1 only if you specifically want to defer to
+  # the Inspector. When enabled, SpeedLimited and Gravel limits are fractions of this cap.
+  # Drive torque starts tapering at 90% of the cap, becomes zero at the cap, and only applies
+  # the modest 900 N·m catch-up brake if overshoot exceeds 0.5 m/s.
+  vehicle_speed_cap_enabled: 0
+  vehicle_speed_cap_ms: 14.0
+  vehicle_speed_cap_governor_start_fraction: 0.90
+  vehicle_speed_cap_overspeed_margin_ms: 0.5
+  vehicle_speed_cap_brake_torque: 900.0
+
+  # Regenerative braking when the accelerator is released. Set to 0 for the matched no-regen
+  # ablation; 450 is the existing Inspector/default value in N*m per wheel.
+  regen_brake_torque: 450.0
+
+  # 0 masks all CarSensor tile-reading slots to zero while preserving the 137-observation vector
+  # shape, allowing a matched no-sensor-input comparison. Keep 1 for normal sensor input.
+  sensor_observations_enabled: 1
+
   # --- Core reward weights (car_component.cs / carAgent.cs) ---
   # Reward-sweep variant 1 (the new default): terminal -10 (was -15), time penalty -0.001 (was
   # -0.01), goal +4 with the 100-band checkpoint/partial reward summing to +1 (0.01/band) instead

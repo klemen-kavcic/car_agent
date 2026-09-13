@@ -47,6 +47,9 @@ public class GridManager : MonoBehaviour
     [HideInInspector] public TileType[,] tileTypes;
     private GridTile[,] tiles;
     private Vector3 gridOrigin;
+    // Rendering can be suppressed for the manual observation-only view without changing the
+    // colliders, tileTypes array, or any physics/reward logic.
+    private bool tileVisualsVisible = true;
 
     // Two independent noise offsets: one for passability, one for terrain type
     private float passOffsetX, passOffsetZ;
@@ -139,8 +142,11 @@ public class GridManager : MonoBehaviour
                 tile.type = type;
 
                 var mat = MaterialForType(type);
-                if (mat != null)
-                    go.GetComponent<Renderer>().material = mat;
+                Renderer renderer = go.GetComponent<Renderer>();
+                if (mat != null && renderer != null)
+                    renderer.material = mat;
+                if (renderer != null)
+                    renderer.enabled = tileVisualsVisible;
 
                 tileTypes[x, z] = type;
                 tiles[x, z] = tile;
@@ -322,6 +328,22 @@ public class GridManager : MonoBehaviour
         return new Vector2Int(x, z);
     }
 
+    // Read-only geometry helpers for continuous grid sensors. Keeping the origin private avoids
+    // accidental edits, while letting a sensor traverse the exact same logical cells as GetTileAt.
+    public Vector3 GridOrigin => gridOrigin;
+    public float GridDiagonal => Mathf.Sqrt(2f) * gridSize * cellSize;
+
+    public bool IsInBounds(Vector2Int cell)
+    {
+        return tileTypes != null && cell.x >= 0 && cell.x < tileTypes.GetLength(0) &&
+               cell.y >= 0 && cell.y < tileTypes.GetLength(1);
+    }
+
+    public TileType GetTileAtCell(Vector2Int cell)
+    {
+        return IsInBounds(cell) ? tileTypes[cell.x, cell.y] : TileType.Terminal;
+    }
+
     public TileType GetTileAt(Vector3 worldPos)
     {
         var grid = tileTypes;
@@ -330,6 +352,24 @@ public class GridManager : MonoBehaviour
         if (c.x < 0 || c.x >= grid.GetLength(0) || c.y < 0 || c.y >= grid.GetLength(1))
             return TileType.Terminal; // off the map — treated as a hazard so the agent can see/avoid the edge
         return grid[c.x, c.y];
+    }
+
+    // Used by ManualDrivingView. Rendering is deliberately separate from tile state: hiding the
+    // map must not give the human a different physical world from the one the policy experiences.
+    public void SetTileVisualsVisible(bool visible)
+    {
+        tileVisualsVisible = visible;
+        if (tiles == null) return;
+        for (int x = 0; x < tiles.GetLength(0); x++)
+        {
+            for (int z = 0; z < tiles.GetLength(1); z++)
+            {
+                GridTile tile = tiles[x, z];
+                if (tile == null) continue;
+                Renderer renderer = tile.GetComponent<Renderer>();
+                if (renderer != null) renderer.enabled = visible;
+            }
+        }
     }
 
     // Overrides a single already-generated tile's type (and material) in place, without a full

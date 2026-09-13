@@ -83,14 +83,24 @@ public static class BuildInfoWriter
         sb.AppendLine($"Built: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
         sb.AppendLine($"Target: {target}, Unity {Application.unityVersion}");
 
-        // Tracks the same "17 fixed + SensorCount*5 (+1 if includeRemainingStepsObservation)"
-        // formula CarAgent.CollectObservations actually builds, so a mismatch against the
-        // BehaviorParameters' Configured Vector Observation Size below (e.g. forgot to bump Space
-        // Size after flipping includeRemainingStepsObservation, or after a sensor shape change)
-        // shows up here explicitly instead of only surfacing as a cryptic training-time crash.
+        // Tracks the same observation formula CarAgent.CollectObservations actually builds, so a
+        // mismatch against BehaviorParameters' configured Vector Observation Size (e.g. forgot to
+        // bump Space Size after choosing lasers) shows up here before HPC training begins.
         int? expectedObsSize = null;
 
-        if (sensor != null)
+        if (agent != null && agent.tileObservationMode == CarAgent.TileObservationMode.ContinuousLasers)
+        {
+            bool remainingSteps = agent.includeRemainingStepsObservation;
+            expectedObsSize = 17 + LaserTileSensor.ObservationCount + (remainingSteps ? 1 : 0);
+            sb.AppendLine($"Tile observation mode: ContinuousLasers, {LaserTileSensor.DirectionCount} directions x " +
+                $"{LaserTileSensor.ObservationsPerDirection} values = {LaserTileSensor.ObservationCount}");
+            if (agent.laserTileSensor != null)
+                sb.AppendLine($"Laser distance normalization: d/(d+S), special S={agent.laserTileSensor.specialDistanceScaleM}m, " +
+                    $"road-boundary S={agent.laserTileSensor.roadBoundaryDistanceScaleM}m (YAML-overridable)");
+            sb.AppendLine($"Expected observation size (17 fixed + laser values" +
+                (remainingSteps ? " + 1 remaining-steps" : "") + $"): {expectedObsSize}");
+        }
+        else if (sensor != null)
         {
             sb.AppendLine($"Sensor shape: {sensor.sensorShape}, {sensor.SensorCount} points");
             bool remainingSteps = agent != null && agent.includeRemainingStepsObservation;
@@ -126,17 +136,26 @@ public static class BuildInfoWriter
             sb.AppendLine($"Agent Max Step: {agent.MaxStep}" +
                 (decisionRequester != null ? $", Decision Period: {decisionRequester.DecisionPeriod}" : ""));
             sb.AppendLine($"includeRemainingStepsObservation: {agent.includeRemainingStepsObservation}");
+            sb.AppendLine($"includeSensorObservations: {agent.includeSensorObservations} (YAML can override without changing vector size)");
         }
 
         if (carController != null)
         {
             sb.AppendLine($"Normal top speed: {carController.normalTopSpeedMS} m/s");
-            sb.AppendLine($"SpeedLimited tile: {carController.grassSpeedFraction:P0} of top speed, " +
+            sb.AppendLine($"Regenerative brake: {carController.regenBrakeTorque} N*m per wheel when accelerator is released");
+            sb.AppendLine($"Vehicle-wide speed cap: " +
+                (carController.vehicleSpeedCapEnabled
+                    ? $"ON at {carController.vehicleSpeedCapMS} m/s, governor starts at {carController.vehicleSpeedCapGovernorStartFraction:P0}, " +
+                      $"catch-up brake {carController.vehicleSpeedCapBrakeTorque} N·m above +{carController.vehicleSpeedCapOverspeedMarginMS} m/s"
+                    : $"OFF (configured value {carController.vehicleSpeedCapMS} m/s)"));
+            sb.AppendLine($"SpeedLimited tile: {carController.grassSpeedFraction:P0} of effective top speed " +
+                $"({carController.EffectiveTopSpeedMS * carController.grassSpeedFraction} m/s), " +
                 $"brake torque {carController.speedLimitBrakeTorque}");
             sb.AppendLine($"Slippery tile: friction x{carController.slipperyFrictionMultiplier}, " +
                 $"disturbance force {carController.slipperyDisturbanceForce} N / torque " +
                 $"{carController.slipperyDisturbanceTorque} N·m every {carController.slipperyDisturbanceInterval}s");
-            sb.AppendLine($"Gravel tile: {carController.gravelSpeedFraction:P0} of top speed, " +
+            sb.AppendLine($"Gravel tile: {carController.gravelSpeedFraction:P0} of effective top speed " +
+                $"({carController.EffectiveTopSpeedMS * carController.gravelSpeedFraction} m/s), " +
                 $"friction x{carController.gravelFrictionMultiplier}");
         }
         else

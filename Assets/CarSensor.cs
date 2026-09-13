@@ -56,6 +56,7 @@ public class CarSensor : MonoBehaviour
     // Local-space (metre) XZ offsets, computed once in BuildOffsets() from whichever shape is selected.
     private Vector2[] sensorOffsets;
     public TileType[] readings;
+    private CarAgent agent;
     public int SensorCount => sensorOffsets != null ? sensorOffsets.Length : 0;
     // Read-only view for SensorWeightOverlay.cs's live layout (same array OnDrawGizmosSelected
     // already draws from) - exposed rather than duplicated so a shape/Inspector change here is
@@ -274,6 +275,12 @@ public class CarSensor : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
+        // The fan remains available for legacy observations and optional reward shaping, but it
+        // is not part of the laser policy input. Avoid drawing both visualizations at once.
+        if (agent == null) agent = GetComponent<CarAgent>();
+        if (agent != null && agent.tileObservationMode == CarAgent.TileObservationMode.ContinuousLasers)
+            return;
+
         if (sensorOffsets == null) BuildOffsets();
         foreach (var offset in sensorOffsets)
         {

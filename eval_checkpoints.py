@@ -17,7 +17,8 @@ One CSV row is written per checkpoint (per --action-mode, if --action-mode=both)
     run_id, maps, action_mode, step, episodes, mean_reward, std_reward,
     goal_rate, terminated_rate, maxstep_rate,
     goal_rate_std, terminated_rate_std, maxstep_rate_std,
-    mean_episode_length, std_episode_length,
+    mean_episode_length, std_episode_length, mean_speed_mps, p95_speed_mps, max_speed_mps,
+    absolute_max_speed_mps,
     time_frac_slippery, time_frac_speedlimited, time_frac_terminal,
     time_frac_asphalt, time_frac_gravel,
     visits_per_episode_slippery, visits_per_episode_speedlimited, visits_per_episode_terminal,
@@ -60,6 +61,13 @@ EvalWorker.__init__ for the full reasoning. Without this, most evaluation runs w
 spend all their episodes inside the Front/Behind/DeadEnd/Side bootstrap drills (forced blank
 all-Asphalt grid) instead of testing the real map.
 
+When --config is supplied, all numeric constant environment_parameters from that run's training
+YAML are queued before Unity's first reset. This is required for a faithful evaluation: settings
+such as vehicle_speed_cap_enabled, vehicle_speed_cap_ms, regen_brake_torque, and
+sensor_observations_enabled otherwise fall back to the built player's Inspector/C# defaults.
+Evaluation-specific overrides (--maps, disabled bootstrap/near-goal curricula, and an explicit
+--max-step-budget) are applied after the loaded configuration.
+
 --num-envs > 1 runs that many independent Unity environment processes in parallel (same idea as
 training's --num-envs, one full copy of the environment per worker) and pools their episode
 outcomes for each checkpoint - since the checkpoint's policy is frozen, this changes nothing about
@@ -72,6 +80,7 @@ Usage:
     python eval_checkpoints.py \
         --binary /path/to/Linux/car.x86_64 \
         --run-dir /path/to/results/<run_id> \
+        --config /path/to/configs/<run_id>.yaml \
         --episodes 50 \
         --num-envs 32 \
         --out /path/to/results/<run_id>/eval_results.csv
@@ -237,10 +246,54 @@ def training_num_envs_from_config(config_path: Path) -> Optional[int]:
     training (see car_agent.yaml's own comment on the key), so it doubles as a sensible
     default for how many parallel eval workers to run. Returns None if the file/key is
     missing so the caller can fall back to a plain default instead of guessing."""
-    with open(config_path) as f:
-        config = yaml.safe_load(f)
-    value = config.get("environment_parameters", {}).get("training_num_envs")
+    value = environment_parameters_from_config(config_path).get("training_num_envs")
     return int(value) if value is not None else None
+
+
+def _constant_environment_value(raw_value) -> Optional[float]:
+    """Extract a float from either a training YAML scalar or ML-Agents' saved expanded form."""
+    if isinstance(raw_value, bool):
+        return float(raw_value)
+    if isinstance(raw_value, (int, float)):
+        return float(raw_value)
+    if not isinstance(raw_value, dict):
+        return None
+
+    # results/<run>/configuration.yaml expands every scalar into a one-lesson constant sampler.
+    # If a real curriculum contains several constant lessons, use its final configured value for
+    # standalone evaluation. Non-constant samplers cannot be represented by set_float_parameter.
+    for lesson in reversed(raw_value.get("curriculum", [])):
+        sampler = lesson.get("value", {}) if isinstance(lesson, dict) else {}
+        if sampler.get("sampler_type") != "constant":
+            continue
+        value = sampler.get("sampler_parameters", {}).get("value")
+        if isinstance(value, bool):
+            return float(value)
+        if isinstance(value, (int, float)):
+            return float(value)
+    return None
+
+
+def environment_parameters_from_config(config_path: Path) -> Dict[str, float]:
+    """Load constant environment parameters from a training or saved ML-Agents YAML file."""
+    with open(config_path, encoding="utf-8") as f:
+        config = yaml.safe_load(f) or {}
+    raw_parameters = config.get("environment_parameters", {})
+    if not isinstance(raw_parameters, dict):
+        raise ValueError(f"{config_path}: environment_parameters must be a mapping")
+
+    parameters = {}
+    skipped = []
+    for name, raw_value in raw_parameters.items():
+        value = _constant_environment_value(raw_value)
+        if value is None:
+            skipped.append(name)
+        else:
+            parameters[name] = value
+    if skipped:
+        log.warning("Skipped non-constant/non-numeric environment parameter(s) from %s: %s",
+                    config_path, ", ".join(sorted(skipped)))
+    return parameters
 
 
 def build_feed(session: ort.InferenceSession, decision_steps, continuous_size: int,
@@ -302,6 +355,12 @@ class EvalWorker:
         self.engine_channel = EngineConfigurationChannel()
         self.stats_channel = StatsSideChannel()
         self.env_params_channel = EnvironmentParametersChannel()
+        # Reproduce the run's training-time vehicle dynamics, observation mask, and reward
+        # settings. These must be queued before Unity's first reset/OnEpisodeBegin; otherwise the
+        # player silently falls back to its Inspector/C# defaults (for example, cap disabled and
+        # regen enabled), which can evaluate a policy under different physics than it learned.
+        for name, value in getattr(args, "environment_parameters", {}).items():
+            self.env_params_channel.set_float_parameter(name, value)
         # Queued before the environment connects, so CarAgent.OnEpisodeBegin already sees these on
         # the very first episode - no separate reset needed to make them take effect.
         self.env_params_channel.set_float_parameter("use_validation_maps", 1.0 if args.maps == "val" else 0.0)
@@ -336,6 +395,11 @@ class EvalWorker:
             base_port=args.base_port,
             seed=seed,
             no_graphics=args.no_graphics,
+            additional_args=(
+                ["-job-worker-count", str(args.unity_job_worker_count)]
+                if args.unity_job_worker_count is not None and args.unity_job_worker_count > 0
+                else None
+            ),
             side_channels=[self.engine_channel, self.stats_channel, self.env_params_channel],
         )
         self.engine_channel.set_configuration_parameters(time_scale=args.time_scale, target_frame_rate=-1)
@@ -421,6 +485,9 @@ def run_checkpoint(workers: List[EvalWorker], onnx_path: Path, n_episodes: int,
     # tile_time/tile_visits totals above (and everything derived from them) are unaffected.
     episode_tile_time = {t: [] for t in TILE_TYPES}
     episode_tile_visits = {t: [] for t in TILE_TYPES}
+    episode_mean_speed = []
+    episode_p95_speed = []
+    episode_max_speed = []
     for w in workers:
         stats = w.stats_channel.get_and_reset_stats()
         goals += sum(v for v, _ in stats.get("Custom/GoalReached", []))
@@ -431,6 +498,9 @@ def run_checkpoint(workers: List[EvalWorker], onnx_path: Path, n_episodes: int,
             tile_visits[t] += sum(v for v, _ in stats.get(f"Custom/TileVisit{t}", []))
             episode_tile_time[t] += [v for v, _ in stats.get(f"Custom/EpisodeTileTime{t}", [])]
             episode_tile_visits[t] += [v for v, _ in stats.get(f"Custom/EpisodeTileVisit{t}", [])]
+        episode_mean_speed += [v for v, _ in stats.get("Custom/EpisodeMeanSpeedMS", [])]
+        episode_p95_speed += [v for v, _ in stats.get("Custom/EpisodeP95SpeedMS", [])]
+        episode_max_speed += [v for v, _ in stats.get("Custom/EpisodeMaxSpeedMS", [])]
     outcomes = goals + terminated + maxstep
     tile_time_total = sum(tile_time.values())
 
@@ -456,6 +526,15 @@ def run_checkpoint(workers: List[EvalWorker], onnx_path: Path, n_episodes: int,
         "maxstep_rate_std": float(np.sqrt(maxstep_rate * (1 - maxstep_rate))) if outcomes else float("nan"),
         "mean_episode_length": float(np.mean(episode_lengths)) if episode_lengths else float("nan"),
         "std_episode_length": float(np.std(episode_lengths)) if episode_lengths else float("nan"),
+        # Per-episode summaries emitted by carAgent.cs; p95 is the average episode-level
+        # 95th-percentile decision speed, deliberately resistant to isolated speed spikes.
+        # max_speed_mps is retained for backwards-compatible interpretation: it is the mean
+        # of the episode maxima. absolute_max_speed_mps is the largest maximum from any
+        # episode in this complete checkpoint evaluation (pooled across all workers).
+        "mean_speed_mps": float(np.mean(episode_mean_speed)) if episode_mean_speed else float("nan"),
+        "p95_speed_mps": float(np.mean(episode_p95_speed)) if episode_p95_speed else float("nan"),
+        "max_speed_mps": float(np.mean(episode_max_speed)) if episode_max_speed else float("nan"),
+        "absolute_max_speed_mps": float(np.max(episode_max_speed)) if episode_max_speed else float("nan"),
     }
     n_episodes = len(episode_rewards)
     for t in TILE_TYPES:
@@ -507,11 +586,12 @@ def main():
                           "is fully independent. Default: read environment_parameters."
                           "training_num_envs from --config if given, else 1.")
     ap.add_argument("--config", default=None,
-                     help="Path to the yaml passed to mlagents-learn for this run, used only to "
-                          "default --num-envs to the same environment_parameters.training_num_envs "
-                          "value training used (that key is already required to match the real "
-                          "--num-envs training was launched with - see the comment on it in "
-                          "car_agent.yaml). Purely a convenience; has no other effect on eval.")
+                     help="Path to the exact yaml passed to mlagents-learn for this run. Constant "
+                          "environment_parameters are applied before Unity's first episode so "
+                          "evaluation reproduces the trained vehicle cap, regen, sensor mask, and "
+                          "reward settings. Also supplies the default --num-envs from "
+                          "training_num_envs. ML-Agents' expanded saved configuration.yaml form "
+                          "is supported for constant samplers.")
     ap.add_argument("--time-scale", type=float, default=20.0)
     ap.add_argument("--base-port", type=int, default=7005)
     ap.add_argument("--worker-id", type=int, default=0,
@@ -519,6 +599,10 @@ def main():
                           "this if running multiple eval processes on the same node at once.")
     ap.add_argument("--seed", type=int, default=0,
                      help="Base seed - worker i uses seed+i, so parallel workers aren't correlated.")
+    ap.add_argument("--unity-job-worker-count", type=int, default=1,
+                     help="Unity internal job-worker threads per executable (default: 1). Keeping "
+                          "this low prevents many parallel environments from exhausting a node's "
+                          "process/thread limit; it does not change observations or physics.")
     ap.add_argument("--no-graphics", action="store_true", default=True)
     ap.add_argument("--graphics", dest="no_graphics", action="store_false",
                      help="Run with graphics on (local debugging only).")
@@ -551,6 +635,21 @@ def main():
                           "train-vs-eval gap is explained by sampling noise vs. a real difference.")
     args = ap.parse_args()
 
+    args.environment_parameters = {}
+    if args.config:
+        config_path = Path(args.config)
+        if not config_path.is_file():
+            ap.error(f"--config does not exist: {config_path}")
+        args.environment_parameters = environment_parameters_from_config(config_path)
+        log.info("Loaded %d constant environment parameter(s) from %s.",
+                 len(args.environment_parameters), config_path)
+        for name in (
+            "vehicle_speed_cap_enabled", "vehicle_speed_cap_ms", "regen_brake_torque",
+            "sensor_observations_enabled",
+        ):
+            if name in args.environment_parameters:
+                log.info("Evaluation parameter %s=%s", name, args.environment_parameters[name])
+
     if args.max_steps_per_checkpoint is None:
         effective_max_episode_length = (
             args.max_step_budget if args.max_step_budget is not None else ASSUMED_MAX_EPISODE_LENGTH
@@ -560,7 +659,8 @@ def main():
     if args.num_envs is None:
         args.num_envs = 1
         if args.config:
-            found = training_num_envs_from_config(Path(args.config))
+            configured_num_envs = args.environment_parameters.get("training_num_envs")
+            found = int(configured_num_envs) if configured_num_envs is not None else None
             if found is not None:
                 args.num_envs = found
                 log.info("Read training_num_envs=%d from %s - using --num-envs=%d.",
@@ -597,11 +697,26 @@ def main():
     fieldnames = ["run_id", "maps", "action_mode", "step", "episodes", "mean_reward", "std_reward",
                   "goal_rate", "terminated_rate", "maxstep_rate",
                   "goal_rate_std", "terminated_rate_std", "maxstep_rate_std",
-                  "mean_episode_length", "std_episode_length"] + \
+                  "mean_episode_length", "std_episode_length",
+                  "mean_speed_mps", "p95_speed_mps", "max_speed_mps", "absolute_max_speed_mps"] + \
                  [f"time_frac_{t.lower()}" for t in TILE_TYPES] + \
                  [f"visits_per_episode_{t.lower()}" for t in TILE_TYPES] + \
                  [f"episode_tile_time_std_{t.lower()}" for t in TILE_TYPES] + \
                  [f"episode_tile_visits_std_{t.lower()}" for t in TILE_TYPES]
+
+    # Do not append rows with the new metrics to a file produced by an older
+    # evaluator. A fresh output path (or a re-evaluation) is required so the
+    # CSV header and every row describe the same schema.
+    if out_path.exists() and out_path.stat().st_size > 0:
+        with out_path.open("r", newline="", encoding="utf-8") as existing_file:
+            existing_header = next(csv.reader(existing_file), [])
+        missing_columns = [name for name in fieldnames if name not in existing_header]
+        if missing_columns:
+            raise ValueError(
+                f"{out_path} uses an older result schema and is missing "
+                f"{missing_columns}. Choose a new output file or re-run the "
+                "evaluation from scratch."
+            )
     completed = load_completed_rows(out_path, args.maps)
     # size==0 case: a previous invocation was killed before even writing the header row.
     write_header = not out_path.exists() or out_path.stat().st_size == 0

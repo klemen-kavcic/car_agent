@@ -3,12 +3,9 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Live "which sensor is the network reacting to" HUD: a fixed corner panel (car-relative, not
-// world-position - forward always points up) with one dot per CarSensor fan point, colored by the
-// tile type it's currently reading and sized by how much that reading pulls on the first hidden
-// layer, given the CURRENTLY sensed tile type at that point (see export_sensor_weights.py's header
-// comment for the exact metric and why a plain "active one-hot column's weight norm" isn't quite
-// right once the observation normalizer is accounted for).
+// Car-relative sensor HUD (forward always points up). In fan mode this is a learned first-layer
+// influence display; in ContinuousLasers mode it becomes a live multi-ray tile display. The two
+// layouts intentionally are not mixed because they describe different observation vectors.
 //
 // Play-mode only, and only meaningful with the Agent's Behavior Parameters set to Inference Only
 // against a real checkpoint - CarSensor.readings is populated by CollectObservations, which only
@@ -36,6 +33,10 @@ public class SensorWeightOverlay : MonoBehaviour
     public Vector2 panelAnchoredPosition = new Vector2(-20, 20);
     public float minDotRadius = 3f;
     public float maxDotRadius = 22f;
+
+    [Header("Laser display")]
+    [Tooltip("World distance mapped to the panel edge in laser mode. This changes only the HUD scale; the agent still receives its full-map-normalized distances.")]
+    [Min(1f)] public float laserDisplayRangeMeters = 35f;
 
     [Header("Colors (mirrors the Python notebooks' TILE_COLORS palette)")]
     public Color colorSlippery = new Color(0.337f, 0.702f, 0.914f);      // #56b4e9
@@ -65,16 +66,36 @@ public class SensorWeightOverlay : MonoBehaviour
     private GameObject canvasGO;
     private RectTransform[] dotTransforms;
     private Image[] dotImages;
+    private CarAgent agent;
+    private LaserTileSensor laserTileSensor;
+    private bool laserMode;
+    private RectTransform[] laserLineTransforms;
+    private Image[] laserLineImages;
+    private RectTransform[] roadBoundaryTransforms;
+    private Image[] roadBoundaryImages;
 
     void Start()
     {
-        if (carSensor == null)
+        agent = GetComponent<CarAgent>();
+        laserMode = agent != null && agent.tileObservationMode == CarAgent.TileObservationMode.ContinuousLasers;
+        laserTileSensor = laserMode ? agent.laserTileSensor : null;
+
+        if (laserMode)
+        {
+            if (laserTileSensor == null || laserTileSensor.gridManager == null)
+            {
+                Debug.LogError("SensorWeightOverlay: ContinuousLasers is selected but LaserTileSensor/gridManager is not assigned - disabling.", this);
+                enabled = false;
+                return;
+            }
+        }
+        else if (carSensor == null)
         {
             Debug.LogError("SensorWeightOverlay: carSensor not assigned - disabling.", this);
             enabled = false;
             return;
         }
-        if (!LoadWeights())
+        if (!laserMode && !LoadWeights())
         {
             enabled = false;
             return;
@@ -144,6 +165,12 @@ public class SensorWeightOverlay : MonoBehaviour
         carImage.color = Color.white;
         carImage.sprite = BuildTriangleSprite();
 
+        if (laserMode)
+        {
+            BuildLaserUI(panelGO.transform);
+            return;
+        }
+
         var offsets = carSensor.SensorOffsets;
         int n = offsets.Count;
         dotTransforms = new RectTransform[n];
@@ -174,11 +201,62 @@ public class SensorWeightOverlay : MonoBehaviour
         }
     }
 
+    void BuildLaserUI(Transform panelTransform)
+    {
+        int n = LaserTileSensor.DirectionCount;
+        dotTransforms = new RectTransform[n];             // nearest-special endpoints
+        dotImages = new Image[n];
+        laserLineTransforms = new RectTransform[n];
+        laserLineImages = new Image[n];
+        roadBoundaryTransforms = new RectTransform[n];
+        roadBoundaryImages = new Image[n];
+
+        var circleSprite = BuildCircleSprite();
+        for (int i = 0; i < n; i++)
+        {
+            var lineGO = new GameObject($"LaserRay{i}");
+            lineGO.transform.SetParent(panelTransform, false);
+            var lineRect = lineGO.AddComponent<RectTransform>();
+            lineRect.anchorMin = lineRect.anchorMax = new Vector2(0.5f, 0.5f);
+            lineRect.pivot = new Vector2(0f, 0.5f); // its left edge stays at the car
+            var lineImage = lineGO.AddComponent<Image>();
+            laserLineTransforms[i] = lineRect;
+            laserLineImages[i] = lineImage;
+
+            var specialGO = new GameObject($"LaserSpecial{i}");
+            specialGO.transform.SetParent(panelTransform, false);
+            var specialRect = specialGO.AddComponent<RectTransform>();
+            specialRect.anchorMin = specialRect.anchorMax = new Vector2(0.5f, 0.5f);
+            var specialImage = specialGO.AddComponent<Image>();
+            specialImage.sprite = circleSprite;
+            dotTransforms[i] = specialRect;
+            dotImages[i] = specialImage;
+
+            var roadGO = new GameObject($"LaserRoadBoundary{i}");
+            roadGO.transform.SetParent(panelTransform, false);
+            var roadRect = roadGO.AddComponent<RectTransform>();
+            roadRect.anchorMin = roadRect.anchorMax = new Vector2(0.5f, 0.5f);
+            var roadImage = roadGO.AddComponent<Image>();
+            roadImage.sprite = circleSprite;
+            roadBoundaryTransforms[i] = roadRect;
+            roadBoundaryImages[i] = roadImage;
+        }
+    }
+
     void Update()
     {
         if (canvasGO != null && canvasGO.activeSelf != showOverlay)
             canvasGO.SetActive(showOverlay);
-        if (!showOverlay || data == null || carSensor.readings == null || dotTransforms == null)
+        if (!showOverlay)
+            return;
+
+        if (laserMode)
+        {
+            UpdateLaserUI();
+            return;
+        }
+
+        if (data == null || carSensor.readings == null || dotTransforms == null)
             return;
 
         int n = Mathf.Min(dotTransforms.Length, carSensor.readings.Length);
@@ -190,6 +268,49 @@ public class SensorWeightOverlay : MonoBehaviour
             float diameter = Mathf.Lerp(minDotRadius, maxDotRadius, t) * 2f;
             dotTransforms[i].sizeDelta = new Vector2(diameter, diameter);
             dotImages[i].color = ColorForTile((TileType)tileIndex);
+        }
+    }
+
+    void UpdateLaserUI()
+    {
+        if (laserTileSensor == null || laserTileSensor.gridManager == null ||
+            laserTileSensor.gridManager.tileTypes == null || dotTransforms == null)
+            return;
+
+        float mapDiagonal = Mathf.Max(0.001f, laserTileSensor.gridManager.GridDiagonal);
+        float displayRange = Mathf.Max(0.001f, laserDisplayRangeMeters);
+        float displayRadius = Mathf.Min(panelSize.x, panelSize.y) * 0.5f - maxDotRadius;
+        for (int i = 0; i < LaserTileSensor.DirectionCount; i++)
+        {
+            Vector3 localDirection3 = LaserTileSensor.GetLocalDirection(i);
+            Vector2 panelDirection = new Vector2(localDirection3.x, localDirection3.z);
+            laserTileSensor.Trace(laserTileSensor.transform.position,
+                laserTileSensor.transform.TransformDirection(localDirection3), out TileType specialType,
+                out float specialDistance, out float roadBoundaryDistance);
+
+            float specialRadius = Mathf.Clamp01(specialDistance / displayRange) * displayRadius;
+            Vector2 specialPosition = panelDirection * specialRadius;
+            Color specialColor = ColorForTile(specialType);
+
+            dotTransforms[i].anchoredPosition = specialPosition;
+            dotTransforms[i].sizeDelta = Vector2.one * 18f;
+            dotImages[i].color = specialColor;
+
+            laserLineTransforms[i].anchoredPosition = Vector2.zero;
+            laserLineTransforms[i].localRotation = Quaternion.Euler(0f, 0f,
+                Mathf.Atan2(panelDirection.y, panelDirection.x) * Mathf.Rad2Deg);
+            laserLineTransforms[i].sizeDelta = new Vector2(Mathf.Max(1f, specialRadius), 2f);
+            laserLineImages[i].color = new Color(specialColor.r, specialColor.g, specialColor.b, 0.65f);
+
+            bool hasRoadBoundary = roadBoundaryDistance < mapDiagonal - 0.001f;
+            roadBoundaryTransforms[i].gameObject.SetActive(hasRoadBoundary);
+            if (hasRoadBoundary)
+            {
+                roadBoundaryTransforms[i].anchoredPosition = panelDirection *
+                    (Mathf.Clamp01(roadBoundaryDistance / displayRange) * displayRadius);
+                roadBoundaryTransforms[i].sizeDelta = Vector2.one * 9f;
+                roadBoundaryImages[i].color = Color.yellow;
+            }
         }
     }
 

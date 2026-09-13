@@ -1,0 +1,334 @@
+{
+  "scenarios": [
+    {
+      "scenario_id": 0,
+      "map_file": "curved_401.txt",
+      "map_index": 0,
+      "crossing_cell_x": 43,
+      "crossing_cell_z": 45,
+      "overlap_cells": 13,
+      "arrival_gap_cells": 0,
+      "routes": [
+        {
+          "spawn_x": 41.25,
+          "spawn_z": 11.25,
+          "goal_x": -45.75,
+          "goal_z": 42.75,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 60,
+          "spawn_cell_z": 40,
+          "goal_cell_x": 2,
+          "goal_cell_z": 61
+        },
+        {
+          "spawn_x": 35.25,
+          "spawn_z": 35.25,
+          "goal_x": -42.75,
+          "goal_z": -5.25,
+          "heading_deg": 180.0,
+          "spawn_cell_x": 56,
+          "spawn_cell_z": 56,
+          "goal_cell_x": 4,
+          "goal_cell_z": 29
+        }
+      ]
+    },
+    {
+      "scenario_id": 1,
+      "map_file": "curved_406.txt",
+      "map_index": 5,
+      "crossing_cell_x": 39,
+      "crossing_cell_z": 41,
+      "overlap_cells": 4,
+      "arrival_gap_cells": 0,
+      "routes": [
+        {
+          "spawn_x": 5.25,
+          "spawn_z": 39.75,
+          "goal_x": 39.75,
+          "goal_z": -39.75,
+          "heading_deg": 150.71478280741925,
+          "spawn_cell_x": 36,
+          "spawn_cell_z": 59,
+          "goal_cell_x": 59,
+          "goal_cell_z": 6
+        },
+        {
+          "spawn_x": 27.75,
+          "spawn_z": 26.25,
+          "goal_x": -21.75,
+          "goal_z": -35.25,
+          "heading_deg": 188.55136448452618,
+          "spawn_cell_x": 51,
+          "spawn_cell_z": 50,
+          "goal_cell_x": 18,
+          "goal_cell_z": 9
+        }
+      ]
+    },
+    {
+      "scenario_id": 2,
+      "map_file": "curved_407.txt",
+      "map_index": 6,
+      "crossing_cell_x": 46,
+      "crossing_cell_z": 28,
+      "overlap_cells": 1,
+      "arrival_gap_cells": 1,
+      "routes": [
+        {
+          "spawn_x": 29.25,
+          "spawn_z": -41.25,
+          "goal_x": -23.25,
+          "goal_z": 33.75,
+          "heading_deg": 35.782525588539,
+          "spawn_cell_x": 52,
+          "spawn_cell_z": 5,
+          "goal_cell_x": 17,
+          "goal_cell_z": 55
+        },
+        {
+          "spawn_x": -18.75,
+          "spawn_z": 17.25,
+          "goal_x": 38.25,
+          "goal_z": -6.75,
+          "heading_deg": 201.13684450304686,
+          "spawn_cell_x": 20,
+          "spawn_cell_z": 44,
+          "goal_cell_x": 58,
+          "goal_cell_z": 28
+        }
+      ]
+    },
+    {
+      "scenario_id": 3,
+      "map_file": "curved_438.txt",
+      "map_index": 37,
+      "crossing_cell_x": 16,
+      "crossing_cell_z": 27,
+      "overlap_cells": 2,
+      "arrival_gap_cells": 1,
+      "routes": [
+        {
+          "spawn_x": -41.25,
+          "spawn_z": -36.75,
+          "goal_x": 30.75,
+          "goal_z": 39.75,
+          "heading_deg": 48.882583009212674,
+          "spawn_cell_x": 5,
+          "spawn_cell_z": 8,
+          "goal_cell_x": 53,
+          "goal_cell_z": 59
+        },
+        {
+          "spawn_x": -47.25,
+          "spawn_z": 15.75,
+          "goal_x": 26.25,
+          "goal_z": -39.75,
+          "heading_deg": 144.21747441146098,
+          "spawn_cell_x": 1,
+          "spawn_cell_z": 43,
+          "goal_cell_x": 50,
+          "goal_cell_z": 6
+        }
+      ]
+    },
+    {
+      "scenario_id": 4,
+      "map_file": "curved_442.txt",
+      "map_index": 41,
+      "crossing_cell_x": 27,
+      "crossing_cell_z": 35,
+      "overlap_cells": 3,
+      "arrival_gap_cells": 2,
+      "routes": [
+        {
+          "spawn_x": 36.75,
+          "spawn_z": -41.25,
+          "goal_x": -41.25,
+          "goal_z": 24.75,
+          "heading_deg": 318.8825830092127,
+          "spawn_cell_x": 57,
+          "spawn_cell_z": 5,
+          "goal_cell_x": 5,
+          "goal_cell_z": 49
+        },
+        {
+          "spawn_x": 33.75,
+          "spawn_z": 48.75,
+          "goal_x": -24.75,
+          "goal_z": -33.75,
+          "heading_deg": 243.78429601441377,
+          "spawn_cell_x": 55,
+          "spawn_cell_z": 65,
+          "goal_cell_x": 16,
+          "goal_cell_z": 10
+        }
+      ]
+    },
+    {
+      "scenario_id": 5,
+      "map_file": "curved_444.txt",
+      "map_index": 43,
+      "crossing_cell_x": 39,
+      "crossing_cell_z": 36,
+      "overlap_cells": 7,
+      "arrival_gap_cells": 0,
+      "routes": [
+        {
+          "spawn_x": 14.25,
+          "spawn_z": -30.75,
+          "goal_x": -0.75,
+          "goal_z": 39.75,
+          "heading_deg": 4.3371200201775234e-15,
+          "spawn_cell_x": 42,
+          "spawn_cell_z": 12,
+          "goal_cell_x": 32,
+          "goal_cell_z": 59
+        },
+        {
+          "spawn_x": 33.75,
+          "spawn_z": 27.75,
+          "goal_x": 39.75,
+          "goal_z": -12.75,
+          "heading_deg": 210.12755935152887,
+          "spawn_cell_x": 55,
+          "spawn_cell_z": 51,
+          "goal_cell_x": 59,
+          "goal_cell_z": 24
+        }
+      ]
+    },
+    {
+      "scenario_id": 6,
+      "map_file": "curved_451.txt",
+      "map_index": 50,
+      "crossing_cell_x": 27,
+      "crossing_cell_z": 29,
+      "overlap_cells": 14,
+      "arrival_gap_cells": 1,
+      "routes": [
+        {
+          "spawn_x": -41.25,
+          "spawn_z": -26.25,
+          "goal_x": 39.75,
+          "goal_z": 24.75,
+          "heading_deg": 54.21747441146101,
+          "spawn_cell_x": 5,
+          "spawn_cell_z": 15,
+          "goal_cell_x": 59,
+          "goal_cell_z": 49
+        },
+        {
+          "spawn_x": -35.25,
+          "spawn_z": 23.25,
+          "goal_x": -15.75,
+          "goal_z": -45.75,
+          "heading_deg": 144.217474411461,
+          "spawn_cell_x": 9,
+          "spawn_cell_z": 48,
+          "goal_cell_x": 22,
+          "goal_cell_z": 2
+        }
+      ]
+    },
+    {
+      "scenario_id": 7,
+      "map_file": "curved_480.txt",
+      "map_index": 79,
+      "crossing_cell_x": 23,
+      "crossing_cell_z": 25,
+      "overlap_cells": 21,
+      "arrival_gap_cells": 0,
+      "routes": [
+        {
+          "spawn_x": -38.25,
+          "spawn_z": -39.75,
+          "goal_x": 15.75,
+          "goal_z": 33.75,
+          "heading_deg": 41.11741699078734,
+          "spawn_cell_x": 7,
+          "spawn_cell_z": 6,
+          "goal_cell_x": 43,
+          "goal_cell_z": 55
+        },
+        {
+          "spawn_x": -0.75,
+          "spawn_z": -44.25,
+          "goal_x": -30.75,
+          "goal_z": 36.75,
+          "heading_deg": 4.3371200201775234e-15,
+          "spawn_cell_x": 32,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 12,
+          "goal_cell_z": 57
+        }
+      ]
+    },
+    {
+      "scenario_id": 8,
+      "map_file": "curved_484.txt",
+      "map_index": 83,
+      "crossing_cell_x": 23,
+      "crossing_cell_z": 45,
+      "overlap_cells": 1,
+      "arrival_gap_cells": 0,
+      "routes": [
+        {
+          "spawn_x": -32.25,
+          "spawn_z": 11.25,
+          "goal_x": 18.75,
+          "goal_z": 5.25,
+          "heading_deg": 45.00000000000003,
+          "spawn_cell_x": 11,
+          "spawn_cell_z": 40,
+          "goal_cell_x": 45,
+          "goal_cell_z": 36
+        },
+        {
+          "spawn_x": -2.25,
+          "spawn_z": 32.25,
+          "goal_x": -26.25,
+          "goal_z": -8.25,
+          "heading_deg": 243.43494882292202,
+          "spawn_cell_x": 31,
+          "spawn_cell_z": 54,
+          "goal_cell_x": 15,
+          "goal_cell_z": 27
+        }
+      ]
+    },
+    {
+      "scenario_id": 9,
+      "map_file": "curved_494.txt",
+      "map_index": 93,
+      "crossing_cell_x": 35,
+      "crossing_cell_z": 38,
+      "overlap_cells": 21,
+      "arrival_gap_cells": 0,
+      "routes": [
+        {
+          "spawn_x": 38.25,
+          "spawn_z": 8.25,
+          "goal_x": -36.75,
+          "goal_z": 23.25,
+          "heading_deg": 234.217474411461,
+          "spawn_cell_x": 58,
+          "spawn_cell_z": 38,
+          "goal_cell_x": 8,
+          "goal_cell_z": 48
+        },
+        {
+          "spawn_x": 18.75,
+          "spawn_z": -41.25,
+          "goal_x": 6.75,
+          "goal_z": 48.75,
+          "heading_deg": 333.43494882292197,
+          "spawn_cell_x": 45,
+          "spawn_cell_z": 5,
+          "goal_cell_x": 37,
+          "goal_cell_z": 65
+        }
+      ]
+    }
+  ]
+}

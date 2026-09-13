@@ -1,0 +1,138 @@
+behaviors:
+  CarAgent:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 1024
+      buffer_size: 8192
+      learning_rate: 0.0003
+    network_settings:
+      hidden_units: 128
+      num_layers: 2
+      normalize: true
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+
+    max_steps: &total_steps 20000000
+    time_horizon: 128
+    summary_freq: 10000
+    keep_checkpoints: 200
+    checkpoint_interval: 100000
+
+
+environment_parameters:
+  vehicle_speed_cap_enabled: 0
+  vehicle_speed_cap_ms: 14.0
+  vehicle_speed_cap_governor_start_fraction: 0.90
+  vehicle_speed_cap_overspeed_margin_ms: 0.5
+  vehicle_speed_cap_brake_torque: 900.0
+
+  regen_brake_torque: 450.0
+
+  sensor_observations_enabled: 1
+  laser_special_distance_scale_m: 50.0
+  laser_road_boundary_distance_scale_m: 3.0
+  
+  reward_goal: 4.0
+  reward_approach_bonus: 0.0
+  reward_terminal_penalty: -10.0
+
+  reward_time_penalty: -0.001
+  reward_time_penalty_growth: 0.00
+
+  reward_checkpoint: 0.01
+  
+  
+
+  total_training_steps: *total_steps
+
+  training_num_envs: 32
+
+  terminal_penalty_escalation_enabled: 0
+  terminal_penalty_escalation_step: 10000000
+  terminal_penalty_escalated_value: -15.0
+
+  goal_reward_escalation_enabled: 0
+  goal_reward_escalation_step: 15000000
+  goal_reward_escalated_value: 16.0
+
+
+  idle_penalty_enabled: 0
+  idle_speed_threshold: 0.001
+  idle_grace_steps: 20
+  idle_penalty_base: -0.02
+  idle_penalty_growth: 0.05
+
+
+  lagrangian_penalty_enabled: 0
+  lagrangian_target_crash_rate: 0.15
+  lagrangian_lambda_init: 5.0
+  lagrangian_lambda_lr: 10.0
+  lagrangian_lambda_max: 30.0
+
+  lagrangian_maxstep_enabled: 0
+  lagrangian_target_maxstep_rate: 0.15
+  lagrangian_maxstep_lambda_init: 0.002
+  lagrangian_maxstep_lambda_lr: 0.01
+  lagrangian_maxstep_lambda_max: 0.01
+
+
+  sensor_terminal_lagrangian_enabled: 0
+  sensor_terminal_target_exposure: 0.15
+  sensor_terminal_lambda_init: 1.0
+  sensor_terminal_lambda_lr: 10.0
+  sensor_terminal_lambda_max: 30.0
+
+  sensor_terminal_penalty_lambda: 0.0
+  sensor_severity_exponent: 1.0
+
+
+  adaptive_step_budget_enabled: 0
+  max_step_budget: 5000
+  adaptive_step_budget_lr: 2000.0
+  adaptive_step_budget_min: 2500
+  adaptive_step_budget_max: 8000
+
+  reward_maxstep_penalty: 0.0
+
+  bootstrap_curriculum_enabled: 1
+
+  bootstrap_approach_bonus: 5.0
+
+  # Stage 1: Front.
+  bootstrap_stage_front_steps: 200000
+  bootstrap_front_distance: 9
+
+  # Stage 2: Behind (reverse-gear drill; approach bonus flipped for this stage).
+  bootstrap_stage_behind_steps: 500000
+  bootstrap_behind_distance: 3
+
+  bootstrap_behind_spawn_reverse_prob_start: 1.0
+  bootstrap_behind_spawn_reverse_prob_end: 0.3
+
+  bootstrap_behind_terminal_distance: 4
+
+
+  bootstrap_stage_deadend_steps: 500000
+  bootstrap_deadend_depth_cells: 3
+  bootstrap_deadend_goal_distance_min: 10
+  bootstrap_deadend_goal_distance_max: 18
+  bootstrap_deadend_goal_angle_spread_deg: 60
+  
+  bootstrap_deadend_spawn_reverse_prob_start: 1.0
+  bootstrap_deadend_spawn_reverse_prob_end: 0.0
+  # Stage 3: Side (randomised angle 0=front/180=behind, mirrored left/right, plus randomised
+  # distance, each re-rolled every episode in this stage).
+  bootstrap_stage_side_steps: 300000
+  bootstrap_side_distance_min: 8
+  bootstrap_side_distance_max: 15
+  bootstrap_side_angle_min_deg: 30
+  bootstrap_side_angle_max_deg: 150
+
+  voronoi_near_goal_enabled: 1
+  voronoi_near_goal_steps: 3500000
+  voronoi_near_goal_distance_start: 15.0
+  voronoi_near_goal_distance_end: 100.0
+
+  use_validation_maps: 0

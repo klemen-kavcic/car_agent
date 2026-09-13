@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
@@ -6,6 +7,8 @@ using UnityEngine.InputSystem;
 
 public class CarAgent : Agent
 {
+    public enum TileObservationMode { SampledTileFan, ContinuousLasers }
+
     public car_component carController;
     public Transform goal;
     public Transform spawnPoint;
@@ -69,6 +72,14 @@ public class CarAgent : Agent
         "Agent's BehaviorParameters -> Vector Observation Space Size by +1 to match, then build). " +
         "To compare with/without, build and train two separate binaries, one with each setting.")]
     public bool includeRemainingStepsObservation = false;
+    [Tooltip("When disabled, sensor slots remain in the vector but are filled with zeros. This enables a matched no-sensor-input ablation without changing the 137-observation model shape.")]
+    public bool includeSensorObservations = true;
+    [Tooltip("SampledTileFan = existing 24 tile points (137 observations). ContinuousLasers = twelve car-relative grid lasers (77 observations). Select before building/training; this changes the model input size.")]
+    public TileObservationMode tileObservationMode = TileObservationMode.SampledTileFan;
+    public LaserTileSensor laserTileSensor;
+    [HideInInspector] public TrafficScenarioManager trafficManager;
+    [HideInInspector] public int trafficSeatIndex = -1;
+    private bool trafficFinished;
 
     [Tooltip("Live cumulative reward for the episode in progress — read-only display, shows in Inspector during Play.")]
     public float currentEpisodeReward;
@@ -116,6 +127,17 @@ public class CarAgent : Agent
     // False only before the run's first episode has actually happened, so that first OnEpisodeBegin
     // doesn't report a bogus all-zero "episode" - same guard shape as hasBootstrapStageHistory above.
     private bool hasEpisodeTileStatsToReport = false;
+
+    // Speed is sampled once per agent decision (0.1 s with the current DecisionPeriod=5),
+    // matching the existing TileTime and fixed-trajectory streams. The five bands are fractions
+    // of carController.EffectiveTopSpeedMS, not of an episode's observed peak, so they remain
+    // comparable across policies and capped/uncapped experiments.
+    private const int SpeedBandCount = 5;
+    private readonly float[] episodeSpeedBandDecisionSteps = new float[SpeedBandCount];
+    private readonly List<float> episodeSpeedSamplesMS = new List<float>();
+    private float episodeSpeedSumMS;
+    private float episodeMaxSpeedMS;
+    private bool hasEpisodeSpeedStatsToReport = false;
 
     // Guards OnTriggerEnter against firing more than once for the same goal arrival. If the car's
     // Rigidbody hierarchy has more than one non-wheel Collider (e.g. separate chassis/body-panel
@@ -191,6 +213,47 @@ public class CarAgent : Agent
     void UpdateRewardWeights()
     {
         var ep = Academy.Instance.EnvironmentParameters;
+
+        // Optional experiment-level vehicle cap. A negative enabled value means "use the
+        // Inspector setting", so old YAMLs/builds retain their exact prior behaviour. When
+        // configured, the cap also becomes the speed reference for SpeedLimited/Gravel tiles.
+        if (carController != null)
+        {
+            float regenTorque = ep.GetWithDefault("regen_brake_torque", carController.regenBrakeTorque);
+            if (regenTorque >= 0f) carController.regenBrakeTorque = regenTorque;
+
+            float capEnabled = ep.GetWithDefault("vehicle_speed_cap_enabled", -1f);
+            if (capEnabled >= 0f)
+            {
+                carController.vehicleSpeedCapEnabled = capEnabled >= 0.5f;
+                float capMS = ep.GetWithDefault("vehicle_speed_cap_ms", carController.vehicleSpeedCapMS);
+                if (capMS > 0f) carController.vehicleSpeedCapMS = capMS;
+                float governorStart = ep.GetWithDefault("vehicle_speed_cap_governor_start_fraction", carController.vehicleSpeedCapGovernorStartFraction);
+                if (governorStart >= 0.5f && governorStart < 1f) carController.vehicleSpeedCapGovernorStartFraction = governorStart;
+                float overspeedMargin = ep.GetWithDefault("vehicle_speed_cap_overspeed_margin_ms", carController.vehicleSpeedCapOverspeedMarginMS);
+                if (overspeedMargin >= 0f) carController.vehicleSpeedCapOverspeedMarginMS = overspeedMargin;
+                float capTorque = ep.GetWithDefault("vehicle_speed_cap_brake_torque", carController.vehicleSpeedCapBrakeTorque);
+                if (capTorque >= 0f) carController.vehicleSpeedCapBrakeTorque = capTorque;
+            }
+        }
+
+        if (laserTileSensor != null)
+        {
+            float specialScale = ep.GetWithDefault(
+                "laser_special_distance_scale_m", laserTileSensor.specialDistanceScaleM);
+            float roadScale = ep.GetWithDefault(
+                "laser_road_boundary_distance_scale_m", laserTileSensor.roadBoundaryDistanceScaleM);
+            if (specialScale > 0f) laserTileSensor.specialDistanceScaleM = specialScale;
+            if (roadScale > 0f) laserTileSensor.roadBoundaryDistanceScaleM = roadScale;
+        }
+
+        // Keep the vector's sensor slots present but zero them for a clean input ablation. This
+        // deliberately does not alter BehaviorParameters.VectorObservationSize, so all vehicle-
+        // control conditions can use the same 137-observation executable.
+        float sensorObservationsEnabled = ep.GetWithDefault("sensor_observations_enabled", -1f);
+        if (sensorObservationsEnabled >= 0f)
+            includeSensorObservations = sensorObservationsEnabled >= 0.5f;
+
         float goalRewardBase = ep.GetWithDefault("reward_goal",                 5.0f);
         rwApproachBonus       = ep.GetWithDefault("reward_approach_bonus",       3.0f);
         rwTimePenaltyGrowth   = ep.GetWithDefault("reward_time_penalty_growth",  0.0f);
@@ -351,6 +414,7 @@ public class CarAgent : Agent
     // fire on both the MaxStep-1 and MaxStep ticks before Agent's internal auto-reset lands.
     void FixedUpdate()
     {
+        if (trafficManager != null) return; // the shared manager owns the traffic clock
         if (MaxStep > 0 && StepCount >= MaxStep - 1 && !episodeOutcomeLogged)
         {
             AddReward(rwMaxStepPenalty);
@@ -378,6 +442,11 @@ public class CarAgent : Agent
     [ContextMenu("Force Next Episode")]
     public void ForceNextEpisode()
     {
+        if (trafficManager != null)
+        {
+            trafficManager.ForceReset();
+            return;
+        }
         EndEpisodeWithLog("Manual");
     }
 
@@ -531,6 +600,41 @@ public class CarAgent : Agent
         }
         hasEpisodeTileStatsToReport = true;
 
+        // Report the completed episode's speed summaries before clearing their accumulators.
+        // p95 is the 95th percentile of decision-speed samples: 95% of the sampled time was at
+        // or below it, making it robust to a single brief speed spike.
+        if (hasEpisodeSpeedStatsToReport && episodeSpeedSamplesMS.Count > 0)
+        {
+            var sortedSpeeds = new List<float>(episodeSpeedSamplesMS);
+            sortedSpeeds.Sort();
+            int p95Index = Mathf.Clamp(Mathf.CeilToInt(sortedSpeeds.Count * 0.95f) - 1, 0, sortedSpeeds.Count - 1);
+            Academy.Instance.StatsRecorder.Add(
+                "Custom/EpisodeMeanSpeedMS",
+                episodeSpeedSumMS / episodeSpeedSamplesMS.Count,
+                StatAggregationMethod.Average);
+            Academy.Instance.StatsRecorder.Add(
+                "Custom/EpisodeP95SpeedMS",
+                sortedSpeeds[p95Index],
+                StatAggregationMethod.Average);
+            Academy.Instance.StatsRecorder.Add(
+                "Custom/EpisodeMaxSpeedMS",
+                episodeMaxSpeedMS,
+                StatAggregationMethod.Average);
+            for (int i = 0; i < SpeedBandCount; i++)
+            {
+                Academy.Instance.StatsRecorder.Add(
+                    $"Custom/EpisodeSpeedBandFraction{i}",
+                    episodeSpeedBandDecisionSteps[i] / episodeSpeedSamplesMS.Count,
+                    StatAggregationMethod.Average);
+            }
+        }
+        episodeSpeedSamplesMS.Clear();
+        episodeSpeedSumMS = 0f;
+        episodeMaxSpeedMS = 0f;
+        for (int i = 0; i < SpeedBandCount; i++) episodeSpeedBandDecisionSteps[i] = 0f;
+        hasEpisodeSpeedStatsToReport = true;
+
+        if (trafficManager != null && rb.isKinematic) rb.isKinematic = false;
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         episodeStepCount = 0;
@@ -549,7 +653,7 @@ public class CarAgent : Agent
         carController.brakeInput = 0f;
         carController.ResetSlipperyDisturbance();
 
-        episodeBootstrapStage = DetermineBootstrapStage();
+        episodeBootstrapStage = trafficManager != null ? BootstrapStage.None : DetermineBootstrapStage();
         currentBootstrapStageDisplay = episodeBootstrapStage.ToString();
 
         // Report the exact step of each stage transition once per environment (Sum-aggregated,
@@ -568,6 +672,13 @@ public class CarAgent : Agent
         hasBootstrapStageHistory = true;
 
         UpdateRewardWeights();
+
+        if (trafficManager != null)
+        {
+            MaxStep = 0; // UpdateRewardWeights reads the single-car YAML budget each reset.
+            trafficManager.OnAgentEpisodeBegin(this);
+            return;
+        }
 
         if (carController.gridManager != null)
         {
@@ -745,6 +856,58 @@ public class CarAgent : Agent
         spawnDistance = Vector3.Distance(transform.position, goal.position);
         minDistanceThisEpisode = spawnDistance;
         checkpointsAwarded = 0;
+    }
+
+    public void PlaceForTraffic(TrafficScenarioManager.Route route)
+    {
+        trafficFinished = false;
+        carController.enabled = true;
+        rb.isKinematic = false;
+        Vector3 spawn = new Vector3(route.spawn_x, startPosition.y, route.spawn_z);
+        rb.position = spawn;
+        rb.rotation = Quaternion.Euler(0f, route.heading_deg, 0f);
+        transform.SetPositionAndRotation(spawn, rb.rotation);
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        goal.position = new Vector3(route.goal_x, goal.position.y, route.goal_z);
+        carController.currentTileType = carController.gridManager.GetTileAt(spawn);
+        spawnDistance = Vector3.Distance(spawn, goal.position);
+        minDistanceThisEpisode = spawnDistance;
+        checkpointsAwarded = 0;
+        Physics.SyncTransforms();
+    }
+
+    public void FreezeForTraffic(string reason)
+    {
+        if (trafficFinished) return;
+        trafficFinished = true;
+        lastEpisodeEndReason = reason;
+        episodeOutcomeLogged = true;
+        carController.accelerationInput = 0f;
+        carController.brakeInput = 0f;
+        carController.steerDeltaInput = 0f;
+        carController.wheel1.motorTorque = 0f;
+        carController.wheel2.motorTorque = 0f;
+        carController.wheel3.motorTorque = 0f;
+        carController.wheel4.motorTorque = 0f;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = true;
+        carController.enabled = false;
+    }
+
+    public void FinishTrafficMaxStep()
+    {
+        if (trafficFinished) return;
+        AddReward(rwMaxStepPenalty);
+        Academy.Instance.StatsRecorder.Add("Custom/MaxStepReached", 1.0f, StatAggregationMethod.Sum);
+        trafficManager.Finish(this, "MaxStep");
+    }
+
+    public void EndTrafficEpisode()
+    {
+        lastEpisodeReward = GetCumulativeReward();
+        EndEpisode();
     }
 
     bool IsSpawnableTile(Vector3 worldPos)
@@ -977,6 +1140,10 @@ public class CarAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         carSensor?.UpdateReadings();
+        // Finished traffic cars remain present as obstacles, but must not accrue
+        // more shaping or stationary-speed/tile samples while waiting for peers.
+        if (trafficManager == null || !trafficFinished)
+        {
 
         // Dense forward-sensor terminal-avoidance shaping - see car_agent.yaml's
         // sensor_terminal_lagrangian_* block for the mechanism/derivation this still follows.
@@ -1026,6 +1193,14 @@ public class CarAgent : Agent
             $"Custom/TileTime{carController.currentTileType}", 1f, StatAggregationMethod.Sum);
         episodeTileTimeSteps[(int)carController.currentTileType] += 1f;
 
+        float speedMS = rb.linearVelocity.magnitude;
+        episodeSpeedSamplesMS.Add(speedMS);
+        episodeSpeedSumMS += speedMS;
+        episodeMaxSpeedMS = Mathf.Max(episodeMaxSpeedMS, speedMS);
+        float effectiveTopSpeed = Mathf.Max(0.001f, carController.EffectiveTopSpeedMS);
+        int speedBand = Mathf.Clamp(Mathf.FloorToInt(speedMS / effectiveTopSpeed * SpeedBandCount), 0, SpeedBandCount - 1);
+        episodeSpeedBandDecisionSteps[speedBand] += 1f;
+
         // One Sum-aggregated stat per genuine surface change (including the episode's starting
         // tile - previousTileType is null only right after OnEpisodeBegin) - unlike TileTime
         // above, this doesn't grow just because the car sat on a slow surface longer, so it's a
@@ -1054,6 +1229,11 @@ public class CarAgent : Agent
             Academy.Instance.StatsRecorder.Add("Custom/PosX", transform.position.x, StatAggregationMethod.MostRecent);
             Academy.Instance.StatsRecorder.Add("Custom/PosZ", transform.position.z, StatAggregationMethod.MostRecent);
             Academy.Instance.StatsRecorder.Add("Custom/ReverseGear", carController.reverseGear ? 1f : 0f, StatAggregationMethod.MostRecent);
+            Academy.Instance.StatsRecorder.Add("Custom/SpeedMS", speedMS, StatAggregationMethod.MostRecent);
+            Academy.Instance.StatsRecorder.Add("Custom/TileType", (float)carController.currentTileType, StatAggregationMethod.MostRecent);
+            Academy.Instance.StatsRecorder.Add("Custom/TileTargetSpeedMS", carController.CurrentTileTargetSpeedMS, StatAggregationMethod.MostRecent);
+            Academy.Instance.StatsRecorder.Add("Custom/EffectiveTopSpeedMS", carController.EffectiveTopSpeedMS, StatAggregationMethod.MostRecent);
+        }
         }
 
         Vector3 toGoal = goal.position - transform.position;
@@ -1082,7 +1262,14 @@ public class CarAgent : Agent
         // sensor readings: carSensor.SensorCount × 5 values (one-hot per point)
         // If the sensor shape/radius/ring settings change, update Space Size to: 17 + SensorCount * 5
         // (+1 more if includeRemainingStepsObservation is enabled)
-        if (carSensor != null && carSensor.readings != null)
+        if (tileObservationMode == TileObservationMode.ContinuousLasers)
+        {
+            if (includeSensorObservations && laserTileSensor != null)
+                laserTileSensor.AddObservations(sensor);
+            else
+                AddZeroObservations(sensor, LaserTileSensor.ObservationCount);
+        }
+        else if (includeSensorObservations && carSensor != null && carSensor.readings != null)
         {
             foreach (var t in carSensor.readings)
                 AddTileOneHot(sensor, t);
@@ -1090,14 +1277,14 @@ public class CarAgent : Agent
         else
         {
             // fallback: 13 zeros per reading × 5 (one-hot) for default circular radius=2
-            int count = carSensor != null ? carSensor.SensorCount : 13;
-            for (int i = 0; i < count * 5; i++)
-                sensor.AddObservation(0f);
+            int count = carSensor != null ? carSensor.SensorCount : 24;
+            AddZeroObservations(sensor, count * 5);
         }
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
+        if (trafficManager != null && trafficFinished) return;
         float steer = actions.ContinuousActions[0];
         float pedal = (actions.ContinuousActions[1] + 1f) / 2f;
         pedal = Mathf.Clamp01(pedal); // safety net only, for rare slight overshoot
@@ -1153,7 +1340,8 @@ public class CarAgent : Agent
             AddReward(rwTerminalPenalty);
             Academy.Instance.StatsRecorder.Add("Custom/Terminated", 1.0f, StatAggregationMethod.Sum);
             episodeOutcomeLogged = true;
-            EndEpisodeWithLog("Terminated");
+            if (trafficManager != null) trafficManager.Finish(this, "Terminated");
+            else EndEpisodeWithLog("Terminated");
             return;
         }
 
@@ -1162,7 +1350,8 @@ public class CarAgent : Agent
             AddReward(rwTerminalPenalty);
             Academy.Instance.StatsRecorder.Add("Custom/Terminated", 1.0f, StatAggregationMethod.Sum);
             episodeOutcomeLogged = true;
-            EndEpisodeWithLog("Terminated");
+            if (trafficManager != null) trafficManager.Finish(this, "Terminated");
+            else EndEpisodeWithLog("Terminated");
             return;
         }
     }
@@ -1217,6 +1406,7 @@ public class CarAgent : Agent
 
     void OnTriggerEnter(Collider other)
     {
+        if (trafficManager != null && trafficFinished) return;
         if (other.transform == goal && !goalTriggeredThisEpisode)
         {
             goalTriggeredThisEpisode = true;
@@ -1234,19 +1424,41 @@ public class CarAgent : Agent
 
             Academy.Instance.StatsRecorder.Add("Custom/GoalReached", 1.0f, StatAggregationMethod.Sum);
             episodeOutcomeLogged = true;
-            EndEpisodeWithLog("Goal");
+            if (trafficManager != null) trafficManager.Finish(this, "Goal");
+            else EndEpisodeWithLog("Goal");
         }
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        if (trafficManager != null)
+        {
+            CarAgent otherCar = collision.collider.GetComponentInParent<CarAgent>();
+            if (otherCar != null && otherCar != this && otherCar.trafficManager == trafficManager)
+            {
+                FinishTrafficCollision();
+                otherCar.FinishTrafficCollision();
+                return;
+            }
+        }
         if (collision.gameObject.CompareTag("Wall"))
         {
+            if (trafficManager != null && trafficFinished) return;
             AddReward(rwTerminalPenalty);
             Academy.Instance.StatsRecorder.Add("Custom/Terminated", 1.0f, StatAggregationMethod.Sum);
             episodeOutcomeLogged = true;
-            EndEpisodeWithLog("Terminated");
+            if (trafficManager != null) trafficManager.Finish(this, "Terminated");
+            else EndEpisodeWithLog("Terminated");
         }
+    }
+
+    void FinishTrafficCollision()
+    {
+        if (trafficManager == null || trafficFinished) return;
+        AddReward(rwTerminalPenalty);
+        Academy.Instance.StatsRecorder.Add("Custom/Terminated", 1.0f, StatAggregationMethod.Sum);
+        episodeOutcomeLogged = true;
+        trafficManager.Finish(this, "VehicleCollision");
     }
 
     void AddTileOneHot(VectorSensor sensor, TileType type)
@@ -1256,5 +1468,10 @@ public class CarAgent : Agent
         sensor.AddObservation(type == TileType.Terminal     ? 1f : 0f);
         sensor.AddObservation(type == TileType.Asphalt      ? 1f : 0f);
         sensor.AddObservation(type == TileType.Gravel       ? 1f : 0f);
+    }
+
+    void AddZeroObservations(VectorSensor sensor, int count)
+    {
+        for (int i = 0; i < count; i++) sensor.AddObservation(0f);
     }
 }

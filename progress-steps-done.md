@@ -129,6 +129,21 @@
     - added 10 fixed maps with fixed start/end to compare the different trajectories
     how wide is the road?
 
+0824
+    - new penalty for sensors, closer it gets to the red the more it stops
+    - tried new penalty values (best -10, -10, 8+2)
+    - longer voronoi bootstrap
+    - better performance, deterministic is very low still
+    - added visualisation of the sensors on the map
+    - add a way to observe remainig time - didnt really help
+
+0906
+    - top speed of the car is the problem, it does not see far enough in to the distance
+    - limit top speed, motor limits at 90%, at 100% there is no more torque, breaking after that limit
+    - add new sensors (lidar, continuos, not points in the space)
+    - 5000 × 0.02 = 100 seconds
+    - measure speed during log and eval, then during 10 maps it also coollects distribution of speed
+
 
  this is essentially potential-based reward shaping (Ng, Harada & Russell 1999): define a "danger potential" Φ(s) = (terminal sensors currently triggered)/7, and reward the change in it each step (−ΔΦ). That framing matters because it's the one variant of reward shaping that's provably policy-invariant — a full round trip (approach then fully retreat) always nets to exactly zero, no matter how many steps it takes or how the car oscillates in between, since the intermediate terms telescope away
 

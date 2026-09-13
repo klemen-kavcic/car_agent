@@ -20,6 +20,16 @@ public class car_component : MonoBehaviour
     [Tooltip("How often (seconds) the random slippery-tile disturbance re-rolls to a new direction/magnitude. A short-lived push reads as a believable patch of ice rather than symmetric high-frequency jitter that cancels itself out.")]
     public float slipperyDisturbanceInterval = 0.4f;
     public float normalTopSpeedMS = 25f;       // measure in play mode, set here
+    [Header("Optional vehicle-wide speed cap")]
+    [Tooltip("When enabled, smoothly reduces drive torque near this speed. SpeedLimited and Gravel thresholds use this capped speed as their reference.")]
+    public bool vehicleSpeedCapEnabled = false;
+    [Min(0.1f)] public float vehicleSpeedCapMS = 14f;
+    [Range(0.5f, 0.99f), Tooltip("The governor begins reducing drive torque at this fraction of vehicleSpeedCapMS.")]
+    public float vehicleSpeedCapGovernorStartFraction = 0.90f;
+    [Min(0f), Tooltip("Allowed overshoot (m/s) before the cap's catch-up brake engages.")]
+    public float vehicleSpeedCapOverspeedMarginMS = 0.5f;
+    [Tooltip("Modest brake torque (N·m per wheel), used only when the cap is exceeded by the overspeed margin.")]
+    public float vehicleSpeedCapBrakeTorque = 900f;
     [Range(0f, 1f)] public float grassSpeedFraction = 0.10f;
     public float speedLimitBrakeTorque = 100000f;
     [Tooltip("Gravel tile top-speed cap, as a fraction of normalTopSpeedMS. Less restrictive than SpeedLimited/grassSpeedFraction - intended tunable range ~0.2-0.5.")]
@@ -44,6 +54,7 @@ public class car_component : MonoBehaviour
     public float currentSpeedMS; // read-only display, shows live speed in Inspector during play
     public TileType currentTileType = TileType.Asphalt;
     public bool regenActive; // read-only display, true while regen braking is currently applied
+    public bool vehicleSpeedCapActive; // read-only display
 
     private float defaultSidewaysStiffness;
     private float defaultForwardStiffness;
@@ -51,6 +62,20 @@ public class car_component : MonoBehaviour
     private float slipperyDisturbanceTimer;
     private float currentDisturbanceForce;
     private float currentDisturbanceTorque;
+
+    // Tile limits are fractions of the speed that is actually available to this experiment.
+    // With the optional cap disabled this is exactly normalTopSpeedMS, preserving old runs.
+    public float EffectiveTopSpeedMS => vehicleSpeedCapEnabled
+        ? Mathf.Min(normalTopSpeedMS, vehicleSpeedCapMS)
+        : normalTopSpeedMS;
+
+    // -1 means this surface has no explicit speed target (Asphalt/Slippery).
+    public float CurrentTileTargetSpeedMS => currentTileType switch
+    {
+        TileType.SpeedLimited => EffectiveTopSpeedMS * grassSpeedFraction,
+        TileType.Gravel       => EffectiveTopSpeedMS * gravelSpeedFraction,
+        _                     => -1f,
+    };
 
     // Called by CarAgent.OnEpisodeBegin() - these are private, so it can't reset them directly.
     // Forces a fresh disturbance roll next time the car is on ice, instead of possibly reusing a
@@ -128,6 +153,23 @@ public class car_component : MonoBehaviour
         float sidewaysStiffness = defaultSidewaysStiffness;
         float forwardStiffness = defaultForwardStiffness;
         float tileBrakeTorque = 0f;
+        float governorStartSpeed = vehicleSpeedCapMS * vehicleSpeedCapGovernorStartFraction;
+        vehicleSpeedCapActive = vehicleSpeedCapEnabled && currentSpeedMS >= governorStartSpeed;
+        if (vehicleSpeedCapActive)
+        {
+            // Electronic-governor behaviour: taper propulsion before the cap, then remove it
+            // at/above the cap. This avoids using wheel lock as the normal speed-control method.
+            float t = Mathf.InverseLerp(governorStartSpeed, vehicleSpeedCapMS, currentSpeedMS);
+            float driveScale = 1f - (t * t * (3f - 2f * t)); // smoothstep falloff
+            frontMotor *= driveScale;
+            rearMotor *= driveScale;
+        }
+        float vehicleCapBrakeTorque =
+            vehicleSpeedCapEnabled && currentSpeedMS > vehicleSpeedCapMS + vehicleSpeedCapOverspeedMarginMS
+                ? vehicleSpeedCapBrakeTorque
+                : 0f;
+        float tileSpeedReferenceMS = EffectiveTopSpeedMS;
+        float tileTargetSpeedMS = float.PositiveInfinity;
 
         switch (currentTileType)
         {
@@ -137,23 +179,39 @@ public class car_component : MonoBehaviour
                 ApplySlipperyDisturbance();
                 break;
             case TileType.SpeedLimited:
-                if (rigid.linearVelocity.magnitude > normalTopSpeedMS * grassSpeedFraction)
+                tileTargetSpeedMS = tileSpeedReferenceMS * grassSpeedFraction;
+                if (rigid.linearVelocity.magnitude > tileTargetSpeedMS)
                     tileBrakeTorque = speedLimitBrakeTorque;
                 break;
             case TileType.Gravel:
                 sidewaysStiffness *= gravelFrictionMultiplier;
                 forwardStiffness *= gravelFrictionMultiplier;
-                if (rigid.linearVelocity.magnitude > normalTopSpeedMS * gravelSpeedFraction)
+                tileTargetSpeedMS = tileSpeedReferenceMS * gravelSpeedFraction;
+                if (rigid.linearVelocity.magnitude > tileTargetSpeedMS)
                     tileBrakeTorque = speedLimitBrakeTorque;
                 break;
             // TileType.Asphalt falls through with no special case - full default friction/speed,
             // the "safe default" surface under both Perlin and Voronoi (see GridManager.SpawnableTileType).
         }
 
+        if (!float.IsPositiveInfinity(tileTargetSpeedMS))
+        {
+            // A tile brakes a car that enters too quickly. Near its own target speed, however,
+            // taper propulsion instead of continuously fighting full motor torque with braking.
+            float tileGovernorStart = tileTargetSpeedMS * vehicleSpeedCapGovernorStartFraction;
+            if (currentSpeedMS >= tileGovernorStart)
+            {
+                float t = Mathf.InverseLerp(tileGovernorStart, tileTargetSpeedMS, currentSpeedMS);
+                float driveScale = 1f - (t * t * (3f - 2f * t));
+                frontMotor *= driveScale;
+                rearMotor *= driveScale;
+            }
+        }
+
         regenActive = accelerationInput <= 0.01f;
         float regenTorque = regenActive ? regenBrakeTorque : 0f;
-        float frontBrakeTorque = Mathf.Max(tileBrakeTorque, brakeInput * frontMaxBrakeTorque, regenTorque);
-        float rearBrakeTorque = Mathf.Max(tileBrakeTorque, brakeInput * rearMaxBrakeTorque, regenTorque);
+        float frontBrakeTorque = Mathf.Max(tileBrakeTorque, vehicleCapBrakeTorque, brakeInput * frontMaxBrakeTorque, regenTorque);
+        float rearBrakeTorque = Mathf.Max(tileBrakeTorque, vehicleCapBrakeTorque, brakeInput * rearMaxBrakeTorque, regenTorque);
 
         ApplyToWheel(wheel1, sidewaysStiffness, forwardStiffness, frontMotor, frontBrakeTorque);
         ApplyToWheel(wheel2, sidewaysStiffness, forwardStiffness, frontMotor, frontBrakeTorque);
