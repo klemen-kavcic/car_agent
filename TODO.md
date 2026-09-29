@@ -30,3 +30,10 @@
 - Convert selected road networks offline into the current tile-grid format. First target approximately 200 x 200 m at the existing 1.5 m cell resolution; later consider 300-500 m.
 - Before increasing grid resolution, replace per-cell tile GameObjects/colliders with a compact ground collider and combined or chunked rendering, while retaining the logical tile-type grid for sensors and rewards.
 - For larger road networks, use connected-road spawn/goal selection, route-distance-based curriculum and episode budgets, bounded laser range, and reassess time-penalty scaling.
+
+## Traffic after the two-car pilot
+
+- Compare existing 3 m/s laser77 checkpoints on the fixed ten two-car cases, then compare fine-tuning the best single-car checkpoint against training a traffic policy from scratch.
+- Replace fixed second routes with dynamic connected-road placement that enforces minimum spacing and produces likely encounters. Extend scenario generation and evaluation beyond two cars.
+- Test whether the 15-degree forward laser spacing misses other cars. If necessary, add a distinct moving-vehicle reading or wider forward detection; either change requires a new observation shape and training build.
+- In a separate ablation, make static Terminal contact use the physical chassis footprint rather than only the car's center. Keep the legacy center rule for the first traffic-transfer comparison.
