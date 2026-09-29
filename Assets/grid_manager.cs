@@ -70,6 +70,10 @@ public class GridManager : MonoBehaviour
         "random (with a warning) if out of range for the currently-loaded array. Same " +
         "GridManager-doesn't-know-why pattern as useValidationMaps above.")]
     public int forcedMapIndex = -1;
+    // Actual successfully parsed Voronoi asset index, not merely the requested index.
+    // -1 means no asset was loaded or parsing fell back to the all-Asphalt plan.
+    public int LastLoadedVoronoiMapIndex { get; private set; } = -1;
+    public string LastLoadedVoronoiMapName { get; private set; } = "";
 
     // Cached separately on first use per set, so every Regenerate() doesn't re-hit
     // Resources.LoadAll, and flipping useValidationMaps mid-run doesn't force a reload of the set
@@ -101,6 +105,8 @@ public class GridManager : MonoBehaviour
 
     public void Regenerate()
     {
+        LastLoadedVoronoiMapIndex = -1;
+        LastLoadedVoronoiMapName = "";
         gridOrigin = new Vector3(-(gridSize * cellSize) / 2f, 0f, -(gridSize * cellSize) / 2f);
         foreach (Transform child in transform)
             Destroy(child.gameObject);
@@ -219,6 +225,8 @@ public class GridManager : MonoBehaviour
     // training run mid-episode.
     TileType[,] BuildVoronoiPlan()
     {
+        LastLoadedVoronoiMapIndex = -1;
+        LastLoadedVoronoiMapName = "";
         var plan = new TileType[gridSize, gridSize];
 
         string resourceFolder = useValidationMaps ? "Maps/VoronoiVal" : "Maps/VoronoiTrain";
@@ -297,6 +305,8 @@ public class GridManager : MonoBehaviour
                 plan[x, z] = VoronoiCodeToType[code];
             }
         }
+        LastLoadedVoronoiMapIndex = mapIndex;
+        LastLoadedVoronoiMapName = asset.name;
         return plan;
     }
 

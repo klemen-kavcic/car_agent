@@ -1,0 +1,2005 @@
+{
+  "placement_mode": "random_connected_asphalt",
+  "scenarios": [
+    {
+      "scenario_id": 0,
+      "map_index": 0,
+      "map_file": "curved_1.txt"
+    },
+    {
+      "scenario_id": 1,
+      "map_index": 1,
+      "map_file": "curved_10.txt"
+    },
+    {
+      "scenario_id": 2,
+      "map_index": 2,
+      "map_file": "curved_100.txt"
+    },
+    {
+      "scenario_id": 3,
+      "map_index": 3,
+      "map_file": "curved_101.txt"
+    },
+    {
+      "scenario_id": 4,
+      "map_index": 4,
+      "map_file": "curved_102.txt"
+    },
+    {
+      "scenario_id": 5,
+      "map_index": 5,
+      "map_file": "curved_103.txt"
+    },
+    {
+      "scenario_id": 6,
+      "map_index": 6,
+      "map_file": "curved_104.txt"
+    },
+    {
+      "scenario_id": 7,
+      "map_index": 7,
+      "map_file": "curved_105.txt"
+    },
+    {
+      "scenario_id": 8,
+      "map_index": 8,
+      "map_file": "curved_106.txt"
+    },
+    {
+      "scenario_id": 9,
+      "map_index": 9,
+      "map_file": "curved_107.txt"
+    },
+    {
+      "scenario_id": 10,
+      "map_index": 10,
+      "map_file": "curved_108.txt"
+    },
+    {
+      "scenario_id": 11,
+      "map_index": 11,
+      "map_file": "curved_109.txt"
+    },
+    {
+      "scenario_id": 12,
+      "map_index": 12,
+      "map_file": "curved_11.txt"
+    },
+    {
+      "scenario_id": 13,
+      "map_index": 13,
+      "map_file": "curved_110.txt"
+    },
+    {
+      "scenario_id": 14,
+      "map_index": 14,
+      "map_file": "curved_111.txt"
+    },
+    {
+      "scenario_id": 15,
+      "map_index": 15,
+      "map_file": "curved_112.txt"
+    },
+    {
+      "scenario_id": 16,
+      "map_index": 16,
+      "map_file": "curved_113.txt"
+    },
+    {
+      "scenario_id": 17,
+      "map_index": 17,
+      "map_file": "curved_114.txt"
+    },
+    {
+      "scenario_id": 18,
+      "map_index": 18,
+      "map_file": "curved_115.txt"
+    },
+    {
+      "scenario_id": 19,
+      "map_index": 19,
+      "map_file": "curved_116.txt"
+    },
+    {
+      "scenario_id": 20,
+      "map_index": 20,
+      "map_file": "curved_117.txt"
+    },
+    {
+      "scenario_id": 21,
+      "map_index": 21,
+      "map_file": "curved_118.txt"
+    },
+    {
+      "scenario_id": 22,
+      "map_index": 22,
+      "map_file": "curved_119.txt"
+    },
+    {
+      "scenario_id": 23,
+      "map_index": 23,
+      "map_file": "curved_12.txt"
+    },
+    {
+      "scenario_id": 24,
+      "map_index": 24,
+      "map_file": "curved_120.txt"
+    },
+    {
+      "scenario_id": 25,
+      "map_index": 25,
+      "map_file": "curved_121.txt"
+    },
+    {
+      "scenario_id": 26,
+      "map_index": 26,
+      "map_file": "curved_122.txt"
+    },
+    {
+      "scenario_id": 27,
+      "map_index": 27,
+      "map_file": "curved_123.txt"
+    },
+    {
+      "scenario_id": 28,
+      "map_index": 28,
+      "map_file": "curved_124.txt"
+    },
+    {
+      "scenario_id": 29,
+      "map_index": 29,
+      "map_file": "curved_125.txt"
+    },
+    {
+      "scenario_id": 30,
+      "map_index": 30,
+      "map_file": "curved_126.txt"
+    },
+    {
+      "scenario_id": 31,
+      "map_index": 31,
+      "map_file": "curved_127.txt"
+    },
+    {
+      "scenario_id": 32,
+      "map_index": 32,
+      "map_file": "curved_128.txt"
+    },
+    {
+      "scenario_id": 33,
+      "map_index": 33,
+      "map_file": "curved_129.txt"
+    },
+    {
+      "scenario_id": 34,
+      "map_index": 34,
+      "map_file": "curved_13.txt"
+    },
+    {
+      "scenario_id": 35,
+      "map_index": 35,
+      "map_file": "curved_130.txt"
+    },
+    {
+      "scenario_id": 36,
+      "map_index": 36,
+      "map_file": "curved_131.txt"
+    },
+    {
+      "scenario_id": 37,
+      "map_index": 37,
+      "map_file": "curved_132.txt"
+    },
+    {
+      "scenario_id": 38,
+      "map_index": 38,
+      "map_file": "curved_133.txt"
+    },
+    {
+      "scenario_id": 39,
+      "map_index": 39,
+      "map_file": "curved_134.txt"
+    },
+    {
+      "scenario_id": 40,
+      "map_index": 40,
+      "map_file": "curved_135.txt"
+    },
+    {
+      "scenario_id": 41,
+      "map_index": 41,
+      "map_file": "curved_136.txt"
+    },
+    {
+      "scenario_id": 42,
+      "map_index": 42,
+      "map_file": "curved_137.txt"
+    },
+    {
+      "scenario_id": 43,
+      "map_index": 43,
+      "map_file": "curved_138.txt"
+    },
+    {
+      "scenario_id": 44,
+      "map_index": 44,
+      "map_file": "curved_139.txt"
+    },
+    {
+      "scenario_id": 45,
+      "map_index": 45,
+      "map_file": "curved_14.txt"
+    },
+    {
+      "scenario_id": 46,
+      "map_index": 46,
+      "map_file": "curved_140.txt"
+    },
+    {
+      "scenario_id": 47,
+      "map_index": 47,
+      "map_file": "curved_141.txt"
+    },
+    {
+      "scenario_id": 48,
+      "map_index": 48,
+      "map_file": "curved_142.txt"
+    },
+    {
+      "scenario_id": 49,
+      "map_index": 49,
+      "map_file": "curved_143.txt"
+    },
+    {
+      "scenario_id": 50,
+      "map_index": 50,
+      "map_file": "curved_144.txt"
+    },
+    {
+      "scenario_id": 51,
+      "map_index": 51,
+      "map_file": "curved_145.txt"
+    },
+    {
+      "scenario_id": 52,
+      "map_index": 52,
+      "map_file": "curved_146.txt"
+    },
+    {
+      "scenario_id": 53,
+      "map_index": 53,
+      "map_file": "curved_147.txt"
+    },
+    {
+      "scenario_id": 54,
+      "map_index": 54,
+      "map_file": "curved_148.txt"
+    },
+    {
+      "scenario_id": 55,
+      "map_index": 55,
+      "map_file": "curved_149.txt"
+    },
+    {
+      "scenario_id": 56,
+      "map_index": 56,
+      "map_file": "curved_15.txt"
+    },
+    {
+      "scenario_id": 57,
+      "map_index": 57,
+      "map_file": "curved_150.txt"
+    },
+    {
+      "scenario_id": 58,
+      "map_index": 58,
+      "map_file": "curved_151.txt"
+    },
+    {
+      "scenario_id": 59,
+      "map_index": 59,
+      "map_file": "curved_152.txt"
+    },
+    {
+      "scenario_id": 60,
+      "map_index": 60,
+      "map_file": "curved_153.txt"
+    },
+    {
+      "scenario_id": 61,
+      "map_index": 61,
+      "map_file": "curved_154.txt"
+    },
+    {
+      "scenario_id": 62,
+      "map_index": 62,
+      "map_file": "curved_155.txt"
+    },
+    {
+      "scenario_id": 63,
+      "map_index": 63,
+      "map_file": "curved_156.txt"
+    },
+    {
+      "scenario_id": 64,
+      "map_index": 64,
+      "map_file": "curved_157.txt"
+    },
+    {
+      "scenario_id": 65,
+      "map_index": 65,
+      "map_file": "curved_158.txt"
+    },
+    {
+      "scenario_id": 66,
+      "map_index": 66,
+      "map_file": "curved_159.txt"
+    },
+    {
+      "scenario_id": 67,
+      "map_index": 67,
+      "map_file": "curved_16.txt"
+    },
+    {
+      "scenario_id": 68,
+      "map_index": 68,
+      "map_file": "curved_160.txt"
+    },
+    {
+      "scenario_id": 69,
+      "map_index": 69,
+      "map_file": "curved_161.txt"
+    },
+    {
+      "scenario_id": 70,
+      "map_index": 70,
+      "map_file": "curved_162.txt"
+    },
+    {
+      "scenario_id": 71,
+      "map_index": 71,
+      "map_file": "curved_163.txt"
+    },
+    {
+      "scenario_id": 72,
+      "map_index": 72,
+      "map_file": "curved_164.txt"
+    },
+    {
+      "scenario_id": 73,
+      "map_index": 73,
+      "map_file": "curved_165.txt"
+    },
+    {
+      "scenario_id": 74,
+      "map_index": 74,
+      "map_file": "curved_166.txt"
+    },
+    {
+      "scenario_id": 75,
+      "map_index": 75,
+      "map_file": "curved_167.txt"
+    },
+    {
+      "scenario_id": 76,
+      "map_index": 76,
+      "map_file": "curved_168.txt"
+    },
+    {
+      "scenario_id": 77,
+      "map_index": 77,
+      "map_file": "curved_169.txt"
+    },
+    {
+      "scenario_id": 78,
+      "map_index": 78,
+      "map_file": "curved_17.txt"
+    },
+    {
+      "scenario_id": 79,
+      "map_index": 79,
+      "map_file": "curved_170.txt"
+    },
+    {
+      "scenario_id": 80,
+      "map_index": 80,
+      "map_file": "curved_171.txt"
+    },
+    {
+      "scenario_id": 81,
+      "map_index": 81,
+      "map_file": "curved_172.txt"
+    },
+    {
+      "scenario_id": 82,
+      "map_index": 82,
+      "map_file": "curved_173.txt"
+    },
+    {
+      "scenario_id": 83,
+      "map_index": 83,
+      "map_file": "curved_174.txt"
+    },
+    {
+      "scenario_id": 84,
+      "map_index": 84,
+      "map_file": "curved_175.txt"
+    },
+    {
+      "scenario_id": 85,
+      "map_index": 85,
+      "map_file": "curved_176.txt"
+    },
+    {
+      "scenario_id": 86,
+      "map_index": 86,
+      "map_file": "curved_177.txt"
+    },
+    {
+      "scenario_id": 87,
+      "map_index": 87,
+      "map_file": "curved_178.txt"
+    },
+    {
+      "scenario_id": 88,
+      "map_index": 88,
+      "map_file": "curved_179.txt"
+    },
+    {
+      "scenario_id": 89,
+      "map_index": 89,
+      "map_file": "curved_18.txt"
+    },
+    {
+      "scenario_id": 90,
+      "map_index": 90,
+      "map_file": "curved_180.txt"
+    },
+    {
+      "scenario_id": 91,
+      "map_index": 91,
+      "map_file": "curved_181.txt"
+    },
+    {
+      "scenario_id": 92,
+      "map_index": 92,
+      "map_file": "curved_182.txt"
+    },
+    {
+      "scenario_id": 93,
+      "map_index": 93,
+      "map_file": "curved_183.txt"
+    },
+    {
+      "scenario_id": 94,
+      "map_index": 94,
+      "map_file": "curved_184.txt"
+    },
+    {
+      "scenario_id": 95,
+      "map_index": 95,
+      "map_file": "curved_185.txt"
+    },
+    {
+      "scenario_id": 96,
+      "map_index": 96,
+      "map_file": "curved_186.txt"
+    },
+    {
+      "scenario_id": 97,
+      "map_index": 97,
+      "map_file": "curved_187.txt"
+    },
+    {
+      "scenario_id": 98,
+      "map_index": 98,
+      "map_file": "curved_188.txt"
+    },
+    {
+      "scenario_id": 99,
+      "map_index": 99,
+      "map_file": "curved_189.txt"
+    },
+    {
+      "scenario_id": 100,
+      "map_index": 100,
+      "map_file": "curved_19.txt"
+    },
+    {
+      "scenario_id": 101,
+      "map_index": 101,
+      "map_file": "curved_190.txt"
+    },
+    {
+      "scenario_id": 102,
+      "map_index": 102,
+      "map_file": "curved_191.txt"
+    },
+    {
+      "scenario_id": 103,
+      "map_index": 103,
+      "map_file": "curved_192.txt"
+    },
+    {
+      "scenario_id": 104,
+      "map_index": 104,
+      "map_file": "curved_193.txt"
+    },
+    {
+      "scenario_id": 105,
+      "map_index": 105,
+      "map_file": "curved_194.txt"
+    },
+    {
+      "scenario_id": 106,
+      "map_index": 106,
+      "map_file": "curved_195.txt"
+    },
+    {
+      "scenario_id": 107,
+      "map_index": 107,
+      "map_file": "curved_196.txt"
+    },
+    {
+      "scenario_id": 108,
+      "map_index": 108,
+      "map_file": "curved_197.txt"
+    },
+    {
+      "scenario_id": 109,
+      "map_index": 109,
+      "map_file": "curved_198.txt"
+    },
+    {
+      "scenario_id": 110,
+      "map_index": 110,
+      "map_file": "curved_199.txt"
+    },
+    {
+      "scenario_id": 111,
+      "map_index": 111,
+      "map_file": "curved_2.txt"
+    },
+    {
+      "scenario_id": 112,
+      "map_index": 112,
+      "map_file": "curved_20.txt"
+    },
+    {
+      "scenario_id": 113,
+      "map_index": 113,
+      "map_file": "curved_200.txt"
+    },
+    {
+      "scenario_id": 114,
+      "map_index": 114,
+      "map_file": "curved_201.txt"
+    },
+    {
+      "scenario_id": 115,
+      "map_index": 115,
+      "map_file": "curved_202.txt"
+    },
+    {
+      "scenario_id": 116,
+      "map_index": 116,
+      "map_file": "curved_203.txt"
+    },
+    {
+      "scenario_id": 117,
+      "map_index": 117,
+      "map_file": "curved_204.txt"
+    },
+    {
+      "scenario_id": 118,
+      "map_index": 118,
+      "map_file": "curved_205.txt"
+    },
+    {
+      "scenario_id": 119,
+      "map_index": 119,
+      "map_file": "curved_206.txt"
+    },
+    {
+      "scenario_id": 120,
+      "map_index": 120,
+      "map_file": "curved_207.txt"
+    },
+    {
+      "scenario_id": 121,
+      "map_index": 121,
+      "map_file": "curved_208.txt"
+    },
+    {
+      "scenario_id": 122,
+      "map_index": 122,
+      "map_file": "curved_209.txt"
+    },
+    {
+      "scenario_id": 123,
+      "map_index": 123,
+      "map_file": "curved_21.txt"
+    },
+    {
+      "scenario_id": 124,
+      "map_index": 124,
+      "map_file": "curved_210.txt"
+    },
+    {
+      "scenario_id": 125,
+      "map_index": 125,
+      "map_file": "curved_211.txt"
+    },
+    {
+      "scenario_id": 126,
+      "map_index": 126,
+      "map_file": "curved_212.txt"
+    },
+    {
+      "scenario_id": 127,
+      "map_index": 127,
+      "map_file": "curved_213.txt"
+    },
+    {
+      "scenario_id": 128,
+      "map_index": 128,
+      "map_file": "curved_214.txt"
+    },
+    {
+      "scenario_id": 129,
+      "map_index": 129,
+      "map_file": "curved_215.txt"
+    },
+    {
+      "scenario_id": 130,
+      "map_index": 130,
+      "map_file": "curved_216.txt"
+    },
+    {
+      "scenario_id": 131,
+      "map_index": 131,
+      "map_file": "curved_217.txt"
+    },
+    {
+      "scenario_id": 132,
+      "map_index": 132,
+      "map_file": "curved_218.txt"
+    },
+    {
+      "scenario_id": 133,
+      "map_index": 133,
+      "map_file": "curved_219.txt"
+    },
+    {
+      "scenario_id": 134,
+      "map_index": 134,
+      "map_file": "curved_22.txt"
+    },
+    {
+      "scenario_id": 135,
+      "map_index": 135,
+      "map_file": "curved_220.txt"
+    },
+    {
+      "scenario_id": 136,
+      "map_index": 136,
+      "map_file": "curved_221.txt"
+    },
+    {
+      "scenario_id": 137,
+      "map_index": 137,
+      "map_file": "curved_222.txt"
+    },
+    {
+      "scenario_id": 138,
+      "map_index": 138,
+      "map_file": "curved_223.txt"
+    },
+    {
+      "scenario_id": 139,
+      "map_index": 139,
+      "map_file": "curved_224.txt"
+    },
+    {
+      "scenario_id": 140,
+      "map_index": 140,
+      "map_file": "curved_225.txt"
+    },
+    {
+      "scenario_id": 141,
+      "map_index": 141,
+      "map_file": "curved_226.txt"
+    },
+    {
+      "scenario_id": 142,
+      "map_index": 142,
+      "map_file": "curved_227.txt"
+    },
+    {
+      "scenario_id": 143,
+      "map_index": 143,
+      "map_file": "curved_228.txt"
+    },
+    {
+      "scenario_id": 144,
+      "map_index": 144,
+      "map_file": "curved_229.txt"
+    },
+    {
+      "scenario_id": 145,
+      "map_index": 145,
+      "map_file": "curved_23.txt"
+    },
+    {
+      "scenario_id": 146,
+      "map_index": 146,
+      "map_file": "curved_230.txt"
+    },
+    {
+      "scenario_id": 147,
+      "map_index": 147,
+      "map_file": "curved_231.txt"
+    },
+    {
+      "scenario_id": 148,
+      "map_index": 148,
+      "map_file": "curved_232.txt"
+    },
+    {
+      "scenario_id": 149,
+      "map_index": 149,
+      "map_file": "curved_233.txt"
+    },
+    {
+      "scenario_id": 150,
+      "map_index": 150,
+      "map_file": "curved_234.txt"
+    },
+    {
+      "scenario_id": 151,
+      "map_index": 151,
+      "map_file": "curved_235.txt"
+    },
+    {
+      "scenario_id": 152,
+      "map_index": 152,
+      "map_file": "curved_236.txt"
+    },
+    {
+      "scenario_id": 153,
+      "map_index": 153,
+      "map_file": "curved_237.txt"
+    },
+    {
+      "scenario_id": 154,
+      "map_index": 154,
+      "map_file": "curved_238.txt"
+    },
+    {
+      "scenario_id": 155,
+      "map_index": 155,
+      "map_file": "curved_239.txt"
+    },
+    {
+      "scenario_id": 156,
+      "map_index": 156,
+      "map_file": "curved_24.txt"
+    },
+    {
+      "scenario_id": 157,
+      "map_index": 157,
+      "map_file": "curved_240.txt"
+    },
+    {
+      "scenario_id": 158,
+      "map_index": 158,
+      "map_file": "curved_241.txt"
+    },
+    {
+      "scenario_id": 159,
+      "map_index": 159,
+      "map_file": "curved_242.txt"
+    },
+    {
+      "scenario_id": 160,
+      "map_index": 160,
+      "map_file": "curved_243.txt"
+    },
+    {
+      "scenario_id": 161,
+      "map_index": 161,
+      "map_file": "curved_244.txt"
+    },
+    {
+      "scenario_id": 162,
+      "map_index": 162,
+      "map_file": "curved_245.txt"
+    },
+    {
+      "scenario_id": 163,
+      "map_index": 163,
+      "map_file": "curved_246.txt"
+    },
+    {
+      "scenario_id": 164,
+      "map_index": 164,
+      "map_file": "curved_247.txt"
+    },
+    {
+      "scenario_id": 165,
+      "map_index": 165,
+      "map_file": "curved_248.txt"
+    },
+    {
+      "scenario_id": 166,
+      "map_index": 166,
+      "map_file": "curved_249.txt"
+    },
+    {
+      "scenario_id": 167,
+      "map_index": 167,
+      "map_file": "curved_25.txt"
+    },
+    {
+      "scenario_id": 168,
+      "map_index": 168,
+      "map_file": "curved_250.txt"
+    },
+    {
+      "scenario_id": 169,
+      "map_index": 169,
+      "map_file": "curved_251.txt"
+    },
+    {
+      "scenario_id": 170,
+      "map_index": 170,
+      "map_file": "curved_252.txt"
+    },
+    {
+      "scenario_id": 171,
+      "map_index": 171,
+      "map_file": "curved_253.txt"
+    },
+    {
+      "scenario_id": 172,
+      "map_index": 172,
+      "map_file": "curved_254.txt"
+    },
+    {
+      "scenario_id": 173,
+      "map_index": 173,
+      "map_file": "curved_255.txt"
+    },
+    {
+      "scenario_id": 174,
+      "map_index": 174,
+      "map_file": "curved_256.txt"
+    },
+    {
+      "scenario_id": 175,
+      "map_index": 175,
+      "map_file": "curved_257.txt"
+    },
+    {
+      "scenario_id": 176,
+      "map_index": 176,
+      "map_file": "curved_258.txt"
+    },
+    {
+      "scenario_id": 177,
+      "map_index": 177,
+      "map_file": "curved_259.txt"
+    },
+    {
+      "scenario_id": 178,
+      "map_index": 178,
+      "map_file": "curved_26.txt"
+    },
+    {
+      "scenario_id": 179,
+      "map_index": 179,
+      "map_file": "curved_260.txt"
+    },
+    {
+      "scenario_id": 180,
+      "map_index": 180,
+      "map_file": "curved_261.txt"
+    },
+    {
+      "scenario_id": 181,
+      "map_index": 181,
+      "map_file": "curved_262.txt"
+    },
+    {
+      "scenario_id": 182,
+      "map_index": 182,
+      "map_file": "curved_263.txt"
+    },
+    {
+      "scenario_id": 183,
+      "map_index": 183,
+      "map_file": "curved_264.txt"
+    },
+    {
+      "scenario_id": 184,
+      "map_index": 184,
+      "map_file": "curved_265.txt"
+    },
+    {
+      "scenario_id": 185,
+      "map_index": 185,
+      "map_file": "curved_266.txt"
+    },
+    {
+      "scenario_id": 186,
+      "map_index": 186,
+      "map_file": "curved_267.txt"
+    },
+    {
+      "scenario_id": 187,
+      "map_index": 187,
+      "map_file": "curved_268.txt"
+    },
+    {
+      "scenario_id": 188,
+      "map_index": 188,
+      "map_file": "curved_269.txt"
+    },
+    {
+      "scenario_id": 189,
+      "map_index": 189,
+      "map_file": "curved_27.txt"
+    },
+    {
+      "scenario_id": 190,
+      "map_index": 190,
+      "map_file": "curved_270.txt"
+    },
+    {
+      "scenario_id": 191,
+      "map_index": 191,
+      "map_file": "curved_271.txt"
+    },
+    {
+      "scenario_id": 192,
+      "map_index": 192,
+      "map_file": "curved_272.txt"
+    },
+    {
+      "scenario_id": 193,
+      "map_index": 193,
+      "map_file": "curved_273.txt"
+    },
+    {
+      "scenario_id": 194,
+      "map_index": 194,
+      "map_file": "curved_274.txt"
+    },
+    {
+      "scenario_id": 195,
+      "map_index": 195,
+      "map_file": "curved_275.txt"
+    },
+    {
+      "scenario_id": 196,
+      "map_index": 196,
+      "map_file": "curved_276.txt"
+    },
+    {
+      "scenario_id": 197,
+      "map_index": 197,
+      "map_file": "curved_277.txt"
+    },
+    {
+      "scenario_id": 198,
+      "map_index": 198,
+      "map_file": "curved_278.txt"
+    },
+    {
+      "scenario_id": 199,
+      "map_index": 199,
+      "map_file": "curved_279.txt"
+    },
+    {
+      "scenario_id": 200,
+      "map_index": 200,
+      "map_file": "curved_28.txt"
+    },
+    {
+      "scenario_id": 201,
+      "map_index": 201,
+      "map_file": "curved_280.txt"
+    },
+    {
+      "scenario_id": 202,
+      "map_index": 202,
+      "map_file": "curved_281.txt"
+    },
+    {
+      "scenario_id": 203,
+      "map_index": 203,
+      "map_file": "curved_282.txt"
+    },
+    {
+      "scenario_id": 204,
+      "map_index": 204,
+      "map_file": "curved_283.txt"
+    },
+    {
+      "scenario_id": 205,
+      "map_index": 205,
+      "map_file": "curved_284.txt"
+    },
+    {
+      "scenario_id": 206,
+      "map_index": 206,
+      "map_file": "curved_285.txt"
+    },
+    {
+      "scenario_id": 207,
+      "map_index": 207,
+      "map_file": "curved_286.txt"
+    },
+    {
+      "scenario_id": 208,
+      "map_index": 208,
+      "map_file": "curved_287.txt"
+    },
+    {
+      "scenario_id": 209,
+      "map_index": 209,
+      "map_file": "curved_288.txt"
+    },
+    {
+      "scenario_id": 210,
+      "map_index": 210,
+      "map_file": "curved_289.txt"
+    },
+    {
+      "scenario_id": 211,
+      "map_index": 211,
+      "map_file": "curved_29.txt"
+    },
+    {
+      "scenario_id": 212,
+      "map_index": 212,
+      "map_file": "curved_290.txt"
+    },
+    {
+      "scenario_id": 213,
+      "map_index": 213,
+      "map_file": "curved_291.txt"
+    },
+    {
+      "scenario_id": 214,
+      "map_index": 214,
+      "map_file": "curved_292.txt"
+    },
+    {
+      "scenario_id": 215,
+      "map_index": 215,
+      "map_file": "curved_293.txt"
+    },
+    {
+      "scenario_id": 216,
+      "map_index": 216,
+      "map_file": "curved_294.txt"
+    },
+    {
+      "scenario_id": 217,
+      "map_index": 217,
+      "map_file": "curved_295.txt"
+    },
+    {
+      "scenario_id": 218,
+      "map_index": 218,
+      "map_file": "curved_296.txt"
+    },
+    {
+      "scenario_id": 219,
+      "map_index": 219,
+      "map_file": "curved_297.txt"
+    },
+    {
+      "scenario_id": 220,
+      "map_index": 220,
+      "map_file": "curved_298.txt"
+    },
+    {
+      "scenario_id": 221,
+      "map_index": 221,
+      "map_file": "curved_299.txt"
+    },
+    {
+      "scenario_id": 222,
+      "map_index": 222,
+      "map_file": "curved_3.txt"
+    },
+    {
+      "scenario_id": 223,
+      "map_index": 223,
+      "map_file": "curved_30.txt"
+    },
+    {
+      "scenario_id": 224,
+      "map_index": 224,
+      "map_file": "curved_300.txt"
+    },
+    {
+      "scenario_id": 225,
+      "map_index": 225,
+      "map_file": "curved_301.txt"
+    },
+    {
+      "scenario_id": 226,
+      "map_index": 226,
+      "map_file": "curved_302.txt"
+    },
+    {
+      "scenario_id": 227,
+      "map_index": 227,
+      "map_file": "curved_303.txt"
+    },
+    {
+      "scenario_id": 228,
+      "map_index": 228,
+      "map_file": "curved_304.txt"
+    },
+    {
+      "scenario_id": 229,
+      "map_index": 229,
+      "map_file": "curved_305.txt"
+    },
+    {
+      "scenario_id": 230,
+      "map_index": 230,
+      "map_file": "curved_306.txt"
+    },
+    {
+      "scenario_id": 231,
+      "map_index": 231,
+      "map_file": "curved_307.txt"
+    },
+    {
+      "scenario_id": 232,
+      "map_index": 232,
+      "map_file": "curved_308.txt"
+    },
+    {
+      "scenario_id": 233,
+      "map_index": 233,
+      "map_file": "curved_309.txt"
+    },
+    {
+      "scenario_id": 234,
+      "map_index": 234,
+      "map_file": "curved_31.txt"
+    },
+    {
+      "scenario_id": 235,
+      "map_index": 235,
+      "map_file": "curved_310.txt"
+    },
+    {
+      "scenario_id": 236,
+      "map_index": 236,
+      "map_file": "curved_311.txt"
+    },
+    {
+      "scenario_id": 237,
+      "map_index": 237,
+      "map_file": "curved_312.txt"
+    },
+    {
+      "scenario_id": 238,
+      "map_index": 238,
+      "map_file": "curved_313.txt"
+    },
+    {
+      "scenario_id": 239,
+      "map_index": 239,
+      "map_file": "curved_314.txt"
+    },
+    {
+      "scenario_id": 240,
+      "map_index": 240,
+      "map_file": "curved_315.txt"
+    },
+    {
+      "scenario_id": 241,
+      "map_index": 241,
+      "map_file": "curved_316.txt"
+    },
+    {
+      "scenario_id": 242,
+      "map_index": 242,
+      "map_file": "curved_317.txt"
+    },
+    {
+      "scenario_id": 243,
+      "map_index": 243,
+      "map_file": "curved_318.txt"
+    },
+    {
+      "scenario_id": 244,
+      "map_index": 244,
+      "map_file": "curved_319.txt"
+    },
+    {
+      "scenario_id": 245,
+      "map_index": 245,
+      "map_file": "curved_32.txt"
+    },
+    {
+      "scenario_id": 246,
+      "map_index": 246,
+      "map_file": "curved_320.txt"
+    },
+    {
+      "scenario_id": 247,
+      "map_index": 247,
+      "map_file": "curved_321.txt"
+    },
+    {
+      "scenario_id": 248,
+      "map_index": 248,
+      "map_file": "curved_322.txt"
+    },
+    {
+      "scenario_id": 249,
+      "map_index": 249,
+      "map_file": "curved_323.txt"
+    },
+    {
+      "scenario_id": 250,
+      "map_index": 250,
+      "map_file": "curved_324.txt"
+    },
+    {
+      "scenario_id": 251,
+      "map_index": 251,
+      "map_file": "curved_325.txt"
+    },
+    {
+      "scenario_id": 252,
+      "map_index": 252,
+      "map_file": "curved_326.txt"
+    },
+    {
+      "scenario_id": 253,
+      "map_index": 253,
+      "map_file": "curved_327.txt"
+    },
+    {
+      "scenario_id": 254,
+      "map_index": 254,
+      "map_file": "curved_328.txt"
+    },
+    {
+      "scenario_id": 255,
+      "map_index": 255,
+      "map_file": "curved_329.txt"
+    },
+    {
+      "scenario_id": 256,
+      "map_index": 256,
+      "map_file": "curved_33.txt"
+    },
+    {
+      "scenario_id": 257,
+      "map_index": 257,
+      "map_file": "curved_330.txt"
+    },
+    {
+      "scenario_id": 258,
+      "map_index": 258,
+      "map_file": "curved_331.txt"
+    },
+    {
+      "scenario_id": 259,
+      "map_index": 259,
+      "map_file": "curved_332.txt"
+    },
+    {
+      "scenario_id": 260,
+      "map_index": 260,
+      "map_file": "curved_333.txt"
+    },
+    {
+      "scenario_id": 261,
+      "map_index": 261,
+      "map_file": "curved_334.txt"
+    },
+    {
+      "scenario_id": 262,
+      "map_index": 262,
+      "map_file": "curved_335.txt"
+    },
+    {
+      "scenario_id": 263,
+      "map_index": 263,
+      "map_file": "curved_336.txt"
+    },
+    {
+      "scenario_id": 264,
+      "map_index": 264,
+      "map_file": "curved_337.txt"
+    },
+    {
+      "scenario_id": 265,
+      "map_index": 265,
+      "map_file": "curved_338.txt"
+    },
+    {
+      "scenario_id": 266,
+      "map_index": 266,
+      "map_file": "curved_339.txt"
+    },
+    {
+      "scenario_id": 267,
+      "map_index": 267,
+      "map_file": "curved_34.txt"
+    },
+    {
+      "scenario_id": 268,
+      "map_index": 268,
+      "map_file": "curved_340.txt"
+    },
+    {
+      "scenario_id": 269,
+      "map_index": 269,
+      "map_file": "curved_341.txt"
+    },
+    {
+      "scenario_id": 270,
+      "map_index": 270,
+      "map_file": "curved_342.txt"
+    },
+    {
+      "scenario_id": 271,
+      "map_index": 271,
+      "map_file": "curved_343.txt"
+    },
+    {
+      "scenario_id": 272,
+      "map_index": 272,
+      "map_file": "curved_344.txt"
+    },
+    {
+      "scenario_id": 273,
+      "map_index": 273,
+      "map_file": "curved_345.txt"
+    },
+    {
+      "scenario_id": 274,
+      "map_index": 274,
+      "map_file": "curved_346.txt"
+    },
+    {
+      "scenario_id": 275,
+      "map_index": 275,
+      "map_file": "curved_347.txt"
+    },
+    {
+      "scenario_id": 276,
+      "map_index": 276,
+      "map_file": "curved_348.txt"
+    },
+    {
+      "scenario_id": 277,
+      "map_index": 277,
+      "map_file": "curved_349.txt"
+    },
+    {
+      "scenario_id": 278,
+      "map_index": 278,
+      "map_file": "curved_35.txt"
+    },
+    {
+      "scenario_id": 279,
+      "map_index": 279,
+      "map_file": "curved_350.txt"
+    },
+    {
+      "scenario_id": 280,
+      "map_index": 280,
+      "map_file": "curved_351.txt"
+    },
+    {
+      "scenario_id": 281,
+      "map_index": 281,
+      "map_file": "curved_352.txt"
+    },
+    {
+      "scenario_id": 282,
+      "map_index": 282,
+      "map_file": "curved_353.txt"
+    },
+    {
+      "scenario_id": 283,
+      "map_index": 283,
+      "map_file": "curved_354.txt"
+    },
+    {
+      "scenario_id": 284,
+      "map_index": 284,
+      "map_file": "curved_355.txt"
+    },
+    {
+      "scenario_id": 285,
+      "map_index": 285,
+      "map_file": "curved_356.txt"
+    },
+    {
+      "scenario_id": 286,
+      "map_index": 286,
+      "map_file": "curved_357.txt"
+    },
+    {
+      "scenario_id": 287,
+      "map_index": 287,
+      "map_file": "curved_358.txt"
+    },
+    {
+      "scenario_id": 288,
+      "map_index": 288,
+      "map_file": "curved_359.txt"
+    },
+    {
+      "scenario_id": 289,
+      "map_index": 289,
+      "map_file": "curved_36.txt"
+    },
+    {
+      "scenario_id": 290,
+      "map_index": 290,
+      "map_file": "curved_360.txt"
+    },
+    {
+      "scenario_id": 291,
+      "map_index": 291,
+      "map_file": "curved_361.txt"
+    },
+    {
+      "scenario_id": 292,
+      "map_index": 292,
+      "map_file": "curved_362.txt"
+    },
+    {
+      "scenario_id": 293,
+      "map_index": 293,
+      "map_file": "curved_363.txt"
+    },
+    {
+      "scenario_id": 294,
+      "map_index": 294,
+      "map_file": "curved_364.txt"
+    },
+    {
+      "scenario_id": 295,
+      "map_index": 295,
+      "map_file": "curved_365.txt"
+    },
+    {
+      "scenario_id": 296,
+      "map_index": 296,
+      "map_file": "curved_366.txt"
+    },
+    {
+      "scenario_id": 297,
+      "map_index": 297,
+      "map_file": "curved_367.txt"
+    },
+    {
+      "scenario_id": 298,
+      "map_index": 298,
+      "map_file": "curved_368.txt"
+    },
+    {
+      "scenario_id": 299,
+      "map_index": 299,
+      "map_file": "curved_369.txt"
+    },
+    {
+      "scenario_id": 300,
+      "map_index": 300,
+      "map_file": "curved_37.txt"
+    },
+    {
+      "scenario_id": 301,
+      "map_index": 301,
+      "map_file": "curved_370.txt"
+    },
+    {
+      "scenario_id": 302,
+      "map_index": 302,
+      "map_file": "curved_371.txt"
+    },
+    {
+      "scenario_id": 303,
+      "map_index": 303,
+      "map_file": "curved_372.txt"
+    },
+    {
+      "scenario_id": 304,
+      "map_index": 304,
+      "map_file": "curved_373.txt"
+    },
+    {
+      "scenario_id": 305,
+      "map_index": 305,
+      "map_file": "curved_374.txt"
+    },
+    {
+      "scenario_id": 306,
+      "map_index": 306,
+      "map_file": "curved_375.txt"
+    },
+    {
+      "scenario_id": 307,
+      "map_index": 307,
+      "map_file": "curved_376.txt"
+    },
+    {
+      "scenario_id": 308,
+      "map_index": 308,
+      "map_file": "curved_377.txt"
+    },
+    {
+      "scenario_id": 309,
+      "map_index": 309,
+      "map_file": "curved_378.txt"
+    },
+    {
+      "scenario_id": 310,
+      "map_index": 310,
+      "map_file": "curved_379.txt"
+    },
+    {
+      "scenario_id": 311,
+      "map_index": 311,
+      "map_file": "curved_38.txt"
+    },
+    {
+      "scenario_id": 312,
+      "map_index": 312,
+      "map_file": "curved_380.txt"
+    },
+    {
+      "scenario_id": 313,
+      "map_index": 313,
+      "map_file": "curved_381.txt"
+    },
+    {
+      "scenario_id": 314,
+      "map_index": 314,
+      "map_file": "curved_382.txt"
+    },
+    {
+      "scenario_id": 315,
+      "map_index": 315,
+      "map_file": "curved_383.txt"
+    },
+    {
+      "scenario_id": 316,
+      "map_index": 316,
+      "map_file": "curved_384.txt"
+    },
+    {
+      "scenario_id": 317,
+      "map_index": 317,
+      "map_file": "curved_385.txt"
+    },
+    {
+      "scenario_id": 318,
+      "map_index": 318,
+      "map_file": "curved_386.txt"
+    },
+    {
+      "scenario_id": 319,
+      "map_index": 319,
+      "map_file": "curved_387.txt"
+    },
+    {
+      "scenario_id": 320,
+      "map_index": 320,
+      "map_file": "curved_388.txt"
+    },
+    {
+      "scenario_id": 321,
+      "map_index": 321,
+      "map_file": "curved_389.txt"
+    },
+    {
+      "scenario_id": 322,
+      "map_index": 322,
+      "map_file": "curved_39.txt"
+    },
+    {
+      "scenario_id": 323,
+      "map_index": 323,
+      "map_file": "curved_390.txt"
+    },
+    {
+      "scenario_id": 324,
+      "map_index": 324,
+      "map_file": "curved_391.txt"
+    },
+    {
+      "scenario_id": 325,
+      "map_index": 325,
+      "map_file": "curved_392.txt"
+    },
+    {
+      "scenario_id": 326,
+      "map_index": 326,
+      "map_file": "curved_393.txt"
+    },
+    {
+      "scenario_id": 327,
+      "map_index": 327,
+      "map_file": "curved_394.txt"
+    },
+    {
+      "scenario_id": 328,
+      "map_index": 328,
+      "map_file": "curved_395.txt"
+    },
+    {
+      "scenario_id": 329,
+      "map_index": 329,
+      "map_file": "curved_396.txt"
+    },
+    {
+      "scenario_id": 330,
+      "map_index": 330,
+      "map_file": "curved_397.txt"
+    },
+    {
+      "scenario_id": 331,
+      "map_index": 331,
+      "map_file": "curved_398.txt"
+    },
+    {
+      "scenario_id": 332,
+      "map_index": 332,
+      "map_file": "curved_399.txt"
+    },
+    {
+      "scenario_id": 333,
+      "map_index": 333,
+      "map_file": "curved_4.txt"
+    },
+    {
+      "scenario_id": 334,
+      "map_index": 334,
+      "map_file": "curved_40.txt"
+    },
+    {
+      "scenario_id": 335,
+      "map_index": 335,
+      "map_file": "curved_400.txt"
+    },
+    {
+      "scenario_id": 336,
+      "map_index": 336,
+      "map_file": "curved_41.txt"
+    },
+    {
+      "scenario_id": 337,
+      "map_index": 337,
+      "map_file": "curved_42.txt"
+    },
+    {
+      "scenario_id": 338,
+      "map_index": 338,
+      "map_file": "curved_43.txt"
+    },
+    {
+      "scenario_id": 339,
+      "map_index": 339,
+      "map_file": "curved_44.txt"
+    },
+    {
+      "scenario_id": 340,
+      "map_index": 340,
+      "map_file": "curved_45.txt"
+    },
+    {
+      "scenario_id": 341,
+      "map_index": 341,
+      "map_file": "curved_46.txt"
+    },
+    {
+      "scenario_id": 342,
+      "map_index": 342,
+      "map_file": "curved_47.txt"
+    },
+    {
+      "scenario_id": 343,
+      "map_index": 343,
+      "map_file": "curved_48.txt"
+    },
+    {
+      "scenario_id": 344,
+      "map_index": 344,
+      "map_file": "curved_49.txt"
+    },
+    {
+      "scenario_id": 345,
+      "map_index": 345,
+      "map_file": "curved_5.txt"
+    },
+    {
+      "scenario_id": 346,
+      "map_index": 346,
+      "map_file": "curved_50.txt"
+    },
+    {
+      "scenario_id": 347,
+      "map_index": 347,
+      "map_file": "curved_51.txt"
+    },
+    {
+      "scenario_id": 348,
+      "map_index": 348,
+      "map_file": "curved_52.txt"
+    },
+    {
+      "scenario_id": 349,
+      "map_index": 349,
+      "map_file": "curved_53.txt"
+    },
+    {
+      "scenario_id": 350,
+      "map_index": 350,
+      "map_file": "curved_54.txt"
+    },
+    {
+      "scenario_id": 351,
+      "map_index": 351,
+      "map_file": "curved_55.txt"
+    },
+    {
+      "scenario_id": 352,
+      "map_index": 352,
+      "map_file": "curved_56.txt"
+    },
+    {
+      "scenario_id": 353,
+      "map_index": 353,
+      "map_file": "curved_57.txt"
+    },
+    {
+      "scenario_id": 354,
+      "map_index": 354,
+      "map_file": "curved_58.txt"
+    },
+    {
+      "scenario_id": 355,
+      "map_index": 355,
+      "map_file": "curved_59.txt"
+    },
+    {
+      "scenario_id": 356,
+      "map_index": 356,
+      "map_file": "curved_6.txt"
+    },
+    {
+      "scenario_id": 357,
+      "map_index": 357,
+      "map_file": "curved_60.txt"
+    },
+    {
+      "scenario_id": 358,
+      "map_index": 358,
+      "map_file": "curved_61.txt"
+    },
+    {
+      "scenario_id": 359,
+      "map_index": 359,
+      "map_file": "curved_62.txt"
+    },
+    {
+      "scenario_id": 360,
+      "map_index": 360,
+      "map_file": "curved_63.txt"
+    },
+    {
+      "scenario_id": 361,
+      "map_index": 361,
+      "map_file": "curved_64.txt"
+    },
+    {
+      "scenario_id": 362,
+      "map_index": 362,
+      "map_file": "curved_65.txt"
+    },
+    {
+      "scenario_id": 363,
+      "map_index": 363,
+      "map_file": "curved_66.txt"
+    },
+    {
+      "scenario_id": 364,
+      "map_index": 364,
+      "map_file": "curved_67.txt"
+    },
+    {
+      "scenario_id": 365,
+      "map_index": 365,
+      "map_file": "curved_68.txt"
+    },
+    {
+      "scenario_id": 366,
+      "map_index": 366,
+      "map_file": "curved_69.txt"
+    },
+    {
+      "scenario_id": 367,
+      "map_index": 367,
+      "map_file": "curved_7.txt"
+    },
+    {
+      "scenario_id": 368,
+      "map_index": 368,
+      "map_file": "curved_70.txt"
+    },
+    {
+      "scenario_id": 369,
+      "map_index": 369,
+      "map_file": "curved_71.txt"
+    },
+    {
+      "scenario_id": 370,
+      "map_index": 370,
+      "map_file": "curved_72.txt"
+    },
+    {
+      "scenario_id": 371,
+      "map_index": 371,
+      "map_file": "curved_73.txt"
+    },
+    {
+      "scenario_id": 372,
+      "map_index": 372,
+      "map_file": "curved_74.txt"
+    },
+    {
+      "scenario_id": 373,
+      "map_index": 373,
+      "map_file": "curved_75.txt"
+    },
+    {
+      "scenario_id": 374,
+      "map_index": 374,
+      "map_file": "curved_76.txt"
+    },
+    {
+      "scenario_id": 375,
+      "map_index": 375,
+      "map_file": "curved_77.txt"
+    },
+    {
+      "scenario_id": 376,
+      "map_index": 376,
+      "map_file": "curved_78.txt"
+    },
+    {
+      "scenario_id": 377,
+      "map_index": 377,
+      "map_file": "curved_79.txt"
+    },
+    {
+      "scenario_id": 378,
+      "map_index": 378,
+      "map_file": "curved_8.txt"
+    },
+    {
+      "scenario_id": 379,
+      "map_index": 379,
+      "map_file": "curved_80.txt"
+    },
+    {
+      "scenario_id": 380,
+      "map_index": 380,
+      "map_file": "curved_81.txt"
+    },
+    {
+      "scenario_id": 381,
+      "map_index": 381,
+      "map_file": "curved_82.txt"
+    },
+    {
+      "scenario_id": 382,
+      "map_index": 382,
+      "map_file": "curved_83.txt"
+    },
+    {
+      "scenario_id": 383,
+      "map_index": 383,
+      "map_file": "curved_84.txt"
+    },
+    {
+      "scenario_id": 384,
+      "map_index": 384,
+      "map_file": "curved_85.txt"
+    },
+    {
+      "scenario_id": 385,
+      "map_index": 385,
+      "map_file": "curved_86.txt"
+    },
+    {
+      "scenario_id": 386,
+      "map_index": 386,
+      "map_file": "curved_87.txt"
+    },
+    {
+      "scenario_id": 387,
+      "map_index": 387,
+      "map_file": "curved_88.txt"
+    },
+    {
+      "scenario_id": 388,
+      "map_index": 388,
+      "map_file": "curved_89.txt"
+    },
+    {
+      "scenario_id": 389,
+      "map_index": 389,
+      "map_file": "curved_9.txt"
+    },
+    {
+      "scenario_id": 390,
+      "map_index": 390,
+      "map_file": "curved_90.txt"
+    },
+    {
+      "scenario_id": 391,
+      "map_index": 391,
+      "map_file": "curved_91.txt"
+    },
+    {
+      "scenario_id": 392,
+      "map_index": 392,
+      "map_file": "curved_92.txt"
+    },
+    {
+      "scenario_id": 393,
+      "map_index": 393,
+      "map_file": "curved_93.txt"
+    },
+    {
+      "scenario_id": 394,
+      "map_index": 394,
+      "map_file": "curved_94.txt"
+    },
+    {
+      "scenario_id": 395,
+      "map_index": 395,
+      "map_file": "curved_95.txt"
+    },
+    {
+      "scenario_id": 396,
+      "map_index": 396,
+      "map_file": "curved_96.txt"
+    },
+    {
+      "scenario_id": 397,
+      "map_index": 397,
+      "map_file": "curved_97.txt"
+    },
+    {
+      "scenario_id": 398,
+      "map_index": 398,
+      "map_file": "curved_98.txt"
+    },
+    {
+      "scenario_id": 399,
+      "map_index": 399,
+      "map_file": "curved_99.txt"
+    }
+  ]
+}

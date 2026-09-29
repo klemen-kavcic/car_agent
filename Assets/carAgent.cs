@@ -3,6 +3,7 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Policies;
 using UnityEngine.InputSystem;
 
 public class CarAgent : Agent
@@ -74,12 +75,29 @@ public class CarAgent : Agent
     public bool includeRemainingStepsObservation = false;
     [Tooltip("When disabled, sensor slots remain in the vector but are filled with zeros. This enables a matched no-sensor-input ablation without changing the 137-observation model shape.")]
     public bool includeSensorObservations = true;
-    [Tooltip("SampledTileFan = existing 24 tile points (137 observations). ContinuousLasers = twelve car-relative grid lasers (77 observations). Select before building/training; this changes the model input size.")]
+    [Tooltip("SampledTileFan = 24 tile points (137 observations). ContinuousLasers = twelve car-relative grid lasers (77 observations, or 89 with vehicle distance enabled on LaserTileSensor). Select before building/training.")]
     public TileObservationMode tileObservationMode = TileObservationMode.SampledTileFan;
     public LaserTileSensor laserTileSensor;
     [HideInInspector] public TrafficScenarioManager trafficManager;
     [HideInInspector] public int trafficSeatIndex = -1;
     private bool trafficFinished;
+
+    [Header("Traffic finish marker")]
+    [Tooltip("Show a coloured beacon above a car after the shared traffic episode marks it finished. " +
+        "This is visual-only and has no effect on observations, physics, rewards, or training. " +
+        "Disable it for a clean presentation/build if needed.")]
+    public bool showTrafficFinishMarker = true;
+    [Tooltip("Height of the finish beacon above the car, in metres.")]
+    public float trafficFinishMarkerHeight = 1.6f;
+    [Tooltip("Size of the finish beacon in metres.")]
+    public float trafficFinishMarkerSize = 0.35f;
+    public Color trafficGoalMarkerColor = new Color(0.1f, 1f, 0.2f, 1f);
+    public Color trafficCollisionMarkerColor = new Color(1f, 0.1f, 0.05f, 1f);
+    public Color trafficTerminalMarkerColor = new Color(1f, 0.55f, 0.05f, 1f);
+    public Color trafficMaxStepMarkerColor = new Color(1f, 0.9f, 0.05f, 1f);
+    private GameObject trafficFinishMarker;
+    private Renderer trafficFinishMarkerRenderer;
+    private Material trafficFinishMarkerMaterial;
 
     [Tooltip("Live cumulative reward for the episode in progress — read-only display, shows in Inspector during Play.")]
     public float currentEpisodeReward;
@@ -243,13 +261,34 @@ public class CarAgent : Agent
                 "laser_special_distance_scale_m", laserTileSensor.specialDistanceScaleM);
             float roadScale = ep.GetWithDefault(
                 "laser_road_boundary_distance_scale_m", laserTileSensor.roadBoundaryDistanceScaleM);
+            float vehicleScale = ep.GetWithDefault(
+                "laser_vehicle_distance_scale_m", laserTileSensor.vehicleDistanceScaleM);
             if (specialScale > 0f) laserTileSensor.specialDistanceScaleM = specialScale;
             if (roadScale > 0f) laserTileSensor.roadBoundaryDistanceScaleM = roadScale;
+            if (vehicleScale > 0f) laserTileSensor.vehicleDistanceScaleM = vehicleScale;
+
+            // YAML may select the mode, but the scene's Behavior Parameters must already
+            // have the matching input size. A 77-input ONNX cannot consume 89 values.
+            float vehicleEnabled = ep.GetWithDefault("laser_vehicle_distance_observation_enabled", -1f);
+            if (vehicleEnabled >= 0f)
+                laserTileSensor.includeVehicleDistanceObservations = vehicleEnabled >= 0.5f;
+        }
+        if (tileObservationMode == TileObservationMode.ContinuousLasers)
+        {
+            if (laserTileSensor == null)
+                throw new System.InvalidOperationException("ContinuousLasers requires LaserTileSensor.");
+            int expectedSize = 17 + laserTileSensor.ActiveObservationCount +
+                (includeRemainingStepsObservation ? 1 : 0);
+            var behavior = GetComponent<BehaviorParameters>();
+            if (behavior == null || behavior.BrainParameters.VectorObservationSize != expectedSize)
+                throw new System.InvalidOperationException($"Laser observation mode requires " +
+                    $"Vector Observation Size {expectedSize} (vehicle distance " +
+                    $"{(laserTileSensor.includeVehicleDistanceObservations ? "on" : "off")}).");
         }
 
         // Keep the vector's sensor slots present but zero them for a clean input ablation. This
-        // deliberately does not alter BehaviorParameters.VectorObservationSize, so all vehicle-
-        // control conditions can use the same 137-observation executable.
+        // deliberately does not alter BehaviorParameters.VectorObservationSize, so sensor
+        // ablations keep the scene's chosen 77-, 89-, or 137-observation vector.
         float sensorObservationsEnabled = ep.GetWithDefault("sensor_observations_enabled", -1f);
         if (sensorObservationsEnabled >= 0f)
             includeSensorObservations = sensorObservationsEnabled >= 0.5f;
@@ -419,6 +458,7 @@ public class CarAgent : Agent
         {
             AddReward(rwMaxStepPenalty);
             Academy.Instance.StatsRecorder.Add("Custom/MaxStepReached", 1.0f, StatAggregationMethod.Sum);
+            RecordOutcomeForTraining("MaxStep");
             episodeOutcomeLogged = true;
             // The Academy ends this episode automatically right after this step (no explicit
             // EndEpisode() call here), so snapshot the display fields directly instead of
@@ -433,7 +473,31 @@ public class CarAgent : Agent
     {
         lastEpisodeReward = GetCumulativeReward();
         lastEpisodeEndReason = reason;
+        RecordOutcomeForTraining(reason);
         EndEpisode();
+    }
+
+    // These counters are intentionally separate from reward and the built-in
+    // trainer summary.  They make a denominator and every outcome explicit in
+    // TensorBoard/event logs, so future analyses can form comparable rates.
+    void RecordOutcomeForTraining(string reason)
+    {
+        Academy.Instance.StatsRecorder.Add("Custom/CompletedVehicleEpisodes", 1f, StatAggregationMethod.Sum);
+        switch (reason)
+        {
+            case "Goal":
+                Academy.Instance.StatsRecorder.Add("Custom/OutcomeGoal", 1f, StatAggregationMethod.Sum);
+                break;
+            case "VehicleCollision":
+                Academy.Instance.StatsRecorder.Add("Custom/OutcomeVehicleCollision", 1f, StatAggregationMethod.Sum);
+                break;
+            case "Terminated":
+                Academy.Instance.StatsRecorder.Add("Custom/OutcomeTerminated", 1f, StatAggregationMethod.Sum);
+                break;
+            case "MaxStep":
+                Academy.Instance.StatsRecorder.Add("Custom/OutcomeMaxStep", 1f, StatAggregationMethod.Sum);
+                break;
+        }
     }
 
     // Dev/testing convenience: end the current episode early with no extra reward, so a
@@ -515,6 +579,7 @@ public class CarAgent : Agent
 
     public override void OnEpisodeBegin()
     {
+        SetTrafficFinishMarker(null);
         // Diagnostic: if the previous episode ended without going through Goal/Terminated/MaxStep,
         // it vanishes from the Episodes vs Goals+Terminated+MaxStep reconciliation (see
         // check_episode_stats.py) with no trace of why. This surfaces it explicitly instead.
@@ -861,6 +926,8 @@ public class CarAgent : Agent
     public void PlaceForTraffic(TrafficScenarioManager.Route route)
     {
         trafficFinished = false;
+        SetTrafficFinishMarker(null);
+        if (decisionRequester != null) decisionRequester.enabled = true;
         carController.enabled = true;
         rb.isKinematic = false;
         Vector3 spawn = new Vector3(route.spawn_x, startPosition.y, route.spawn_z);
@@ -881,6 +948,10 @@ public class CarAgent : Agent
     {
         if (trafficFinished) return;
         trafficFinished = true;
+        SetTrafficFinishMarker(reason);
+        // Do not feed the shared policy repeated no-op decisions from parked cars.
+        // EndEpisode still runs for every seat when the shared episode finishes.
+        if (decisionRequester != null) decisionRequester.enabled = false;
         lastEpisodeEndReason = reason;
         episodeOutcomeLogged = true;
         carController.accelerationInput = 0f;
@@ -910,6 +981,72 @@ public class CarAgent : Agent
         EndEpisode();
     }
 
+    // The marker is deliberately a collider-free child created at runtime. It therefore cannot
+    // change the car's observations or trigger a wall/vehicle collision, while remaining visible
+    // in the Unity game view when a traffic car reaches Goal, VehicleCollision, Terminated, or
+    // MaxStep. It is cleared when the shared episode is reset.
+    void EnsureTrafficFinishMarker()
+    {
+        if (!showTrafficFinishMarker || trafficFinishMarker != null) return;
+
+        trafficFinishMarker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        trafficFinishMarker.name = "TrafficFinishMarker";
+        trafficFinishMarker.transform.SetParent(transform, false);
+        trafficFinishMarker.transform.localPosition = new Vector3(0f, trafficFinishMarkerHeight, 0f);
+        float size = Mathf.Max(0.05f, trafficFinishMarkerSize);
+        trafficFinishMarker.transform.localScale = new Vector3(size, size, size);
+
+        Collider markerCollider = trafficFinishMarker.GetComponent<Collider>();
+        if (markerCollider != null) markerCollider.enabled = false;
+
+        trafficFinishMarkerRenderer = trafficFinishMarker.GetComponent<Renderer>();
+        Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
+        if (shader == null) shader = Shader.Find("Unlit/Color");
+        if (shader == null) shader = Shader.Find("Standard");
+        if (trafficFinishMarkerRenderer != null && shader != null)
+        {
+            trafficFinishMarkerMaterial = new Material(shader);
+            trafficFinishMarkerMaterial.name = "TrafficFinishMarkerMaterial";
+            trafficFinishMarkerRenderer.material = trafficFinishMarkerMaterial;
+        }
+        if (trafficFinishMarkerRenderer != null)
+            trafficFinishMarkerRenderer.enabled = false;
+    }
+
+    void SetTrafficFinishMarker(string reason)
+    {
+        // Ordinary one-car episodes never call FreezeForTraffic; avoid creating hidden marker
+        // objects for those runs. TrafficScenarioManager is assigned before traffic episodes.
+        if (trafficManager == null && reason == null) return;
+        if (!showTrafficFinishMarker)
+        {
+            if (trafficFinishMarkerRenderer != null) trafficFinishMarkerRenderer.enabled = false;
+            return;
+        }
+
+        EnsureTrafficFinishMarker();
+        if (trafficFinishMarkerRenderer == null) return;
+        if (reason == null)
+        {
+            trafficFinishMarkerRenderer.enabled = false;
+            return;
+        }
+
+        Color colour = trafficMaxStepMarkerColor;
+        if (reason == "Goal") colour = trafficGoalMarkerColor;
+        else if (reason == "VehicleCollision") colour = trafficCollisionMarkerColor;
+        else if (reason == "Terminated") colour = trafficTerminalMarkerColor;
+
+        if (trafficFinishMarkerMaterial != null)
+        {
+            if (trafficFinishMarkerMaterial.HasProperty("_BaseColor"))
+                trafficFinishMarkerMaterial.SetColor("_BaseColor", colour);
+            if (trafficFinishMarkerMaterial.HasProperty("_Color"))
+                trafficFinishMarkerMaterial.SetColor("_Color", colour);
+        }
+        trafficFinishMarkerRenderer.enabled = true;
+    }
+
     bool IsSpawnableTile(Vector3 worldPos)
     {
         if (carController.gridManager == null) return true;
@@ -925,6 +1062,8 @@ public class CarAgent : Agent
     // result) correctly finds the dominant *line* orientation instead. Falls back to a uniformly
     // random heading when too few Asphalt neighbours are found to give a reliable direction (e.g.
     // an isolated patch), then picks one of the two directions along the road at random.
+    public float TrafficRoadAlignedHeading(Vector3 worldPos) => ComputeRoadAlignedHeading(worldPos);
+
     float ComputeRoadAlignedHeading(Vector3 worldPos)
     {
         var neighborhood = new TileType[25];
@@ -1267,7 +1406,8 @@ public class CarAgent : Agent
             if (includeSensorObservations && laserTileSensor != null)
                 laserTileSensor.AddObservations(sensor);
             else
-                AddZeroObservations(sensor, LaserTileSensor.ObservationCount);
+                AddZeroObservations(sensor, laserTileSensor != null
+                    ? laserTileSensor.ActiveObservationCount : LaserTileSensor.ObservationCount);
         }
         else if (includeSensorObservations && carSensor != null && carSensor.readings != null)
         {

@@ -144,6 +144,14 @@
     - 5000 × 0.02 = 100 seconds
     - measure speed during log and eval, then during 10 maps it also coollects distribution of speed
 
+0919
+    - multiagent environment
+    - try cars as terminal + aditionals laser sensors for the cars
+    - try solo + fine - tuning vs multiagent from scratch - not much difference
+    - extra observation is better when there are more cars
+    - terminations from tiles virtually gone
+    - a lot of maxstep results
+
 
  this is essentially potential-based reward shaping (Ng, Harada & Russell 1999): define a "danger potential" Φ(s) = (terminal sensors currently triggered)/7, and reward the change in it each step (−ΔΦ). That framing matters because it's the one variant of reward shaping that's provably policy-invariant — a full round trip (approach then fully retreat) always nets to exactly zero, no matter how many steps it takes or how the car oscillates in between, since the intermediate terms telescope away
 

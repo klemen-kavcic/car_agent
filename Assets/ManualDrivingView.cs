@@ -263,15 +263,24 @@ public class ManualDrivingView : MonoBehaviour
         if (agent.tileObservationMode == CarAgent.TileObservationMode.ContinuousLasers &&
             agent.laserTileSensor != null && agent.laserTileSensor.gridManager != null)
         {
-            sb.AppendLine("Lasers — special type one-hot | special distance | road boundary:");
             LaserTileSensor laser = agent.laserTileSensor;
+            sb.AppendLine(laser.includeVehicleDistanceObservations
+                ? "Lasers — floor type | floor distance | road boundary | vehicle distance:"
+                : "Lasers — special type one-hot | special distance | road boundary:");
             for (int i = 0; i < LaserTileSensor.DirectionCount; i++)
             {
-                laser.Trace(laser.transform.position,
+                laser.TraceWithVehicle(laser.transform.position,
                     laser.transform.TransformDirection(LaserTileSensor.GetLocalDirection(i)),
-                    out TileType special, out float specialDistance, out float roadDistance);
-                sb.AppendFormat(" {0,-2}: {1,-12} {2}  {3,5:F1} m  {4,5:F1} m\n",
+                    out TileType special, out float specialDistance, out float roadDistance,
+                    out float vehicleDistance);
+                sb.AppendFormat(" {0,-2}: {1,-12} {2}  {3,5:F1} m  {4,5:F1} m",
                     DirectionName(i), special, SpecialOneHotText(special), specialDistance, roadDistance);
+                if (laser.includeVehicleDistanceObservations)
+                    sb.AppendFormat("  vehicle: {0}\n",
+                        vehicleDistance < laser.gridManager.GridDiagonal - 0.001f
+                            ? vehicleDistance.ToString("F1") + " m" : "none");
+                else
+                    sb.AppendLine();
             }
         }
         else

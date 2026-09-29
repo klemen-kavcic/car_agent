@@ -33,6 +33,11 @@ environment_parameters:
   sensor_observations_enabled: 1
   laser_special_distance_scale_m: 50.0
   laser_road_boundary_distance_scale_m: 3.0
+  # For a separate 89-observation traffic build, set the LaserTileSensor Inspector
+  # checkbox on every car and use laser_vehicle_distance_observation_enabled: 1.
+  # Keep the matching 77-observation build at 0 (or omit this parameter).
+  # laser_vehicle_distance_observation_enabled: 0
+  laser_vehicle_distance_scale_m: 10.0
   
   reward_goal: 4.0
   reward_approach_bonus: 0.0

@@ -1,0 +1,601 @@
+Wrote /d/hpc/home/kk42117/mag/car1/configs/traffic89_solo20m_s0.yaml; init=scratch, steps=20000000, environments=64
+FORCE_RESTART=1: replacing the known-invalid previous contents of traffic89_solo20m_s0.
+Launch attempt 1/4 using base port 33104
+
+            ┐  ╖
+        ╓╖╬│╡  ││╬╖╖
+    ╓╖╬│││││┘  ╬│││││╬╖
+ ╖╬│││││╬╜        ╙╬│││││╖╖                               ╗╗╗
+ ╬╬╬╬╖││╦╖        ╖╬││╗╣╣╣╬      ╟╣╣╬    ╟╣╣╣             ╜╜╜  ╟╣╣
+ ╬╬╬╬╬╬╬╬╖│╬╖╖╓╬╪│╓╣╣╣╣╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╒╣╣╖╗╣╣╣╗   ╣╣╣ ╣╣╣╣╣╣ ╟╣╣╖   ╣╣╣
+ ╬╬╬╬┐  ╙╬╬╬╬│╓╣╣╣╝╜  ╫╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╟╣╣╣╙ ╙╣╣╣  ╣╣╣ ╙╟╣╣╜╙  ╫╣╣  ╟╣╣
+ ╬╬╬╬┐     ╙╬╬╣╣      ╫╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╟╣╣╬   ╣╣╣  ╣╣╣  ╟╣╣     ╣╣╣┌╣╣╜
+ ╬╬╬╜       ╬╬╣╣      ╙╝╣╣╬      ╙╣╣╣╗╖╓╗╣╣╣╜ ╟╣╣╬   ╣╣╣  ╣╣╣  ╟╣╣╦╓    ╣╣╣╣╣
+ ╙   ╓╦╖    ╬╬╣╣   ╓╗╗╖            ╙╝╣╣╣╣╝╜   ╘╝╝╜   ╝╝╝  ╝╝╝   ╙╣╣╣    ╟╣╣╣
+   ╩╬╬╬╬╬╬╦╦╬╬╣╣╗╣╣╣╣╣╣╣╝                                             ╫╣╣╣╣
+      ╙╬╬╬╬╬╬╬╣╣╣╣╣╣╝╜
+          ╙╬╬╬╣╣╣╜
+             ╙
+        
+ Version information:
+  ml-agents: 1.1.0,
+  ml-agents-envs: 1.1.0,
+  Communicator API: 1.5.0,
+  PyTorch: 2.1.2+cu121
+E0920 21:17:20.834431969 3890724 chttp2_server.cc:1080]      UNKNOWN:No address added out of total 1 resolved for '[::]:33114' {created_time:"2026-09-20T21:17:20.833416715+02:00", children:[UNKNOWN:Failed to add any wildcard listeners {created_time:"2026-09-20T21:17:20.833402163+02:00", children:[UNKNOWN:Unable to configure socket {created_time:"2026-09-20T21:17:20.832558689+02:00", fd:44, children:[UNKNOWN:Address already in use {syscall:"bind", os_error:"Address already in use", errno:98, created_time:"2026-09-20T21:17:20.832496535+02:00"}]}, UNKNOWN:Unable to configure socket {fd:44, created_time:"2026-09-20T21:17:20.833383265+02:00", children:[UNKNOWN:Address already in use {syscall:"bind", os_error:"Address already in use", errno:98, created_time:"2026-09-20T21:17:20.83338009+02:00"}]}]}]}
+[ERROR] UnityEnvironment worker 10: environment raised an unexpected exception.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/rpc_communicator.py", line 71, in create_server
+    self.server.add_insecure_port("[::]:" + str(self.port))
+  File "/usr/local/lib/python3.10/dist-packages/grpc/_server.py", line 969, in add_insecure_port
+    return _common.validate_port_binding_result(
+  File "/usr/local/lib/python3.10/dist-packages/grpc/_common.py", line 166, in validate_port_binding_result
+    raise RuntimeError(_ERROR_MESSAGE_PORT_BINDING_FAILED % address)
+RuntimeError: Failed to bind to address [::]:33114; set GRPC_VERBOSITY=debug environment variable to see detailed error message.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/subprocess_env_manager.py", line 163, in worker
+    env = env_factory(worker_id, side_channels)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/learn.py", line 191, in create_unity_environment
+    return UnityEnvironment(
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/environment.py", line 189, in __init__
+    self._communicator = self._get_communicator(worker_id, base_port, timeout_wait)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/environment.py", line 267, in _get_communicator
+    return RpcCommunicator(worker_id, base_port, timeout_wait)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/rpc_communicator.py", line 51, in __init__
+    self.create_server()
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/rpc_communicator.py", line 75, in create_server
+    raise UnityWorkerInUseException(self.worker_id)
+mlagents_envs.exception.UnityWorkerInUseException: Couldn't start socket communication because worker number 10 is still in use. You may need to manually close a previously opened environment or use a different worker number.
+E0920 21:17:21.063777492 3899744 chttp2_server.cc:1080]      UNKNOWN:No address added out of total 1 resolved for '[::]:33142' {created_time:"2026-09-20T21:17:21.063483378+02:00", children:[UNKNOWN:Failed to add any wildcard listeners {created_time:"2026-09-20T21:17:21.063469287+02:00", children:[UNKNOWN:Unable to configure socket {created_time:"2026-09-20T21:17:21.063413142+02:00", fd:128, children:[UNKNOWN:Address already in use {created_time:"2026-09-20T21:17:21.063358409+02:00", errno:98, os_error:"Address already in use", syscall:"bind"}]}, UNKNOWN:Unable to configure socket {created_time:"2026-09-20T21:17:21.063460814+02:00", fd:128, children:[UNKNOWN:Address already in use {created_time:"2026-09-20T21:17:21.063457889+02:00", errno:98, os_error:"Address already in use", syscall:"bind"}]}]}]}
+[ERROR] UnityEnvironment worker 38: environment raised an unexpected exception.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/rpc_communicator.py", line 71, in create_server
+    self.server.add_insecure_port("[::]:" + str(self.port))
+  File "/usr/local/lib/python3.10/dist-packages/grpc/_server.py", line 969, in add_insecure_port
+    return _common.validate_port_binding_result(
+  File "/usr/local/lib/python3.10/dist-packages/grpc/_common.py", line 166, in validate_port_binding_result
+    raise RuntimeError(_ERROR_MESSAGE_PORT_BINDING_FAILED % address)
+RuntimeError: Failed to bind to address [::]:33142; set GRPC_VERBOSITY=debug environment variable to see detailed error message.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/subprocess_env_manager.py", line 163, in worker
+    env = env_factory(worker_id, side_channels)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/learn.py", line 191, in create_unity_environment
+    return UnityEnvironment(
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/environment.py", line 189, in __init__
+    self._communicator = self._get_communicator(worker_id, base_port, timeout_wait)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/environment.py", line 267, in _get_communicator
+    return RpcCommunicator(worker_id, base_port, timeout_wait)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/rpc_communicator.py", line 51, in __init__
+    self.create_server()
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/rpc_communicator.py", line 75, in create_server
+    raise UnityWorkerInUseException(self.worker_id)
+mlagents_envs.exception.UnityWorkerInUseException: Couldn't start socket communication because worker number 38 is still in use. You may need to manually close a previously opened environment or use a different worker number.
+E0920 21:17:21.119791568 3901387 chttp2_server.cc:1080]      UNKNOWN:No address added out of total 1 resolved for '[::]:33152' {created_time:"2026-09-20T21:17:21.119463432+02:00", children:[UNKNOWN:Failed to add any wildcard listeners {created_time:"2026-09-20T21:17:21.119449851+02:00", children:[UNKNOWN:Unable to configure socket {fd:158, created_time:"2026-09-20T21:17:21.119365654+02:00", children:[UNKNOWN:Address already in use {created_time:"2026-09-20T21:17:21.119311222+02:00", errno:98, os_error:"Address already in use", syscall:"bind"}]}, UNKNOWN:Unable to configure socket {created_time:"2026-09-20T21:17:21.119434158+02:00", fd:158, children:[UNKNOWN:Address already in use {created_time:"2026-09-20T21:17:21.119430923+02:00", errno:98, os_error:"Address already in use", syscall:"bind"}]}]}]}
+[ERROR] UnityEnvironment worker 48: environment raised an unexpected exception.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/rpc_communicator.py", line 71, in create_server
+    self.server.add_insecure_port("[::]:" + str(self.port))
+  File "/usr/local/lib/python3.10/dist-packages/grpc/_server.py", line 969, in add_insecure_port
+    return _common.validate_port_binding_result(
+  File "/usr/local/lib/python3.10/dist-packages/grpc/_common.py", line 166, in validate_port_binding_result
+    raise RuntimeError(_ERROR_MESSAGE_PORT_BINDING_FAILED % address)
+RuntimeError: Failed to bind to address [::]:33152; set GRPC_VERBOSITY=debug environment variable to see detailed error message.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/subprocess_env_manager.py", line 163, in worker
+    env = env_factory(worker_id, side_channels)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/learn.py", line 191, in create_unity_environment
+    return UnityEnvironment(
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/environment.py", line 189, in __init__
+    self._communicator = self._get_communicator(worker_id, base_port, timeout_wait)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/environment.py", line 267, in _get_communicator
+    return RpcCommunicator(worker_id, base_port, timeout_wait)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/rpc_communicator.py", line 51, in __init__
+    self.create_server()
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/rpc_communicator.py", line 75, in create_server
+    raise UnityWorkerInUseException(self.worker_id)
+mlagents_envs.exception.UnityWorkerInUseException: Couldn't start socket communication because worker number 48 is still in use. You may need to manually close a previously opened environment or use a different worker number.
+[INFO] Learning was interrupted. Please wait while the graph is generated.
+E0920 21:17:21.225369302 3904559 chttp2_server.cc:1080]      UNKNOWN:No address added out of total 1 resolved for '[::]:33166' {created_time:"2026-09-20T21:17:21.22503699+02:00", children:[UNKNOWN:Failed to add any wildcard listeners {created_time:"2026-09-20T21:17:21.225016859+02:00", children:[UNKNOWN:Unable to configure socket {fd:200, created_time:"2026-09-20T21:17:21.224032872+02:00", children:[UNKNOWN:Address already in use {syscall:"bind", os_error:"Address already in use", errno:98, created_time:"2026-09-20T21:17:21.223977339+02:00"}]}, UNKNOWN:Unable to configure socket {created_time:"2026-09-20T21:17:21.2241043+02:00", fd:200, children:[UNKNOWN:Address already in use {created_time:"2026-09-20T21:17:21.224094966+02:00", errno:98, os_error:"Address already in use", syscall:"bind"}]}]}]}
+[ERROR] UnityEnvironment worker 62: environment raised an unexpected exception.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/rpc_communicator.py", line 71, in create_server
+    self.server.add_insecure_port("[::]:" + str(self.port))
+  File "/usr/local/lib/python3.10/dist-packages/grpc/_server.py", line 969, in add_insecure_port
+    return _common.validate_port_binding_result(
+  File "/usr/local/lib/python3.10/dist-packages/grpc/_common.py", line 166, in validate_port_binding_result
+    raise RuntimeError(_ERROR_MESSAGE_PORT_BINDING_FAILED % address)
+RuntimeError: Failed to bind to address [::]:33166; set GRPC_VERBOSITY=debug environment variable to see detailed error message.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/subprocess_env_manager.py", line 163, in worker
+    env = env_factory(worker_id, side_channels)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/learn.py", line 191, in create_unity_environment
+    return UnityEnvironment(
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/environment.py", line 189, in __init__
+    self._communicator = self._get_communicator(worker_id, base_port, timeout_wait)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/environment.py", line 267, in _get_communicator
+    return RpcCommunicator(worker_id, base_port, timeout_wait)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/rpc_communicator.py", line 51, in __init__
+    self.create_server()
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/rpc_communicator.py", line 75, in create_server
+    raise UnityWorkerInUseException(self.worker_id)
+mlagents_envs.exception.UnityWorkerInUseException: Couldn't start socket communication because worker number 62 is still in use. You may need to manually close a previously opened environment or use a different worker number.
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[ERROR] SubprocessEnvManager had workers that didn't signal shutdown
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+[ERROR] A SubprocessEnvManager worker did not shut down correctly so it was forcefully terminated.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/subprocess_env_manager.py", line 92, in send
+    self.conn.send(req)
+  File "/usr/lib/python3.10/multiprocessing/connection.py", line 206, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+  File "/usr/lib/python3.10/multiprocessing/connection.py", line 411, in _send_bytes
+    self._send(header + buf)
+  File "/usr/lib/python3.10/multiprocessing/connection.py", line 368, in _send
+    n = write(self._handle, buf)
+BrokenPipeError: [Errno 32] Broken pipe
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/bin/mlagents-learn", line 8, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/learn.py", line 270, in main
+    run_cli(parse_command_line())
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/learn.py", line 266, in run_cli
+    run_training(run_seed, options, num_areas)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/learn.py", line 138, in run_training
+    tc.start_learning(env_manager)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/timers.py", line 305, in wrapped
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/trainer_controller.py", line 236, in start_learning
+    raise ex
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/trainer_controller.py", line 211, in start_learning
+    self._reset_env(env_manager)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents_envs/timers.py", line 305, in wrapped
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/trainer_controller.py", line 144, in _reset_env
+    env_manager.reset(config=new_config)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/env_manager.py", line 68, in reset
+    self.first_step_infos = self._reset_env(config)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/subprocess_env_manager.py", line 440, in _reset_env
+    self.set_env_parameters(config)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/subprocess_env_manager.py", line 457, in set_env_parameters
+    ew.send(EnvironmentCommand.ENVIRONMENT_PARAMETERS, config)
+  File "/usr/local/lib/python3.10/dist-packages/mlagents/trainers/subprocess_env_manager.py", line 94, in send
+    raise UnityCommunicationException("UnityEnvironment worker: send failed.")
+mlagents_envs.exception.UnityCommunicationException: UnityEnvironment worker: send failed.
+Launch attempt 2/4 using base port 39312
+
+            ┐  ╖
+        ╓╖╬│╡  ││╬╖╖
+    ╓╖╬│││││┘  ╬│││││╬╖
+ ╖╬│││││╬╜        ╙╬│││││╖╖                               ╗╗╗
+ ╬╬╬╬╖││╦╖        ╖╬││╗╣╣╣╬      ╟╣╣╬    ╟╣╣╣             ╜╜╜  ╟╣╣
+ ╬╬╬╬╬╬╬╬╖│╬╖╖╓╬╪│╓╣╣╣╣╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╒╣╣╖╗╣╣╣╗   ╣╣╣ ╣╣╣╣╣╣ ╟╣╣╖   ╣╣╣
+ ╬╬╬╬┐  ╙╬╬╬╬│╓╣╣╣╝╜  ╫╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╟╣╣╣╙ ╙╣╣╣  ╣╣╣ ╙╟╣╣╜╙  ╫╣╣  ╟╣╣
+ ╬╬╬╬┐     ╙╬╬╣╣      ╫╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╟╣╣╬   ╣╣╣  ╣╣╣  ╟╣╣     ╣╣╣┌╣╣╜
+ ╬╬╬╜       ╬╬╣╣      ╙╝╣╣╬      ╙╣╣╣╗╖╓╗╣╣╣╜ ╟╣╣╬   ╣╣╣  ╣╣╣  ╟╣╣╦╓    ╣╣╣╣╣
+ ╙   ╓╦╖    ╬╬╣╣   ╓╗╗╖            ╙╝╣╣╣╣╝╜   ╘╝╝╜   ╝╝╝  ╝╝╝   ╙╣╣╣    ╟╣╣╣
+   ╩╬╬╬╬╬╬╦╦╬╬╣╣╗╣╣╣╣╣╣╣╝                                             ╫╣╣╣╣
+      ╙╬╬╬╬╬╬╬╣╣╣╣╣╣╝╜
+          ╙╬╬╬╣╣╣╜
+             ╙
+        
+ Version information:
+  ml-agents: 1.1.0,
+  ml-agents-envs: 1.1.0,
+  Communicator API: 1.5.0,
+  PyTorch: 2.1.2+cu121
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Hyperparameters for behavior name CarAgent: 
+	trainer_type:	ppo
+	hyperparameters:	
+	  batch_size:	1024
+	  buffer_size:	16384
+	  learning_rate:	0.0003
+	  beta:	0.005
+	  epsilon:	0.2
+	  lambd:	0.95
+	  num_epoch:	3
+	  shared_critic:	False
+	  learning_rate_schedule:	linear
+	  beta_schedule:	linear
+	  epsilon_schedule:	linear
+	checkpoint_interval:	1000000
+	network_settings:	
+	  normalize:	True
+	  hidden_units:	128
+	  num_layers:	2
+	  vis_encode_type:	simple
+	  memory:	None
+	  goal_conditioning_type:	hyper
+	  deterministic:	False
+	reward_signals:	
+	  extrinsic:	
+	    gamma:	0.99
+	    strength:	1.0
+	    network_settings:	
+	      normalize:	False
+	      hidden_units:	128
+	      num_layers:	2
+	      vis_encode_type:	simple
+	      memory:	None
+	      goal_conditioning_type:	hyper
+	      deterministic:	False
+	init_path:	None
+	keep_checkpoints:	22
+	even_checkpoints:	False
+	max_steps:	20000000
+	time_horizon:	128
+	summary_freq:	10000
+	threaded:	False
+	self_play:	None
+	behavioral_cloning:	None
+[INFO] Parameter 'vehicle_speed_cap_enabled' is in lesson 'vehicle_speed_cap_enabled' and has value 'Float: value=1.0'.
+[INFO] Parameter 'vehicle_speed_cap_ms' is in lesson 'vehicle_speed_cap_ms' and has value 'Float: value=3.0'.
+[INFO] Parameter 'vehicle_speed_cap_governor_start_fraction' is in lesson 'vehicle_speed_cap_governor_start_fraction' and has value 'Float: value=0.9'.
+[INFO] Parameter 'vehicle_speed_cap_overspeed_margin_ms' is in lesson 'vehicle_speed_cap_overspeed_margin_ms' and has value 'Float: value=0.5'.
+[INFO] Parameter 'vehicle_speed_cap_brake_torque' is in lesson 'vehicle_speed_cap_brake_torque' and has value 'Float: value=900.0'.
+[INFO] Parameter 'regen_brake_torque' is in lesson 'regen_brake_torque' and has value 'Float: value=450.0'.
+[INFO] Parameter 'sensor_observations_enabled' is in lesson 'sensor_observations_enabled' and has value 'Float: value=1.0'.
+[INFO] Parameter 'laser_special_distance_scale_m' is in lesson 'laser_special_distance_scale_m' and has value 'Float: value=10.0'.
+[INFO] Parameter 'laser_road_boundary_distance_scale_m' is in lesson 'laser_road_boundary_distance_scale_m' and has value 'Float: value=3.0'.
+[INFO] Parameter 'reward_goal' is in lesson 'reward_goal' and has value 'Float: value=8.0'.
+[INFO] Parameter 'reward_approach_bonus' is in lesson 'reward_approach_bonus' and has value 'Float: value=0.0'.
+[INFO] Parameter 'reward_terminal_penalty' is in lesson 'reward_terminal_penalty' and has value 'Float: value=-10.0'.
+[INFO] Parameter 'reward_time_penalty' is in lesson 'reward_time_penalty' and has value 'Float: value=-0.002'.
+[INFO] Parameter 'reward_time_penalty_growth' is in lesson 'reward_time_penalty_growth' and has value 'Float: value=0.0'.
+[INFO] Parameter 'reward_checkpoint' is in lesson 'reward_checkpoint' and has value 'Float: value=0.02'.
+[INFO] Parameter 'total_training_steps' is in lesson 'total_training_steps' and has value 'Float: value=20000000.0'.
+[INFO] Parameter 'training_num_envs' is in lesson 'training_num_envs' and has value 'Float: value=64.0'.
+[INFO] Parameter 'terminal_penalty_escalation_enabled' is in lesson 'terminal_penalty_escalation_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'terminal_penalty_escalation_step' is in lesson 'terminal_penalty_escalation_step' and has value 'Float: value=10000000.0'.
+[INFO] Parameter 'terminal_penalty_escalated_value' is in lesson 'terminal_penalty_escalated_value' and has value 'Float: value=-15.0'.
+[INFO] Parameter 'goal_reward_escalation_enabled' is in lesson 'goal_reward_escalation_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'goal_reward_escalation_step' is in lesson 'goal_reward_escalation_step' and has value 'Float: value=15000000.0'.
+[INFO] Parameter 'goal_reward_escalated_value' is in lesson 'goal_reward_escalated_value' and has value 'Float: value=16.0'.
+[INFO] Parameter 'idle_penalty_enabled' is in lesson 'idle_penalty_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'idle_speed_threshold' is in lesson 'idle_speed_threshold' and has value 'Float: value=0.001'.
+[INFO] Parameter 'idle_grace_steps' is in lesson 'idle_grace_steps' and has value 'Float: value=20.0'.
+[INFO] Parameter 'idle_penalty_base' is in lesson 'idle_penalty_base' and has value 'Float: value=-0.02'.
+[INFO] Parameter 'idle_penalty_growth' is in lesson 'idle_penalty_growth' and has value 'Float: value=0.05'.
+[INFO] Parameter 'lagrangian_penalty_enabled' is in lesson 'lagrangian_penalty_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'lagrangian_target_crash_rate' is in lesson 'lagrangian_target_crash_rate' and has value 'Float: value=0.15'.
+[INFO] Parameter 'lagrangian_lambda_init' is in lesson 'lagrangian_lambda_init' and has value 'Float: value=5.0'.
+[INFO] Parameter 'lagrangian_lambda_lr' is in lesson 'lagrangian_lambda_lr' and has value 'Float: value=10.0'.
+[INFO] Parameter 'lagrangian_lambda_max' is in lesson 'lagrangian_lambda_max' and has value 'Float: value=30.0'.
+[INFO] Parameter 'lagrangian_maxstep_enabled' is in lesson 'lagrangian_maxstep_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'lagrangian_target_maxstep_rate' is in lesson 'lagrangian_target_maxstep_rate' and has value 'Float: value=0.15'.
+[INFO] Parameter 'lagrangian_maxstep_lambda_init' is in lesson 'lagrangian_maxstep_lambda_init' and has value 'Float: value=0.002'.
+[INFO] Parameter 'lagrangian_maxstep_lambda_lr' is in lesson 'lagrangian_maxstep_lambda_lr' and has value 'Float: value=0.01'.
+[INFO] Parameter 'lagrangian_maxstep_lambda_max' is in lesson 'lagrangian_maxstep_lambda_max' and has value 'Float: value=0.01'.
+[INFO] Parameter 'sensor_terminal_lagrangian_enabled' is in lesson 'sensor_terminal_lagrangian_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'sensor_terminal_target_exposure' is in lesson 'sensor_terminal_target_exposure' and has value 'Float: value=0.15'.
+[INFO] Parameter 'sensor_terminal_lambda_init' is in lesson 'sensor_terminal_lambda_init' and has value 'Float: value=1.0'.
+[INFO] Parameter 'sensor_terminal_lambda_lr' is in lesson 'sensor_terminal_lambda_lr' and has value 'Float: value=10.0'.
+[INFO] Parameter 'sensor_terminal_lambda_max' is in lesson 'sensor_terminal_lambda_max' and has value 'Float: value=30.0'.
+[INFO] Parameter 'sensor_terminal_penalty_lambda' is in lesson 'sensor_terminal_penalty_lambda' and has value 'Float: value=0.0'.
+[INFO] Parameter 'sensor_severity_exponent' is in lesson 'sensor_severity_exponent' and has value 'Float: value=1.0'.
+[INFO] Parameter 'adaptive_step_budget_enabled' is in lesson 'adaptive_step_budget_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'max_step_budget' is in lesson 'max_step_budget' and has value 'Float: value=5000.0'.
+[INFO] Parameter 'adaptive_step_budget_lr' is in lesson 'adaptive_step_budget_lr' and has value 'Float: value=2000.0'.
+[INFO] Parameter 'adaptive_step_budget_min' is in lesson 'adaptive_step_budget_min' and has value 'Float: value=2500.0'.
+[INFO] Parameter 'adaptive_step_budget_max' is in lesson 'adaptive_step_budget_max' and has value 'Float: value=8000.0'.
+[INFO] Parameter 'reward_maxstep_penalty' is in lesson 'reward_maxstep_penalty' and has value 'Float: value=0.0'.
+[INFO] Parameter 'bootstrap_curriculum_enabled' is in lesson 'bootstrap_curriculum_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'bootstrap_approach_bonus' is in lesson 'bootstrap_approach_bonus' and has value 'Float: value=5.0'.
+[INFO] Parameter 'bootstrap_stage_front_steps' is in lesson 'bootstrap_stage_front_steps' and has value 'Float: value=200000.0'.
+[INFO] Parameter 'bootstrap_front_distance' is in lesson 'bootstrap_front_distance' and has value 'Float: value=9.0'.
+[INFO] Parameter 'bootstrap_stage_behind_steps' is in lesson 'bootstrap_stage_behind_steps' and has value 'Float: value=500000.0'.
+[INFO] Parameter 'bootstrap_behind_distance' is in lesson 'bootstrap_behind_distance' and has value 'Float: value=3.0'.
+[INFO] Parameter 'bootstrap_behind_spawn_reverse_prob_start' is in lesson 'bootstrap_behind_spawn_reverse_prob_start' and has value 'Float: value=1.0'.
+[INFO] Parameter 'bootstrap_behind_spawn_reverse_prob_end' is in lesson 'bootstrap_behind_spawn_reverse_prob_end' and has value 'Float: value=0.3'.
+[INFO] Parameter 'bootstrap_behind_terminal_distance' is in lesson 'bootstrap_behind_terminal_distance' and has value 'Float: value=4.0'.
+[INFO] Parameter 'bootstrap_stage_deadend_steps' is in lesson 'bootstrap_stage_deadend_steps' and has value 'Float: value=500000.0'.
+[INFO] Parameter 'bootstrap_deadend_depth_cells' is in lesson 'bootstrap_deadend_depth_cells' and has value 'Float: value=3.0'.
+[INFO] Parameter 'bootstrap_deadend_goal_distance_min' is in lesson 'bootstrap_deadend_goal_distance_min' and has value 'Float: value=10.0'.
+[INFO] Parameter 'bootstrap_deadend_goal_distance_max' is in lesson 'bootstrap_deadend_goal_distance_max' and has value 'Float: value=18.0'.
+[INFO] Parameter 'bootstrap_deadend_goal_angle_spread_deg' is in lesson 'bootstrap_deadend_goal_angle_spread_deg' and has value 'Float: value=60.0'.
+[INFO] Parameter 'bootstrap_deadend_spawn_reverse_prob_start' is in lesson 'bootstrap_deadend_spawn_reverse_prob_start' and has value 'Float: value=1.0'.
+[INFO] Parameter 'bootstrap_deadend_spawn_reverse_prob_end' is in lesson 'bootstrap_deadend_spawn_reverse_prob_end' and has value 'Float: value=0.0'.
+[INFO] Parameter 'bootstrap_stage_side_steps' is in lesson 'bootstrap_stage_side_steps' and has value 'Float: value=300000.0'.
+[INFO] Parameter 'bootstrap_side_distance_min' is in lesson 'bootstrap_side_distance_min' and has value 'Float: value=8.0'.
+[INFO] Parameter 'bootstrap_side_distance_max' is in lesson 'bootstrap_side_distance_max' and has value 'Float: value=15.0'.
+[INFO] Parameter 'bootstrap_side_angle_min_deg' is in lesson 'bootstrap_side_angle_min_deg' and has value 'Float: value=30.0'.
+[INFO] Parameter 'bootstrap_side_angle_max_deg' is in lesson 'bootstrap_side_angle_max_deg' and has value 'Float: value=150.0'.
+[INFO] Parameter 'voronoi_near_goal_enabled' is in lesson 'voronoi_near_goal_enabled' and has value 'Float: value=1.0'.
+[INFO] Parameter 'voronoi_near_goal_steps' is in lesson 'voronoi_near_goal_steps' and has value 'Float: value=10000000.0'.
+[INFO] Parameter 'voronoi_near_goal_distance_start' is in lesson 'voronoi_near_goal_distance_start' and has value 'Float: value=15.0'.
+[INFO] Parameter 'voronoi_near_goal_distance_end' is in lesson 'voronoi_near_goal_distance_end' and has value 'Float: value=100.0'.
+[INFO] Parameter 'use_validation_maps' is in lesson 'use_validation_maps' and has value 'Float: value=0.0'.
+[INFO] Parameter 'laser_vehicle_distance_observation_enabled' is in lesson 'laser_vehicle_distance_observation_enabled' and has value 'Float: value=1'.
+[INFO] Parameter 'laser_vehicle_distance_scale_m' is in lesson 'laser_vehicle_distance_scale_m' and has value 'Float: value=10.0'.
+[INFO] CarAgent. Step: 10000. Time Elapsed: 46.430 s. Episodes: 16. Mean Reward: 2.693. Std of Reward: 8.677. Mean Episode Length: 97.062. Std of Episode Length: 87.617. Goals: 12. Terminated: 5. FwdTerminalExposure: 0.294. Training.
+[INFO] CarAgent. Step: 20000. Time Elapsed: 73.182 s. Episodes: 8. Mean Reward: -5.538. Std of Reward: 8.345. Mean Episode Length: 298.000. Std of Episode Length: 50.125. Goals: 2. Terminated: 6. FwdTerminalExposure: 0.750. Training.
+[INFO] CarAgent. Step: 30000. Time Elapsed: 94.783 s. Episodes: 4. Mean Reward: -5.673. Std of Reward: 8.461. Mean Episode Length: 390.500. Std of Episode Length: 118.925. Goals: 1. Terminated: 3. FwdTerminalExposure: 0.750. Training.
+[INFO] CarAgent. Step: 40000. Time Elapsed: 122.065 s. Episodes: 2. Mean Reward: -10.259. Std of Reward: 0.903. Mean Episode Length: 403.500. Std of Episode Length: 176.500. Terminated: 2. FwdTerminalExposure: 1.000. Training.
+[INFO] CarAgent. Step: 50000. Time Elapsed: 159.545 s. Episodes: 8. Mean Reward: -8.676. Std of Reward: 6.376. Mean Episode Length: 630.875. Std of Episode Length: 201.910. Goals: 2. Terminated: 7. FwdTerminalExposure: 0.778. Training.
+[INFO] CarAgent. Step: 60000. Time Elapsed: 181.908 s. Episodes: 20. Mean Reward: -1.784. Std of Reward: 5.325. Mean Episode Length: 963.310. Std of Episode Length: 133.459. Goals: 5. Terminated: 3. MaxStep: 23. FwdTerminalExposure: 0.166. Training.
+[INFO] CarAgent. Step: 70000. Time Elapsed: 207.853 s. Episodes: 22. Mean Reward: -1.185. Std of Reward: 2.076. Mean Episode Length: 922.308. Std of Episode Length: 265.670. Goals: 1. MaxStep: 12. FwdTerminalExposure: 0.209. Training.
+[INFO] CarAgent. Step: 80000. Time Elapsed: 233.339 s. Episodes: 10. Mean Reward: 2.695. Std of Reward: 5.171. Mean Episode Length: 639.273. Std of Episode Length: 412.619. Goals: 4. Terminated: 1. MaxStep: 6. FwdTerminalExposure: 0.221. Training.
+[INFO] CarAgent. Step: 90000. Time Elapsed: 266.411 s. Episodes: 15. Mean Reward: -3.456. Std of Reward: 6.255. Mean Episode Length: 714.714. Std of Episode Length: 337.727. Goals: 3. Terminated: 4. MaxStep: 8. FwdTerminalExposure: 0.352. Training.
+[INFO] CarAgent. Step: 100000. Time Elapsed: 293.877 s. Episodes: 5. Mean Reward: -4.904. Std of Reward: 4.356. Mean Episode Length: 740.800. Std of Episode Length: 329.881. Terminated: 2. MaxStep: 3. FwdTerminalExposure: 0.400. Training.
+[INFO] CarAgent. Step: 110000. Time Elapsed: 314.976 s. Episodes: 4. Mean Reward: -3.899. Std of Reward: 3.302. Mean Episode Length: 806.250. Std of Episode Length: 333.853. Terminated: 1. MaxStep: 3. FwdTerminalExposure: 0.714. Training.
+[INFO] CarAgent. Step: 120000. Time Elapsed: 343.373 s. Episodes: 4. Mean Reward: -0.685. Std of Reward: 0.336. Mean Episode Length: 999.000. Std of Episode Length: 0.000. MaxStep: 4. FwdTerminalExposure: 0.214. Training.
+[INFO] CarAgent. Step: 130000. Time Elapsed: 371.932 s. Episodes: 31. Mean Reward: -1.752. Std of Reward: 2.676. Mean Episode Length: 966.531. Std of Episode Length: 168.813. Goals: 1. Terminated: 1. MaxStep: 30. FwdTerminalExposure: 0.411. Training.
+[INFO] CarAgent. Step: 140000. Time Elapsed: 400.093 s. Episodes: 10. Mean Reward: 0.592. Std of Reward: 6.069. Mean Episode Length: 722.222. Std of Episode Length: 354.716. Goals: 3. Terminated: 1. MaxStep: 5. FwdTerminalExposure: 0.365. Training.
+[INFO] CarAgent. Step: 150000. Time Elapsed: 424.384 s. Episodes: 8. Mean Reward: -1.758. Std of Reward: 0.426. Mean Episode Length: 999.000. Std of Episode Length: 0.000. MaxStep: 8. FwdTerminalExposure: 0.125. Training.
+[INFO] CarAgent. Step: 160000. Time Elapsed: 450.517 s. Episodes: 13. Mean Reward: 1.073. Std of Reward: 5.862. Mean Episode Length: 671.077. Std of Episode Length: 429.542. Goals: 4. Terminated: 1. MaxStep: 8. FwdTerminalExposure: 0.264. Training.
+[INFO] CarAgent. Step: 170000. Time Elapsed: 481.138 s. Episodes: 6. Mean Reward: -4.778. Std of Reward: 4.298. Mean Episode Length: 832.286. Std of Episode Length: 318.517. Goals: 3. Terminated: 2. MaxStep: 5. FwdTerminalExposure: 0.200. Training.
+[INFO] CarAgent. Step: 180000. Time Elapsed: 508.668 s. Episodes: 5. Mean Reward: 0.424. Std of Reward: 4.044. Mean Episode Length: 751.750. Std of Episode Length: 428.250. Goals: 1. MaxStep: 3. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 190000. Time Elapsed: 531.103 s. Episodes: 27. Mean Reward: -1.971. Std of Reward: 1.765. Mean Episode Length: 993.259. Std of Episode Length: 29.272. Goals: 1. Terminated: 1. MaxStep: 26. FwdTerminalExposure: 0.301. Training.
+[INFO] CarAgent. Step: 200000. Time Elapsed: 561.547 s. Episodes: 11. Mean Reward: 1.479. Std of Reward: 4.763. Mean Episode Length: 744.000. Std of Episode Length: 416.451. Goals: 3. MaxStep: 8. FwdTerminalExposure: 0.195. Training.
+[INFO] CarAgent. Step: 210000. Time Elapsed: 585.313 s. Episodes: 10. Mean Reward: -0.717. Std of Reward: 2.902. Mean Episode Length: 987.700. Std of Episode Length: 33.900. Goals: 1. MaxStep: 9. FwdTerminalExposure: 0.186. Training.
+[INFO] CarAgent. Step: 220000. Time Elapsed: 610.137 s. Episodes: 14. Mean Reward: 0.438. Std of Reward: 5.880. Mean Episode Length: 709.357. Std of Episode Length: 431.118. Goals: 5. Terminated: 1. MaxStep: 9. FwdTerminalExposure: 0.276. Training.
+[INFO] CarAgent. Step: 230000. Time Elapsed: 631.013 s. Episodes: 4. Mean Reward: 1.023. Std of Reward: 4.869. Mean Episode Length: 769.750. Std of Episode Length: 397.073. Goals: 1. MaxStep: 3. FwdTerminalExposure: 0.714. Training.
+[INFO] CarAgent. Step: 240000. Time Elapsed: 660.164 s. Episodes: 6. Mean Reward: -1.608. Std of Reward: 6.110. Mean Episode Length: 826.500. Std of Episode Length: 358.287. Goals: 1. Terminated: 1. MaxStep: 4. FwdTerminalExposure: 0.167. Training.
+[INFO] CarAgent. Step: 250000. Time Elapsed: 688.379 s. Episodes: 4. Mean Reward: -1.525. Std of Reward: 0.572. Mean Episode Length: 999.000. Std of Episode Length: 0.000. MaxStep: 4. FwdTerminalExposure: 0.214. Training.
+[INFO] CarAgent. Step: 260000. Time Elapsed: 708.939 s. Episodes: 35. Mean Reward: -0.195. Std of Reward: 3.742. Mean Episode Length: 860.886. Std of Episode Length: 338.461. Goals: 5. MaxStep: 30. FwdTerminalExposure: 0.204. Training.
+[INFO] CarAgent. Step: 270000. Time Elapsed: 733.007 s. Episodes: 6. Mean Reward: 0.021. Std of Reward: 3.608. Mean Episode Length: 961.833. Std of Episode Length: 83.107. Goals: 2. MaxStep: 5. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 280000. Time Elapsed: 756.869 s. Episodes: 13. Mean Reward: -2.165. Std of Reward: 4.682. Mean Episode Length: 835.154. Std of Episode Length: 312.635. Goals: 1. Terminated: 2. MaxStep: 10. FwdTerminalExposure: 0.440. Training.
+[INFO] CarAgent. Step: 290000. Time Elapsed: 784.578 s. Episodes: 12. Mean Reward: -0.524. Std of Reward: 5.010. Mean Episode Length: 806.000. Std of Episode Length: 361.749. Goals: 2. Terminated: 1. MaxStep: 9. FwdTerminalExposure: 0.417. Training.
+[INFO] CarAgent. Step: 300000. Time Elapsed: 807.851 s. Episodes: 8. Mean Reward: 3.784. Std of Reward: 5.069. Mean Episode Length: 515.750. Std of Episode Length: 483.679. Goals: 4. MaxStep: 4. FwdTerminalExposure: 0.161. Training.
+[INFO] CarAgent. Step: 310000. Time Elapsed: 829.509 s. Episodes: 1. Mean Reward: -1.440. Std of Reward: 0.000. Mean Episode Length: 999.000. Std of Episode Length: 0.000. MaxStep: 1. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 320000. Time Elapsed: 856.461 s. Episodes: 25. Mean Reward: -0.699. Std of Reward: 2.988. Mean Episode Length: 921.640. Std of Episode Length: 262.344. Goals: 4. MaxStep: 23. FwdTerminalExposure: 0.180. Training.
+[INFO] CarAgent. Step: 330000. Time Elapsed: 880.542 s. Episodes: 13. Mean Reward: -1.729. Std of Reward: 0.419. Mean Episode Length: 927.643. Std of Episode Length: 257.282. Goals: 1. MaxStep: 13. FwdTerminalExposure: 0.276. Training.

@@ -59,6 +59,9 @@ hpc/**
 !hpc/**/*.png
 !hpc/**/*.jpg
 !hpc/**/*.jpeg
+!hpc/traffic/*.py
+!hpc/traffic/*.md
+!hpc/traffic/*.sh
 
 # progress0802/ predates the hpc/-wide whitelist above and had model checkpoints and full
 # run logs committed directly - same "keep the analysis, not the training artifacts" rule,

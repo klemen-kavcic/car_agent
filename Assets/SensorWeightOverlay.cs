@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // Car-relative sensor HUD (forward always points up). In fan mode this is a learned first-layer
-// influence display; in ContinuousLasers mode it becomes a live multi-ray tile display. The two
+// influence display; in ContinuousLasers mode it becomes a live multi-ray tile/vehicle display. The two
 // layouts intentionally are not mixed because they describe different observation vectors.
 //
 // Play-mode only, and only meaningful with the Agent's Behavior Parameters set to Inference Only
@@ -73,6 +73,8 @@ public class SensorWeightOverlay : MonoBehaviour
     private Image[] laserLineImages;
     private RectTransform[] roadBoundaryTransforms;
     private Image[] roadBoundaryImages;
+    private RectTransform[] vehicleTransforms;
+    private Image[] vehicleImages;
 
     void Start()
     {
@@ -210,6 +212,8 @@ public class SensorWeightOverlay : MonoBehaviour
         laserLineImages = new Image[n];
         roadBoundaryTransforms = new RectTransform[n];
         roadBoundaryImages = new Image[n];
+        vehicleTransforms = new RectTransform[n];
+        vehicleImages = new Image[n];
 
         var circleSprite = BuildCircleSprite();
         for (int i = 0; i < n; i++)
@@ -240,6 +244,15 @@ public class SensorWeightOverlay : MonoBehaviour
             roadImage.sprite = circleSprite;
             roadBoundaryTransforms[i] = roadRect;
             roadBoundaryImages[i] = roadImage;
+
+            var vehicleGO = new GameObject($"LaserVehicle{i}");
+            vehicleGO.transform.SetParent(panelTransform, false);
+            var vehicleRect = vehicleGO.AddComponent<RectTransform>();
+            vehicleRect.anchorMin = vehicleRect.anchorMax = new Vector2(0.5f, 0.5f);
+            var vehicleImage = vehicleGO.AddComponent<Image>();
+            vehicleImage.sprite = circleSprite;
+            vehicleTransforms[i] = vehicleRect;
+            vehicleImages[i] = vehicleImage;
         }
     }
 
@@ -284,9 +297,9 @@ public class SensorWeightOverlay : MonoBehaviour
         {
             Vector3 localDirection3 = LaserTileSensor.GetLocalDirection(i);
             Vector2 panelDirection = new Vector2(localDirection3.x, localDirection3.z);
-            laserTileSensor.Trace(laserTileSensor.transform.position,
+            laserTileSensor.TraceWithVehicle(laserTileSensor.transform.position,
                 laserTileSensor.transform.TransformDirection(localDirection3), out TileType specialType,
-                out float specialDistance, out float roadBoundaryDistance);
+                out float specialDistance, out float roadBoundaryDistance, out float vehicleDistance);
 
             float specialRadius = Mathf.Clamp01(specialDistance / displayRange) * displayRadius;
             Vector2 specialPosition = panelDirection * specialRadius;
@@ -310,6 +323,17 @@ public class SensorWeightOverlay : MonoBehaviour
                     (Mathf.Clamp01(roadBoundaryDistance / displayRange) * displayRadius);
                 roadBoundaryTransforms[i].sizeDelta = Vector2.one * 9f;
                 roadBoundaryImages[i].color = Color.yellow;
+            }
+
+            bool hasVehicle = laserTileSensor.includeVehicleDistanceObservations &&
+                vehicleDistance < mapDiagonal - 0.001f;
+            vehicleTransforms[i].gameObject.SetActive(hasVehicle);
+            if (hasVehicle)
+            {
+                vehicleTransforms[i].anchoredPosition = panelDirection *
+                    (Mathf.Clamp01(vehicleDistance / displayRange) * displayRadius);
+                vehicleTransforms[i].sizeDelta = Vector2.one * 13f;
+                vehicleImages[i].color = Color.magenta;
             }
         }
     }

@@ -1,0 +1,677 @@
+Wrote /d/hpc/home/kk42117/mag/car1/configs/traffic89_solo20m_s1.yaml; init=scratch, steps=20000000, environments=64
+
+            ┐  ╖
+        ╓╖╬│╡  ││╬╖╖
+    ╓╖╬│││││┘  ╬│││││╬╖
+ ╖╬│││││╬╜        ╙╬│││││╖╖                               ╗╗╗
+ ╬╬╬╬╖││╦╖        ╖╬││╗╣╣╣╬      ╟╣╣╬    ╟╣╣╣             ╜╜╜  ╟╣╣
+ ╬╬╬╬╬╬╬╬╖│╬╖╖╓╬╪│╓╣╣╣╣╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╒╣╣╖╗╣╣╣╗   ╣╣╣ ╣╣╣╣╣╣ ╟╣╣╖   ╣╣╣
+ ╬╬╬╬┐  ╙╬╬╬╬│╓╣╣╣╝╜  ╫╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╟╣╣╣╙ ╙╣╣╣  ╣╣╣ ╙╟╣╣╜╙  ╫╣╣  ╟╣╣
+ ╬╬╬╬┐     ╙╬╬╣╣      ╫╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╟╣╣╬   ╣╣╣  ╣╣╣  ╟╣╣     ╣╣╣┌╣╣╜
+ ╬╬╬╜       ╬╬╣╣      ╙╝╣╣╬      ╙╣╣╣╗╖╓╗╣╣╣╜ ╟╣╣╬   ╣╣╣  ╣╣╣  ╟╣╣╦╓    ╣╣╣╣╣
+ ╙   ╓╦╖    ╬╬╣╣   ╓╗╗╖            ╙╝╣╣╣╣╝╜   ╘╝╝╜   ╝╝╝  ╝╝╝   ╙╣╣╣    ╟╣╣╣
+   ╩╬╬╬╬╬╬╦╦╬╬╣╣╗╣╣╣╣╣╣╣╝                                             ╫╣╣╣╣
+      ╙╬╬╬╬╬╬╬╣╣╣╣╣╣╝╜
+          ╙╬╬╬╣╣╣╜
+             ╙
+        
+ Version information:
+  ml-agents: 1.1.0,
+  ml-agents-envs: 1.1.0,
+  Communicator API: 1.5.0,
+  PyTorch: 2.1.2+cu121
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Hyperparameters for behavior name CarAgent: 
+	trainer_type:	ppo
+	hyperparameters:	
+	  batch_size:	1024
+	  buffer_size:	16384
+	  learning_rate:	0.0003
+	  beta:	0.005
+	  epsilon:	0.2
+	  lambd:	0.95
+	  num_epoch:	3
+	  shared_critic:	False
+	  learning_rate_schedule:	linear
+	  beta_schedule:	linear
+	  epsilon_schedule:	linear
+	checkpoint_interval:	1000000
+	network_settings:	
+	  normalize:	True
+	  hidden_units:	128
+	  num_layers:	2
+	  vis_encode_type:	simple
+	  memory:	None
+	  goal_conditioning_type:	hyper
+	  deterministic:	False
+	reward_signals:	
+	  extrinsic:	
+	    gamma:	0.99
+	    strength:	1.0
+	    network_settings:	
+	      normalize:	False
+	      hidden_units:	128
+	      num_layers:	2
+	      vis_encode_type:	simple
+	      memory:	None
+	      goal_conditioning_type:	hyper
+	      deterministic:	False
+	init_path:	None
+	keep_checkpoints:	22
+	even_checkpoints:	False
+	max_steps:	20000000
+	time_horizon:	128
+	summary_freq:	10000
+	threaded:	False
+	self_play:	None
+	behavioral_cloning:	None
+[INFO] Parameter 'vehicle_speed_cap_enabled' is in lesson 'vehicle_speed_cap_enabled' and has value 'Float: value=1.0'.
+[INFO] Parameter 'vehicle_speed_cap_ms' is in lesson 'vehicle_speed_cap_ms' and has value 'Float: value=3.0'.
+[INFO] Parameter 'vehicle_speed_cap_governor_start_fraction' is in lesson 'vehicle_speed_cap_governor_start_fraction' and has value 'Float: value=0.9'.
+[INFO] Parameter 'vehicle_speed_cap_overspeed_margin_ms' is in lesson 'vehicle_speed_cap_overspeed_margin_ms' and has value 'Float: value=0.5'.
+[INFO] Parameter 'vehicle_speed_cap_brake_torque' is in lesson 'vehicle_speed_cap_brake_torque' and has value 'Float: value=900.0'.
+[INFO] Parameter 'regen_brake_torque' is in lesson 'regen_brake_torque' and has value 'Float: value=450.0'.
+[INFO] Parameter 'sensor_observations_enabled' is in lesson 'sensor_observations_enabled' and has value 'Float: value=1.0'.
+[INFO] Parameter 'laser_special_distance_scale_m' is in lesson 'laser_special_distance_scale_m' and has value 'Float: value=10.0'.
+[INFO] Parameter 'laser_road_boundary_distance_scale_m' is in lesson 'laser_road_boundary_distance_scale_m' and has value 'Float: value=3.0'.
+[INFO] Parameter 'reward_goal' is in lesson 'reward_goal' and has value 'Float: value=8.0'.
+[INFO] Parameter 'reward_approach_bonus' is in lesson 'reward_approach_bonus' and has value 'Float: value=0.0'.
+[INFO] Parameter 'reward_terminal_penalty' is in lesson 'reward_terminal_penalty' and has value 'Float: value=-10.0'.
+[INFO] Parameter 'reward_time_penalty' is in lesson 'reward_time_penalty' and has value 'Float: value=-0.002'.
+[INFO] Parameter 'reward_time_penalty_growth' is in lesson 'reward_time_penalty_growth' and has value 'Float: value=0.0'.
+[INFO] Parameter 'reward_checkpoint' is in lesson 'reward_checkpoint' and has value 'Float: value=0.02'.
+[INFO] Parameter 'total_training_steps' is in lesson 'total_training_steps' and has value 'Float: value=20000000.0'.
+[INFO] Parameter 'training_num_envs' is in lesson 'training_num_envs' and has value 'Float: value=64.0'.
+[INFO] Parameter 'terminal_penalty_escalation_enabled' is in lesson 'terminal_penalty_escalation_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'terminal_penalty_escalation_step' is in lesson 'terminal_penalty_escalation_step' and has value 'Float: value=10000000.0'.
+[INFO] Parameter 'terminal_penalty_escalated_value' is in lesson 'terminal_penalty_escalated_value' and has value 'Float: value=-15.0'.
+[INFO] Parameter 'goal_reward_escalation_enabled' is in lesson 'goal_reward_escalation_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'goal_reward_escalation_step' is in lesson 'goal_reward_escalation_step' and has value 'Float: value=15000000.0'.
+[INFO] Parameter 'goal_reward_escalated_value' is in lesson 'goal_reward_escalated_value' and has value 'Float: value=16.0'.
+[INFO] Parameter 'idle_penalty_enabled' is in lesson 'idle_penalty_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'idle_speed_threshold' is in lesson 'idle_speed_threshold' and has value 'Float: value=0.001'.
+[INFO] Parameter 'idle_grace_steps' is in lesson 'idle_grace_steps' and has value 'Float: value=20.0'.
+[INFO] Parameter 'idle_penalty_base' is in lesson 'idle_penalty_base' and has value 'Float: value=-0.02'.
+[INFO] Parameter 'idle_penalty_growth' is in lesson 'idle_penalty_growth' and has value 'Float: value=0.05'.
+[INFO] Parameter 'lagrangian_penalty_enabled' is in lesson 'lagrangian_penalty_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'lagrangian_target_crash_rate' is in lesson 'lagrangian_target_crash_rate' and has value 'Float: value=0.15'.
+[INFO] Parameter 'lagrangian_lambda_init' is in lesson 'lagrangian_lambda_init' and has value 'Float: value=5.0'.
+[INFO] Parameter 'lagrangian_lambda_lr' is in lesson 'lagrangian_lambda_lr' and has value 'Float: value=10.0'.
+[INFO] Parameter 'lagrangian_lambda_max' is in lesson 'lagrangian_lambda_max' and has value 'Float: value=30.0'.
+[INFO] Parameter 'lagrangian_maxstep_enabled' is in lesson 'lagrangian_maxstep_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'lagrangian_target_maxstep_rate' is in lesson 'lagrangian_target_maxstep_rate' and has value 'Float: value=0.15'.
+[INFO] Parameter 'lagrangian_maxstep_lambda_init' is in lesson 'lagrangian_maxstep_lambda_init' and has value 'Float: value=0.002'.
+[INFO] Parameter 'lagrangian_maxstep_lambda_lr' is in lesson 'lagrangian_maxstep_lambda_lr' and has value 'Float: value=0.01'.
+[INFO] Parameter 'lagrangian_maxstep_lambda_max' is in lesson 'lagrangian_maxstep_lambda_max' and has value 'Float: value=0.01'.
+[INFO] Parameter 'sensor_terminal_lagrangian_enabled' is in lesson 'sensor_terminal_lagrangian_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'sensor_terminal_target_exposure' is in lesson 'sensor_terminal_target_exposure' and has value 'Float: value=0.15'.
+[INFO] Parameter 'sensor_terminal_lambda_init' is in lesson 'sensor_terminal_lambda_init' and has value 'Float: value=1.0'.
+[INFO] Parameter 'sensor_terminal_lambda_lr' is in lesson 'sensor_terminal_lambda_lr' and has value 'Float: value=10.0'.
+[INFO] Parameter 'sensor_terminal_lambda_max' is in lesson 'sensor_terminal_lambda_max' and has value 'Float: value=30.0'.
+[INFO] Parameter 'sensor_terminal_penalty_lambda' is in lesson 'sensor_terminal_penalty_lambda' and has value 'Float: value=0.0'.
+[INFO] Parameter 'sensor_severity_exponent' is in lesson 'sensor_severity_exponent' and has value 'Float: value=1.0'.
+[INFO] Parameter 'adaptive_step_budget_enabled' is in lesson 'adaptive_step_budget_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'max_step_budget' is in lesson 'max_step_budget' and has value 'Float: value=5000.0'.
+[INFO] Parameter 'adaptive_step_budget_lr' is in lesson 'adaptive_step_budget_lr' and has value 'Float: value=2000.0'.
+[INFO] Parameter 'adaptive_step_budget_min' is in lesson 'adaptive_step_budget_min' and has value 'Float: value=2500.0'.
+[INFO] Parameter 'adaptive_step_budget_max' is in lesson 'adaptive_step_budget_max' and has value 'Float: value=8000.0'.
+[INFO] Parameter 'reward_maxstep_penalty' is in lesson 'reward_maxstep_penalty' and has value 'Float: value=0.0'.
+[INFO] Parameter 'bootstrap_curriculum_enabled' is in lesson 'bootstrap_curriculum_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'bootstrap_approach_bonus' is in lesson 'bootstrap_approach_bonus' and has value 'Float: value=5.0'.
+[INFO] Parameter 'bootstrap_stage_front_steps' is in lesson 'bootstrap_stage_front_steps' and has value 'Float: value=200000.0'.
+[INFO] Parameter 'bootstrap_front_distance' is in lesson 'bootstrap_front_distance' and has value 'Float: value=9.0'.
+[INFO] Parameter 'bootstrap_stage_behind_steps' is in lesson 'bootstrap_stage_behind_steps' and has value 'Float: value=500000.0'.
+[INFO] Parameter 'bootstrap_behind_distance' is in lesson 'bootstrap_behind_distance' and has value 'Float: value=3.0'.
+[INFO] Parameter 'bootstrap_behind_spawn_reverse_prob_start' is in lesson 'bootstrap_behind_spawn_reverse_prob_start' and has value 'Float: value=1.0'.
+[INFO] Parameter 'bootstrap_behind_spawn_reverse_prob_end' is in lesson 'bootstrap_behind_spawn_reverse_prob_end' and has value 'Float: value=0.3'.
+[INFO] Parameter 'bootstrap_behind_terminal_distance' is in lesson 'bootstrap_behind_terminal_distance' and has value 'Float: value=4.0'.
+[INFO] Parameter 'bootstrap_stage_deadend_steps' is in lesson 'bootstrap_stage_deadend_steps' and has value 'Float: value=500000.0'.
+[INFO] Parameter 'bootstrap_deadend_depth_cells' is in lesson 'bootstrap_deadend_depth_cells' and has value 'Float: value=3.0'.
+[INFO] Parameter 'bootstrap_deadend_goal_distance_min' is in lesson 'bootstrap_deadend_goal_distance_min' and has value 'Float: value=10.0'.
+[INFO] Parameter 'bootstrap_deadend_goal_distance_max' is in lesson 'bootstrap_deadend_goal_distance_max' and has value 'Float: value=18.0'.
+[INFO] Parameter 'bootstrap_deadend_goal_angle_spread_deg' is in lesson 'bootstrap_deadend_goal_angle_spread_deg' and has value 'Float: value=60.0'.
+[INFO] Parameter 'bootstrap_deadend_spawn_reverse_prob_start' is in lesson 'bootstrap_deadend_spawn_reverse_prob_start' and has value 'Float: value=1.0'.
+[INFO] Parameter 'bootstrap_deadend_spawn_reverse_prob_end' is in lesson 'bootstrap_deadend_spawn_reverse_prob_end' and has value 'Float: value=0.0'.
+[INFO] Parameter 'bootstrap_stage_side_steps' is in lesson 'bootstrap_stage_side_steps' and has value 'Float: value=300000.0'.
+[INFO] Parameter 'bootstrap_side_distance_min' is in lesson 'bootstrap_side_distance_min' and has value 'Float: value=8.0'.
+[INFO] Parameter 'bootstrap_side_distance_max' is in lesson 'bootstrap_side_distance_max' and has value 'Float: value=15.0'.
+[INFO] Parameter 'bootstrap_side_angle_min_deg' is in lesson 'bootstrap_side_angle_min_deg' and has value 'Float: value=30.0'.
+[INFO] Parameter 'bootstrap_side_angle_max_deg' is in lesson 'bootstrap_side_angle_max_deg' and has value 'Float: value=150.0'.
+[INFO] Parameter 'voronoi_near_goal_enabled' is in lesson 'voronoi_near_goal_enabled' and has value 'Float: value=1.0'.
+[INFO] Parameter 'voronoi_near_goal_steps' is in lesson 'voronoi_near_goal_steps' and has value 'Float: value=10000000.0'.
+[INFO] Parameter 'voronoi_near_goal_distance_start' is in lesson 'voronoi_near_goal_distance_start' and has value 'Float: value=15.0'.
+[INFO] Parameter 'voronoi_near_goal_distance_end' is in lesson 'voronoi_near_goal_distance_end' and has value 'Float: value=100.0'.
+[INFO] Parameter 'use_validation_maps' is in lesson 'use_validation_maps' and has value 'Float: value=0.0'.
+[INFO] Parameter 'laser_vehicle_distance_observation_enabled' is in lesson 'laser_vehicle_distance_observation_enabled' and has value 'Float: value=1'.
+[INFO] Parameter 'laser_vehicle_distance_scale_m' is in lesson 'laser_vehicle_distance_scale_m' and has value 'Float: value=10.0'.
+[INFO] CarAgent. Step: 10000. Time Elapsed: 12.687 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 20000. Time Elapsed: 21.563 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 30000. Time Elapsed: 26.251 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 40000. Time Elapsed: 35.563 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 50000. Time Elapsed: 47.388 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 60000. Time Elapsed: 47.854 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 70000. Time Elapsed: 59.550 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 80000. Time Elapsed: 59.980 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 90000. Time Elapsed: 71.603 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 100000. Time Elapsed: 82.800 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 110000. Time Elapsed: 83.344 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 120000. Time Elapsed: 92.278 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 130000. Time Elapsed: 98.652 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 140000. Time Elapsed: 105.747 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 150000. Time Elapsed: 117.658 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 160000. Time Elapsed: 118.298 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 170000. Time Elapsed: 130.348 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 180000. Time Elapsed: 141.949 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 190000. Time Elapsed: 142.488 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 200000. Time Elapsed: 154.041 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 210000. Time Elapsed: 154.652 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 220000. Time Elapsed: 166.283 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 230000. Time Elapsed: 177.886 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 240000. Time Elapsed: 178.401 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 250000. Time Elapsed: 189.870 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 260000. Time Elapsed: 190.615 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 270000. Time Elapsed: 199.861 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 280000. Time Elapsed: 212.496 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 290000. Time Elapsed: 213.068 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 300000. Time Elapsed: 224.536 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 310000. Time Elapsed: 233.061 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 320000. Time Elapsed: 236.320 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 330000. Time Elapsed: 247.410 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 340000. Time Elapsed: 248.050 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 350000. Time Elapsed: 258.400 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 360000. Time Elapsed: 269.652 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 370000. Time Elapsed: 270.220 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 380000. Time Elapsed: 281.064 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 390000. Time Elapsed: 281.792 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 400000. Time Elapsed: 292.527 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 410000. Time Elapsed: 301.497 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 420000. Time Elapsed: 306.400 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 430000. Time Elapsed: 315.429 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 440000. Time Elapsed: 322.112 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 450000. Time Elapsed: 327.996 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 460000. Time Elapsed: 339.855 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 470000. Time Elapsed: 340.474 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 480000. Time Elapsed: 352.293 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 490000. Time Elapsed: 363.998 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 500000. Time Elapsed: 364.566 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 510000. Time Elapsed: 376.304 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 520000. Time Elapsed: 376.894 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 530000. Time Elapsed: 388.335 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 540000. Time Elapsed: 399.943 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 550000. Time Elapsed: 400.485 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 560000. Time Elapsed: 412.172 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 570000. Time Elapsed: 414.648 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 580000. Time Elapsed: 421.752 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 590000. Time Elapsed: 435.040 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 600000. Time Elapsed: 438.675 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 610000. Time Elapsed: 447.664 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 620000. Time Elapsed: 459.374 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 630000. Time Elapsed: 459.751 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 640000. Time Elapsed: 471.380 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 650000. Time Elapsed: 472.149 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 660000. Time Elapsed: 483.382 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 670000. Time Elapsed: 494.604 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 680000. Time Elapsed: 495.157 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 690000. Time Elapsed: 506.313 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 700000. Time Elapsed: 507.325 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 710000. Time Elapsed: 518.209 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 720000. Time Elapsed: 529.617 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 730000. Time Elapsed: 530.189 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 740000. Time Elapsed: 541.559 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 750000. Time Elapsed: 546.780 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 760000. Time Elapsed: 553.702 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 770000. Time Elapsed: 563.217 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 780000. Time Elapsed: 567.416 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 790000. Time Elapsed: 576.588 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 800000. Time Elapsed: 588.816 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 810000. Time Elapsed: 589.181 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 820000. Time Elapsed: 600.651 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 830000. Time Elapsed: 603.861 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 840000. Time Elapsed: 612.572 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 850000. Time Elapsed: 624.134 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 860000. Time Elapsed: 624.749 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 870000. Time Elapsed: 636.018 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 880000. Time Elapsed: 640.465 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 890000. Time Elapsed: 647.498 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 900000. Time Elapsed: 658.728 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 910000. Time Elapsed: 659.172 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 920000. Time Elapsed: 670.586 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 930000. Time Elapsed: 681.710 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 940000. Time Elapsed: 682.073 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 950000. Time Elapsed: 693.120 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 960000. Time Elapsed: 693.994 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 970000. Time Elapsed: 702.358 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 980000. Time Elapsed: 714.359 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 990000. Time Elapsed: 717.337 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1000000. Time Elapsed: 725.869 s. No episode was completed since last summary. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_solo20m_s1/CarAgent/CarAgent-999936.onnx
+[INFO] CarAgent. Step: 1010000. Time Elapsed: 729.199 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1020000. Time Elapsed: 737.666 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1030000. Time Elapsed: 748.691 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1040000. Time Elapsed: 749.311 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1050000. Time Elapsed: 760.262 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1060000. Time Elapsed: 769.522 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1070000. Time Elapsed: 772.016 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1080000. Time Elapsed: 783.461 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1090000. Time Elapsed: 784.162 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1100000. Time Elapsed: 794.780 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1110000. Time Elapsed: 805.582 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1120000. Time Elapsed: 806.194 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1130000. Time Elapsed: 817.118 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1140000. Time Elapsed: 818.337 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1150000. Time Elapsed: 828.797 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1160000. Time Elapsed: 839.993 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1170000. Time Elapsed: 840.740 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1180000. Time Elapsed: 852.919 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1190000. Time Elapsed: 856.493 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1200000. Time Elapsed: 865.251 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1210000. Time Elapsed: 874.446 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1220000. Time Elapsed: 877.922 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1230000. Time Elapsed: 887.067 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1240000. Time Elapsed: 898.662 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1250000. Time Elapsed: 899.178 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1260000. Time Elapsed: 910.752 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1270000. Time Elapsed: 914.354 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1280000. Time Elapsed: 923.118 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1290000. Time Elapsed: 934.563 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1300000. Time Elapsed: 935.256 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1310000. Time Elapsed: 946.311 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1320000. Time Elapsed: 950.048 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1330000. Time Elapsed: 958.160 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1340000. Time Elapsed: 969.362 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1350000. Time Elapsed: 970.103 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1360000. Time Elapsed: 981.624 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1370000. Time Elapsed: 991.153 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1380000. Time Elapsed: 993.937 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1390000. Time Elapsed: 1004.733 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1400000. Time Elapsed: 1005.696 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1410000. Time Elapsed: 1016.437 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1420000. Time Elapsed: 1025.671 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1430000. Time Elapsed: 1029.187 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1440000. Time Elapsed: 1038.070 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1450000. Time Elapsed: 1042.204 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1460000. Time Elapsed: 1050.109 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1470000. Time Elapsed: 1061.618 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1480000. Time Elapsed: 1064.950 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1490000. Time Elapsed: 1073.650 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1500000. Time Elapsed: 1079.945 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1510000. Time Elapsed: 1085.498 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1520000. Time Elapsed: 1096.502 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1530000. Time Elapsed: 1097.065 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1540000. Time Elapsed: 1108.198 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1550000. Time Elapsed: 1119.215 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1560000. Time Elapsed: 1119.944 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1570000. Time Elapsed: 1130.932 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1580000. Time Elapsed: 1132.190 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1590000. Time Elapsed: 1142.268 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1600000. Time Elapsed: 1153.095 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1610000. Time Elapsed: 1153.879 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1620000. Time Elapsed: 1164.898 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1630000. Time Elapsed: 1166.683 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1640000. Time Elapsed: 1176.535 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1650000. Time Elapsed: 1187.680 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1660000. Time Elapsed: 1188.483 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1670000. Time Elapsed: 1199.799 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1680000. Time Elapsed: 1208.492 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1690000. Time Elapsed: 1211.881 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1700000. Time Elapsed: 1220.616 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1710000. Time Elapsed: 1224.484 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1720000. Time Elapsed: 1232.706 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1730000. Time Elapsed: 1243.523 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1740000. Time Elapsed: 1244.224 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1750000. Time Elapsed: 1255.277 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1760000. Time Elapsed: 1259.346 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1770000. Time Elapsed: 1266.852 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1780000. Time Elapsed: 1277.878 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1790000. Time Elapsed: 1278.602 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1800000. Time Elapsed: 1289.418 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1810000. Time Elapsed: 1299.316 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1820000. Time Elapsed: 1301.157 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1830000. Time Elapsed: 1312.204 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1840000. Time Elapsed: 1313.290 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1850000. Time Elapsed: 1324.118 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1860000. Time Elapsed: 1335.250 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1870000. Time Elapsed: 1335.903 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1880000. Time Elapsed: 1347.024 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1890000. Time Elapsed: 1348.717 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1900000. Time Elapsed: 1358.481 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1910000. Time Elapsed: 1367.686 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1920000. Time Elapsed: 1371.053 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1930000. Time Elapsed: 1380.061 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1940000. Time Elapsed: 1387.693 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1950000. Time Elapsed: 1392.110 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1960000. Time Elapsed: 1403.821 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1970000. Time Elapsed: 1407.523 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1980000. Time Elapsed: 1416.016 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 1990000. Time Elapsed: 1427.520 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2000000. Time Elapsed: 1428.184 s. No episode was completed since last summary. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_solo20m_s1/CarAgent/CarAgent-1999872.onnx
+[INFO] CarAgent. Step: 2010000. Time Elapsed: 1439.212 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2020000. Time Elapsed: 1443.281 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2030000. Time Elapsed: 1450.967 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2040000. Time Elapsed: 1461.842 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2050000. Time Elapsed: 1462.569 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2060000. Time Elapsed: 1473.471 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2070000. Time Elapsed: 1478.555 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2080000. Time Elapsed: 1485.202 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2090000. Time Elapsed: 1496.472 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2100000. Time Elapsed: 1497.334 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2110000. Time Elapsed: 1508.088 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2120000. Time Elapsed: 1519.275 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2130000. Time Elapsed: 1519.930 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2140000. Time Elapsed: 1530.885 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2150000. Time Elapsed: 1532.389 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2160000. Time Elapsed: 1542.653 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2170000. Time Elapsed: 1553.904 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2180000. Time Elapsed: 1554.389 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2190000. Time Elapsed: 1566.120 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2200000. Time Elapsed: 1568.256 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2210000. Time Elapsed: 1578.102 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2220000. Time Elapsed: 1586.727 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2230000. Time Elapsed: 1590.194 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2240000. Time Elapsed: 1599.220 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2250000. Time Elapsed: 1608.071 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2260000. Time Elapsed: 1611.209 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2270000. Time Elapsed: 1622.367 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2280000. Time Elapsed: 1625.594 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2290000. Time Elapsed: 1633.852 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2300000. Time Elapsed: 1644.821 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2310000. Time Elapsed: 1645.501 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2320000. Time Elapsed: 1656.364 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2330000. Time Elapsed: 1660.284 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2340000. Time Elapsed: 1667.458 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2350000. Time Elapsed: 1678.458 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2360000. Time Elapsed: 1679.020 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2370000. Time Elapsed: 1690.004 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2380000. Time Elapsed: 1697.072 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2390000. Time Elapsed: 1701.719 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2400000. Time Elapsed: 1712.856 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2410000. Time Elapsed: 1713.651 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2420000. Time Elapsed: 1724.581 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2430000. Time Elapsed: 1735.853 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2440000. Time Elapsed: 1736.544 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2450000. Time Elapsed: 1747.649 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2460000. Time Elapsed: 1749.374 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2470000. Time Elapsed: 1760.160 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2480000. Time Elapsed: 1769.204 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2490000. Time Elapsed: 1772.516 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2500000. Time Elapsed: 1781.292 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2510000. Time Elapsed: 1786.384 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2520000. Time Elapsed: 1793.294 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2530000. Time Elapsed: 1804.666 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2540000. Time Elapsed: 1805.444 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2550000. Time Elapsed: 1816.599 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2560000. Time Elapsed: 1826.832 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2570000. Time Elapsed: 1828.421 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2580000. Time Elapsed: 1839.354 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2590000. Time Elapsed: 1840.486 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2600000. Time Elapsed: 1851.126 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2610000. Time Elapsed: 1861.947 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2620000. Time Elapsed: 1862.465 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2630000. Time Elapsed: 1873.297 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2640000. Time Elapsed: 1875.485 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2650000. Time Elapsed: 1884.976 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2660000. Time Elapsed: 1895.951 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2670000. Time Elapsed: 1896.730 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2680000. Time Elapsed: 1907.836 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2690000. Time Elapsed: 1914.611 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2700000. Time Elapsed: 1919.482 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2710000. Time Elapsed: 1930.473 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2720000. Time Elapsed: 1931.474 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2730000. Time Elapsed: 1942.803 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2740000. Time Elapsed: 1951.875 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2750000. Time Elapsed: 1955.169 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2760000. Time Elapsed: 1964.398 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2770000. Time Elapsed: 1968.892 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2780000. Time Elapsed: 1976.701 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2790000. Time Elapsed: 1988.027 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2800000. Time Elapsed: 1988.600 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2810000. Time Elapsed: 1999.636 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2820000. Time Elapsed: 2005.387 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2830000. Time Elapsed: 2011.509 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2840000. Time Elapsed: 2022.614 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2850000. Time Elapsed: 2023.672 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2860000. Time Elapsed: 2034.459 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2870000. Time Elapsed: 2045.718 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2880000. Time Elapsed: 2046.405 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2890000. Time Elapsed: 2057.522 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2900000. Time Elapsed: 2059.338 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2910000. Time Elapsed: 2068.921 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2920000. Time Elapsed: 2079.216 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2930000. Time Elapsed: 2079.948 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2940000. Time Elapsed: 2090.482 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2950000. Time Elapsed: 2093.441 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2960000. Time Elapsed: 2101.546 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2970000. Time Elapsed: 2112.621 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2980000. Time Elapsed: 2113.526 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 2990000. Time Elapsed: 2124.322 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3000000. Time Elapsed: 2132.787 s. No episode was completed since last summary. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_solo20m_s1/CarAgent/CarAgent-2999936.onnx
+[INFO] CarAgent. Step: 3010000. Time Elapsed: 2136.290 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3020000. Time Elapsed: 2145.307 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3030000. Time Elapsed: 2149.955 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3040000. Time Elapsed: 2158.540 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3050000. Time Elapsed: 2170.686 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3060000. Time Elapsed: 2173.992 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3070000. Time Elapsed: 2182.659 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3080000. Time Elapsed: 2187.911 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3090000. Time Elapsed: 2194.935 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3100000. Time Elapsed: 2205.938 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3110000. Time Elapsed: 2206.516 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3120000. Time Elapsed: 2217.499 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3130000. Time Elapsed: 2228.234 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3140000. Time Elapsed: 2228.850 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3150000. Time Elapsed: 2239.912 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3160000. Time Elapsed: 2241.139 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3170000. Time Elapsed: 2251.363 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3180000. Time Elapsed: 2262.136 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3190000. Time Elapsed: 2262.840 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3200000. Time Elapsed: 2273.673 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3210000. Time Elapsed: 2276.162 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3220000. Time Elapsed: 2285.243 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3230000. Time Elapsed: 2296.003 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3240000. Time Elapsed: 2296.716 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3250000. Time Elapsed: 2307.413 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3260000. Time Elapsed: 2315.010 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3270000. Time Elapsed: 2319.560 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3280000. Time Elapsed: 2328.345 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3290000. Time Elapsed: 2332.073 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3300000. Time Elapsed: 2340.464 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3310000. Time Elapsed: 2351.717 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3320000. Time Elapsed: 2354.617 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3330000. Time Elapsed: 2363.117 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3340000. Time Elapsed: 2367.354 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3350000. Time Elapsed: 2374.632 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3360000. Time Elapsed: 2385.740 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3370000. Time Elapsed: 2386.533 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3380000. Time Elapsed: 2397.332 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3390000. Time Elapsed: 2404.156 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3400000. Time Elapsed: 2408.703 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3410000. Time Elapsed: 2419.525 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3420000. Time Elapsed: 2420.250 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3430000. Time Elapsed: 2430.742 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3440000. Time Elapsed: 2441.802 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3450000. Time Elapsed: 2442.515 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3460000. Time Elapsed: 2453.334 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3470000. Time Elapsed: 2454.880 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3480000. Time Elapsed: 2464.643 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3490000. Time Elapsed: 2475.361 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3500000. Time Elapsed: 2476.108 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3510000. Time Elapsed: 2487.180 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3520000. Time Elapsed: 2489.929 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3530000. Time Elapsed: 2499.304 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3540000. Time Elapsed: 2508.270 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3550000. Time Elapsed: 2512.305 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3560000. Time Elapsed: 2520.836 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3570000. Time Elapsed: 2531.867 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3580000. Time Elapsed: 2532.586 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3590000. Time Elapsed: 2543.940 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3600000. Time Elapsed: 2548.023 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3610000. Time Elapsed: 2555.622 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3620000. Time Elapsed: 2566.749 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3630000. Time Elapsed: 2567.537 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3640000. Time Elapsed: 2578.544 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3650000. Time Elapsed: 2583.813 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3660000. Time Elapsed: 2590.208 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3670000. Time Elapsed: 2601.232 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3680000. Time Elapsed: 2602.291 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3690000. Time Elapsed: 2612.795 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3700000. Time Elapsed: 2623.491 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3710000. Time Elapsed: 2624.162 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3720000. Time Elapsed: 2635.194 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3730000. Time Elapsed: 2637.033 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3740000. Time Elapsed: 2647.230 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3750000. Time Elapsed: 2658.670 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3760000. Time Elapsed: 2659.442 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3770000. Time Elapsed: 2671.191 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3780000. Time Elapsed: 2674.528 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3790000. Time Elapsed: 2683.517 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3800000. Time Elapsed: 2692.849 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3810000. Time Elapsed: 2696.805 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3820000. Time Elapsed: 2705.836 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3830000. Time Elapsed: 2716.158 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3840000. Time Elapsed: 2717.891 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3850000. Time Elapsed: 2729.565 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3860000. Time Elapsed: 2733.933 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3870000. Time Elapsed: 2741.813 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3880000. Time Elapsed: 2753.041 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3890000. Time Elapsed: 2753.650 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3900000. Time Elapsed: 2764.998 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3910000. Time Elapsed: 2770.144 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3920000. Time Elapsed: 2776.946 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3930000. Time Elapsed: 2788.191 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3940000. Time Elapsed: 2789.073 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3950000. Time Elapsed: 2800.380 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3960000. Time Elapsed: 2808.618 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3970000. Time Elapsed: 2812.265 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3980000. Time Elapsed: 2823.815 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 3990000. Time Elapsed: 2825.319 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 4000000. Time Elapsed: 2835.951 s. No episode was completed since last summary. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_solo20m_s1/CarAgent/CarAgent-3999872.onnx

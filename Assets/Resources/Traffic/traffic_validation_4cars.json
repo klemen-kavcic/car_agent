@@ -1,0 +1,5810 @@
+{
+  "generator": "generate_validation_scenarios.py",
+  "max_cars": 4,
+  "min_endpoint_m": 12.0,
+  "min_path_cells": 20,
+  "cell_size_m": 1.5,
+  "seed": 48151,
+  "scenarios": [
+    {
+      "scenario_id": 0,
+      "map_index": 0,
+      "map_file": "curved_401.txt",
+      "minimum_endpoint_separation_m": 35.655,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -45.75,
+          "spawn_z": -26.25,
+          "goal_x": 36.75,
+          "goal_z": 41.25,
+          "heading_deg": 9.665800968459472,
+          "spawn_cell_x": 2,
+          "spawn_cell_z": 15,
+          "goal_cell_x": 57,
+          "goal_cell_z": 60,
+          "path_len_cells": 104
+        },
+        {
+          "spawn_x": 0.75,
+          "spawn_z": -9.75,
+          "goal_x": 3.75,
+          "goal_z": 27.75,
+          "heading_deg": 338.86315549695314,
+          "spawn_cell_x": 33,
+          "spawn_cell_z": 26,
+          "goal_cell_x": 35,
+          "goal_cell_z": 51,
+          "path_len_cells": 27
+        },
+        {
+          "spawn_x": 17.25,
+          "spawn_z": -42.75,
+          "goal_x": -44.25,
+          "goal_z": 41.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 44,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 3,
+          "goal_cell_z": 60,
+          "path_len_cells": 97
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -18.75,
+          "goal_x": -32.25,
+          "goal_z": 6.75,
+          "heading_deg": 318.8825830092127,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 20,
+          "goal_cell_x": 11,
+          "goal_cell_z": 37,
+          "path_len_cells": 91
+        }
+      ]
+    },
+    {
+      "scenario_id": 1,
+      "map_index": 1,
+      "map_file": "curved_402.txt",
+      "minimum_endpoint_separation_m": 31.321,
+      "overlapping_route_pairs": 5,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 42.75,
+          "spawn_z": -23.25,
+          "goal_x": -9.75,
+          "goal_z": 8.25,
+          "heading_deg": 283.282525588539,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 17,
+          "goal_cell_x": 26,
+          "goal_cell_z": 38,
+          "path_len_cells": 56
+        },
+        {
+          "spawn_x": 20.25,
+          "spawn_z": -0.75,
+          "goal_x": -45.75,
+          "goal_z": 5.25,
+          "heading_deg": 294.18323033171487,
+          "spawn_cell_x": 46,
+          "spawn_cell_z": 32,
+          "goal_cell_x": 2,
+          "goal_cell_z": 36,
+          "path_len_cells": 60
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": 23.25,
+          "goal_x": -26.25,
+          "goal_z": -44.25,
+          "heading_deg": 234.217474411461,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 48,
+          "goal_cell_x": 15,
+          "goal_cell_z": 3,
+          "path_len_cells": 91
+        },
+        {
+          "spawn_x": 9.75,
+          "spawn_z": 41.25,
+          "goal_x": 8.25,
+          "goal_z": -36.75,
+          "heading_deg": 155.8167696682851,
+          "spawn_cell_x": 39,
+          "spawn_cell_z": 60,
+          "goal_cell_x": 38,
+          "goal_cell_z": 8,
+          "path_len_cells": 73
+        }
+      ]
+    },
+    {
+      "scenario_id": 2,
+      "map_index": 2,
+      "map_file": "curved_403.txt",
+      "minimum_endpoint_separation_m": 27.166,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -11.25,
+          "spawn_z": -33.75,
+          "goal_x": 21.75,
+          "goal_z": 45.75,
+          "heading_deg": 296.565051177078,
+          "spawn_cell_x": 25,
+          "spawn_cell_z": 10,
+          "goal_cell_x": 47,
+          "goal_cell_z": 63,
+          "path_len_cells": 79
+        },
+        {
+          "spawn_x": 18.75,
+          "spawn_z": -39.75,
+          "goal_x": -15.75,
+          "goal_z": 14.25,
+          "heading_deg": 45.0,
+          "spawn_cell_x": 45,
+          "spawn_cell_z": 6,
+          "goal_cell_x": 22,
+          "goal_cell_z": 42,
+          "path_len_cells": 85
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -29.25,
+          "goal_x": -42.75,
+          "goal_z": -8.25,
+          "heading_deg": 246.4394518016693,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 13,
+          "goal_cell_x": 4,
+          "goal_cell_z": 27,
+          "path_len_cells": 81
+        },
+        {
+          "spawn_x": 15.75,
+          "spawn_z": -3.75,
+          "goal_x": -38.25,
+          "goal_z": -36.75,
+          "heading_deg": 322.7620554983771,
+          "spawn_cell_x": 43,
+          "spawn_cell_z": 30,
+          "goal_cell_x": 7,
+          "goal_cell_z": 8,
+          "path_len_cells": 68
+        }
+      ]
+    },
+    {
+      "scenario_id": 3,
+      "map_index": 3,
+      "map_file": "curved_404.txt",
+      "minimum_endpoint_separation_m": 27.042,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 20.25,
+          "spawn_z": -32.25,
+          "goal_x": 17.25,
+          "goal_z": 33.75,
+          "heading_deg": 76.717474411461,
+          "spawn_cell_x": 46,
+          "spawn_cell_z": 11,
+          "goal_cell_x": 44,
+          "goal_cell_z": 55,
+          "path_len_cells": 64
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -23.25,
+          "goal_x": -23.25,
+          "goal_z": 18.75,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 17,
+          "goal_cell_x": 17,
+          "goal_cell_z": 45,
+          "path_len_cells": 90
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": 12.75,
+          "goal_x": -45.75,
+          "goal_z": -20.25,
+          "heading_deg": 234.217474411461,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 41,
+          "goal_cell_x": 2,
+          "goal_cell_z": 19,
+          "path_len_cells": 94
+        },
+        {
+          "spawn_x": 8.25,
+          "spawn_z": 0.75,
+          "goal_x": -14.25,
+          "goal_z": -21.75,
+          "heading_deg": 180.0,
+          "spawn_cell_x": 38,
+          "spawn_cell_z": 33,
+          "goal_cell_x": 23,
+          "goal_cell_z": 18,
+          "path_len_cells": 46
+        }
+      ]
+    },
+    {
+      "scenario_id": 4,
+      "map_index": 4,
+      "map_file": "curved_405.txt",
+      "minimum_endpoint_separation_m": 34.63,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -23.25,
+          "goal_x": -44.25,
+          "goal_z": 6.75,
+          "heading_deg": 288.0136866925518,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 17,
+          "goal_cell_x": 3,
+          "goal_cell_z": 37,
+          "path_len_cells": 87
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": 29.25,
+          "goal_x": -9.75,
+          "goal_z": -14.25,
+          "heading_deg": 318.92530545147645,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 52,
+          "goal_cell_x": 26,
+          "goal_cell_z": 23,
+          "path_len_cells": 65
+        },
+        {
+          "spawn_x": 0.75,
+          "spawn_z": 18.75,
+          "goal_x": -27.75,
+          "goal_z": -45.75,
+          "heading_deg": 135.0,
+          "spawn_cell_x": 33,
+          "spawn_cell_z": 45,
+          "goal_cell_x": 14,
+          "goal_cell_z": 2,
+          "path_len_cells": 66
+        },
+        {
+          "spawn_x": -24.75,
+          "spawn_z": 44.25,
+          "goal_x": 11.25,
+          "goal_z": -42.75,
+          "heading_deg": 131.80144130611086,
+          "spawn_cell_x": 16,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 40,
+          "goal_cell_z": 4,
+          "path_len_cells": 92
+        }
+      ]
+    },
+    {
+      "scenario_id": 5,
+      "map_index": 5,
+      "map_file": "curved_406.txt",
+      "minimum_endpoint_separation_m": 30.336,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 42.75,
+          "spawn_z": -45.75,
+          "goal_x": -45.75,
+          "goal_z": 23.25,
+          "heading_deg": 329.8724406484711,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 2,
+          "goal_cell_z": 48,
+          "path_len_cells": 105
+        },
+        {
+          "spawn_x": 35.25,
+          "spawn_z": -2.25,
+          "goal_x": -6.75,
+          "goal_z": 3.75,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 56,
+          "spawn_cell_z": 31,
+          "goal_cell_x": 28,
+          "goal_cell_z": 35,
+          "path_len_cells": 44
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 35.25,
+          "goal_x": -32.25,
+          "goal_z": -44.25,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 56,
+          "goal_cell_x": 11,
+          "goal_cell_z": 3,
+          "path_len_cells": 105
+        },
+        {
+          "spawn_x": 5.25,
+          "spawn_z": 45.75,
+          "goal_x": 12.75,
+          "goal_z": -41.25,
+          "heading_deg": 202.5,
+          "spawn_cell_x": 36,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 41,
+          "goal_cell_z": 5,
+          "path_len_cells": 79
+        }
+      ]
+    },
+    {
+      "scenario_id": 6,
+      "map_index": 6,
+      "map_file": "curved_407.txt",
+      "minimum_endpoint_separation_m": 33.034,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 24.75,
+          "spawn_z": -45.75,
+          "goal_x": -20.25,
+          "goal_z": 45.75,
+          "heading_deg": 24.18323033171491,
+          "spawn_cell_x": 49,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 19,
+          "goal_cell_z": 63,
+          "path_len_cells": 113
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -18.75,
+          "goal_x": -45.75,
+          "goal_z": -0.75,
+          "heading_deg": 277.01812173396326,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 20,
+          "goal_cell_x": 2,
+          "goal_cell_z": 32,
+          "path_len_cells": 89
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": 44.25,
+          "goal_x": -12.75,
+          "goal_z": -2.25,
+          "heading_deg": 239.87244064847113,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 24,
+          "goal_cell_z": 31,
+          "path_len_cells": 68
+        },
+        {
+          "spawn_x": 14.25,
+          "spawn_z": 21.75,
+          "goal_x": -15.75,
+          "goal_z": -44.25,
+          "heading_deg": 218.95262146149395,
+          "spawn_cell_x": 42,
+          "spawn_cell_z": 47,
+          "goal_cell_x": 22,
+          "goal_cell_z": 3,
+          "path_len_cells": 64
+        }
+      ]
+    },
+    {
+      "scenario_id": 7,
+      "map_index": 7,
+      "map_file": "curved_408.txt",
+      "minimum_endpoint_separation_m": 32.45,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 27.75,
+          "spawn_z": -44.25,
+          "goal_x": -35.25,
+          "goal_z": 45.75,
+          "heading_deg": 324.99155326095,
+          "spawn_cell_x": 51,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 9,
+          "goal_cell_z": 63,
+          "path_len_cells": 102
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -8.25,
+          "goal_x": -17.25,
+          "goal_z": 2.25,
+          "heading_deg": 245.8167696682851,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 27,
+          "goal_cell_x": 21,
+          "goal_cell_z": 34,
+          "path_len_cells": 67
+        },
+        {
+          "spawn_x": 24.75,
+          "spawn_z": 18.75,
+          "goal_x": -44.25,
+          "goal_z": -33.75,
+          "heading_deg": 149.8724406484711,
+          "spawn_cell_x": 49,
+          "spawn_cell_z": 45,
+          "goal_cell_x": 3,
+          "goal_cell_z": 10,
+          "path_len_cells": 87
+        },
+        {
+          "spawn_x": -2.25,
+          "spawn_z": 36.75,
+          "goal_x": 0.75,
+          "goal_z": -24.75,
+          "heading_deg": 119.28521719258075,
+          "spawn_cell_x": 31,
+          "spawn_cell_z": 57,
+          "goal_cell_x": 33,
+          "goal_cell_z": 16,
+          "path_len_cells": 59
+        }
+      ]
+    },
+    {
+      "scenario_id": 8,
+      "map_index": 8,
+      "map_file": "curved_409.txt",
+      "minimum_endpoint_separation_m": 35.781,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -42.75,
+          "spawn_z": -15.75,
+          "goal_x": 45.75,
+          "goal_z": 20.25,
+          "heading_deg": 45.0,
+          "spawn_cell_x": 4,
+          "spawn_cell_z": 22,
+          "goal_cell_x": 63,
+          "goal_cell_z": 46,
+          "path_len_cells": 91
+        },
+        {
+          "spawn_x": -23.25,
+          "spawn_z": -45.75,
+          "goal_x": 14.25,
+          "goal_z": 42.75,
+          "heading_deg": 37.23794450162288,
+          "spawn_cell_x": 17,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 42,
+          "goal_cell_z": 61,
+          "path_len_cells": 90
+        },
+        {
+          "spawn_x": 38.25,
+          "spawn_z": -44.25,
+          "goal_x": -38.25,
+          "goal_z": 45.75,
+          "heading_deg": 335.8167696682851,
+          "spawn_cell_x": 58,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 7,
+          "goal_cell_z": 63,
+          "path_len_cells": 111
+        },
+        {
+          "spawn_x": 15.75,
+          "spawn_z": -9.75,
+          "goal_x": -17.25,
+          "goal_z": 9.75,
+          "heading_deg": 324.217474411461,
+          "spawn_cell_x": 43,
+          "spawn_cell_z": 26,
+          "goal_cell_x": 21,
+          "goal_cell_z": 39,
+          "path_len_cells": 35
+        }
+      ]
+    },
+    {
+      "scenario_id": 9,
+      "map_index": 9,
+      "map_file": "curved_410.txt",
+      "minimum_endpoint_separation_m": 32.101,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 5.25,
+          "spawn_z": -42.75,
+          "goal_x": 17.25,
+          "goal_z": 45.75,
+          "heading_deg": 338.86315549695314,
+          "spawn_cell_x": 36,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 44,
+          "goal_cell_z": 63,
+          "path_len_cells": 93
+        },
+        {
+          "spawn_x": 29.25,
+          "spawn_z": -11.25,
+          "goal_x": -45.75,
+          "goal_z": 33.75,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 52,
+          "spawn_cell_z": 25,
+          "goal_cell_x": 2,
+          "goal_cell_z": 55,
+          "path_len_cells": 84
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 21.75,
+          "goal_x": -18.75,
+          "goal_z": -2.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 47,
+          "goal_cell_x": 20,
+          "goal_cell_z": 31,
+          "path_len_cells": 69
+        },
+        {
+          "spawn_x": 9.75,
+          "spawn_z": 14.25,
+          "goal_x": -32.25,
+          "goal_z": -44.25,
+          "heading_deg": 231.1323868639462,
+          "spawn_cell_x": 39,
+          "spawn_cell_z": 42,
+          "goal_cell_x": 11,
+          "goal_cell_z": 3,
+          "path_len_cells": 67
+        }
+      ]
+    },
+    {
+      "scenario_id": 10,
+      "map_index": 10,
+      "map_file": "curved_411.txt",
+      "minimum_endpoint_separation_m": 33.305,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 24.75,
+          "spawn_z": -45.75,
+          "goal_x": -42.75,
+          "goal_z": 29.25,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 49,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 4,
+          "goal_cell_z": 52,
+          "path_len_cells": 95
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": -12.75,
+          "goal_x": -44.25,
+          "goal_z": -5.25,
+          "heading_deg": 251.9863133074482,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 24,
+          "goal_cell_x": 3,
+          "goal_cell_z": 29,
+          "path_len_cells": 79
+        },
+        {
+          "spawn_x": 15.75,
+          "spawn_z": 9.75,
+          "goal_x": -45.75,
+          "goal_z": -39.75,
+          "heading_deg": 162.652423234383,
+          "spawn_cell_x": 43,
+          "spawn_cell_z": 39,
+          "goal_cell_x": 2,
+          "goal_cell_z": 6,
+          "path_len_cells": 80
+        },
+        {
+          "spawn_x": 8.25,
+          "spawn_z": 45.75,
+          "goal_x": -11.25,
+          "goal_z": -9.75,
+          "heading_deg": 218.8676131360538,
+          "spawn_cell_x": 38,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 25,
+          "goal_cell_z": 26,
+          "path_len_cells": 68
+        }
+      ]
+    },
+    {
+      "scenario_id": 11,
+      "map_index": 11,
+      "map_file": "curved_412.txt",
+      "minimum_endpoint_separation_m": 30.373,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -45.75,
+          "spawn_z": -30.75,
+          "goal_x": 32.25,
+          "goal_z": 30.75,
+          "heading_deg": 51.04737853850605,
+          "spawn_cell_x": 2,
+          "spawn_cell_z": 12,
+          "goal_cell_x": 54,
+          "goal_cell_z": 53,
+          "path_len_cells": 93
+        },
+        {
+          "spawn_x": -15.75,
+          "spawn_z": -45.75,
+          "goal_x": -3.75,
+          "goal_z": 8.25,
+          "heading_deg": 304.0992952568241,
+          "spawn_cell_x": 22,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 30,
+          "goal_cell_z": 38,
+          "path_len_cells": 52
+        },
+        {
+          "spawn_x": 14.25,
+          "spawn_z": -26.25,
+          "goal_x": -38.25,
+          "goal_z": 30.75,
+          "heading_deg": 24.183230331714903,
+          "spawn_cell_x": 42,
+          "spawn_cell_z": 15,
+          "goal_cell_x": 7,
+          "goal_cell_z": 53,
+          "path_len_cells": 73
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -18.75,
+          "goal_x": -32.25,
+          "goal_z": -2.25,
+          "heading_deg": 291.13684450304686,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 20,
+          "goal_cell_x": 11,
+          "goal_cell_z": 31,
+          "path_len_cells": 68
+        }
+      ]
+    },
+    {
+      "scenario_id": 12,
+      "map_index": 12,
+      "map_file": "curved_413.txt",
+      "minimum_endpoint_separation_m": 30.336,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -5.25,
+          "spawn_z": -44.25,
+          "goal_x": -15.75,
+          "goal_z": 42.75,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 29,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 22,
+          "goal_cell_z": 61,
+          "path_len_cells": 81
+        },
+        {
+          "spawn_x": 24.75,
+          "spawn_z": -17.25,
+          "goal_x": -39.75,
+          "goal_z": 12.75,
+          "heading_deg": 234.217474411461,
+          "spawn_cell_x": 49,
+          "spawn_cell_z": 21,
+          "goal_cell_x": 6,
+          "goal_cell_z": 41,
+          "path_len_cells": 65
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": 12.75,
+          "goal_x": -45.75,
+          "goal_z": -30.75,
+          "heading_deg": 257.7780226097917,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 41,
+          "goal_cell_x": 2,
+          "goal_cell_z": 12,
+          "path_len_cells": 107
+        },
+        {
+          "spawn_x": 14.25,
+          "spawn_z": 30.75,
+          "goal_x": -9.75,
+          "goal_z": -14.25,
+          "heading_deg": 281.7266599165517,
+          "spawn_cell_x": 42,
+          "spawn_cell_z": 53,
+          "goal_cell_x": 26,
+          "goal_cell_z": 23,
+          "path_len_cells": 54
+        }
+      ]
+    },
+    {
+      "scenario_id": 13,
+      "map_index": 13,
+      "map_file": "curved_414.txt",
+      "minimum_endpoint_separation_m": 37.047,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -0.75,
+          "spawn_z": -27.75,
+          "goal_x": -0.75,
+          "goal_z": 17.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 32,
+          "spawn_cell_z": 14,
+          "goal_cell_x": 32,
+          "goal_cell_z": 44,
+          "path_len_cells": 36
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": -33.75,
+          "goal_x": -26.25,
+          "goal_z": 45.75,
+          "heading_deg": 300.1275593515289,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 10,
+          "goal_cell_x": 15,
+          "goal_cell_z": 63,
+          "path_len_cells": 103
+        },
+        {
+          "spawn_x": 41.25,
+          "spawn_z": 5.25,
+          "goal_x": -45.75,
+          "goal_z": 14.25,
+          "heading_deg": 335.8167696682851,
+          "spawn_cell_x": 60,
+          "spawn_cell_z": 36,
+          "goal_cell_x": 2,
+          "goal_cell_z": 42,
+          "path_len_cells": 78
+        },
+        {
+          "spawn_x": 35.25,
+          "spawn_z": 45.75,
+          "goal_x": -45.75,
+          "goal_z": -33.75,
+          "heading_deg": 180.0,
+          "spawn_cell_x": 56,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 2,
+          "goal_cell_z": 10,
+          "path_len_cells": 107
+        }
+      ]
+    },
+    {
+      "scenario_id": 14,
+      "map_index": 14,
+      "map_file": "curved_415.txt",
+      "minimum_endpoint_separation_m": 31.321,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 9.75,
+          "spawn_z": -20.25,
+          "goal_x": -14.25,
+          "goal_z": 44.25,
+          "heading_deg": 278.5513644845262,
+          "spawn_cell_x": 39,
+          "spawn_cell_z": 19,
+          "goal_cell_x": 23,
+          "goal_cell_z": 62,
+          "path_len_cells": 83
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -29.25,
+          "goal_x": -15.75,
+          "goal_z": 12.75,
+          "heading_deg": 283.282525588539,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 13,
+          "goal_cell_x": 22,
+          "goal_cell_z": 41,
+          "path_len_cells": 71
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 6.75,
+          "goal_x": -44.25,
+          "goal_z": -0.75,
+          "heading_deg": 296.565051177078,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 37,
+          "goal_cell_x": 3,
+          "goal_cell_z": 32,
+          "path_len_cells": 87
+        },
+        {
+          "spawn_x": 14.25,
+          "spawn_z": 21.75,
+          "goal_x": -27.75,
+          "goal_z": -44.25,
+          "heading_deg": 127.23794450162288,
+          "spawn_cell_x": 42,
+          "spawn_cell_z": 47,
+          "goal_cell_x": 14,
+          "goal_cell_z": 3,
+          "path_len_cells": 74
+        }
+      ]
+    },
+    {
+      "scenario_id": 15,
+      "map_index": 15,
+      "map_file": "curved_416.txt",
+      "minimum_endpoint_separation_m": 33.034,
+      "overlapping_route_pairs": 5,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -44.25,
+          "spawn_z": -23.25,
+          "goal_x": 44.25,
+          "goal_z": 17.25,
+          "heading_deg": 45.0,
+          "spawn_cell_x": 3,
+          "spawn_cell_z": 17,
+          "goal_cell_x": 62,
+          "goal_cell_z": 44,
+          "path_len_cells": 86
+        },
+        {
+          "spawn_x": 9.75,
+          "spawn_z": -42.75,
+          "goal_x": 14.25,
+          "goal_z": 42.75,
+          "heading_deg": 307.23794450162285,
+          "spawn_cell_x": 39,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 42,
+          "goal_cell_z": 61,
+          "path_len_cells": 78
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": -44.25,
+          "goal_x": -11.25,
+          "goal_z": 12.75,
+          "heading_deg": 17.34757676561699,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 25,
+          "goal_cell_z": 41,
+          "path_len_cells": 80
+        },
+        {
+          "spawn_x": 18.75,
+          "spawn_z": -8.25,
+          "goal_x": -44.25,
+          "goal_z": 29.25,
+          "heading_deg": 228.88258300921268,
+          "spawn_cell_x": 45,
+          "spawn_cell_z": 27,
+          "goal_cell_x": 3,
+          "goal_cell_z": 52,
+          "path_len_cells": 85
+        }
+      ]
+    },
+    {
+      "scenario_id": 16,
+      "map_index": 16,
+      "map_file": "curved_417.txt",
+      "minimum_endpoint_separation_m": 34.271,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 41.25,
+          "spawn_z": -41.25,
+          "goal_x": -44.25,
+          "goal_z": 39.75,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 60,
+          "spawn_cell_z": 5,
+          "goal_cell_x": 3,
+          "goal_cell_z": 59,
+          "path_len_cells": 119
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": 29.25,
+          "goal_x": -41.25,
+          "goal_z": -5.25,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 52,
+          "goal_cell_x": 5,
+          "goal_cell_z": 29,
+          "path_len_cells": 80
+        },
+        {
+          "spawn_x": 11.25,
+          "spawn_z": 8.25,
+          "goal_x": -21.75,
+          "goal_z": -44.25,
+          "heading_deg": 252.65242323438304,
+          "spawn_cell_x": 40,
+          "spawn_cell_z": 38,
+          "goal_cell_x": 18,
+          "goal_cell_z": 3,
+          "path_len_cells": 57
+        },
+        {
+          "spawn_x": 3.75,
+          "spawn_z": 44.25,
+          "goal_x": 9.75,
+          "goal_z": -27.75,
+          "heading_deg": 144.21747441146098,
+          "spawn_cell_x": 35,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 39,
+          "goal_cell_z": 14,
+          "path_len_cells": 60
+        }
+      ]
+    },
+    {
+      "scenario_id": 17,
+      "map_index": 17,
+      "map_file": "curved_418.txt",
+      "minimum_endpoint_separation_m": 28.853,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -30.75,
+          "spawn_z": -15.75,
+          "goal_x": 44.25,
+          "goal_z": 33.75,
+          "heading_deg": 97.01812173396324,
+          "spawn_cell_x": 12,
+          "spawn_cell_z": 22,
+          "goal_cell_x": 62,
+          "goal_cell_z": 55,
+          "path_len_cells": 83
+        },
+        {
+          "spawn_x": -26.25,
+          "spawn_z": -44.25,
+          "goal_x": 11.25,
+          "goal_z": 15.75,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 15,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 40,
+          "goal_cell_z": 43,
+          "path_len_cells": 65
+        },
+        {
+          "spawn_x": 5.25,
+          "spawn_z": -15.75,
+          "goal_x": 2.25,
+          "goal_z": 45.75,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 36,
+          "spawn_cell_z": 22,
+          "goal_cell_x": 34,
+          "goal_cell_z": 63,
+          "path_len_cells": 59
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -21.75,
+          "goal_x": -30.75,
+          "goal_z": 14.25,
+          "heading_deg": 307.23794450162285,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 18,
+          "goal_cell_x": 12,
+          "goal_cell_z": 42,
+          "path_len_cells": 77
+        }
+      ]
+    },
+    {
+      "scenario_id": 18,
+      "map_index": 18,
+      "map_file": "curved_419.txt",
+      "minimum_endpoint_separation_m": 37.858,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -35.25,
+          "spawn_z": -44.25,
+          "goal_x": 33.75,
+          "goal_z": 44.25,
+          "heading_deg": 45.00000000000001,
+          "spawn_cell_x": 9,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 55,
+          "goal_cell_z": 62,
+          "path_len_cells": 111
+        },
+        {
+          "spawn_x": 12.75,
+          "spawn_z": -38.25,
+          "goal_x": -5.25,
+          "goal_z": 44.25,
+          "heading_deg": 41.11741699078734,
+          "spawn_cell_x": 41,
+          "spawn_cell_z": 7,
+          "goal_cell_x": 29,
+          "goal_cell_z": 62,
+          "path_len_cells": 77
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -17.25,
+          "goal_x": -44.25,
+          "goal_z": 41.25,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 21,
+          "goal_cell_x": 3,
+          "goal_cell_z": 60,
+          "path_len_cells": 98
+        },
+        {
+          "spawn_x": 17.25,
+          "spawn_z": 9.75,
+          "goal_x": -21.75,
+          "goal_z": -5.25,
+          "heading_deg": 294.18323033171487,
+          "spawn_cell_x": 44,
+          "spawn_cell_z": 39,
+          "goal_cell_x": 18,
+          "goal_cell_z": 29,
+          "path_len_cells": 42
+        }
+      ]
+    },
+    {
+      "scenario_id": 19,
+      "map_index": 19,
+      "map_file": "curved_420.txt",
+      "minimum_endpoint_separation_m": 33.034,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -32.25,
+          "goal_x": -20.25,
+          "goal_z": 45.75,
+          "heading_deg": 294.18323033171487,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 11,
+          "goal_cell_x": 19,
+          "goal_cell_z": 63,
+          "path_len_cells": 96
+        },
+        {
+          "spawn_x": 14.25,
+          "spawn_z": -0.75,
+          "goal_x": -44.25,
+          "goal_z": 18.75,
+          "heading_deg": 215.782525588539,
+          "spawn_cell_x": 42,
+          "spawn_cell_z": 32,
+          "goal_cell_x": 3,
+          "goal_cell_z": 45,
+          "path_len_cells": 52
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 18.75,
+          "goal_x": -18.75,
+          "goal_z": -2.25,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 45,
+          "goal_cell_x": 20,
+          "goal_cell_z": 31,
+          "path_len_cells": 69
+        },
+        {
+          "spawn_x": 15.75,
+          "spawn_z": 42.75,
+          "goal_x": -18.75,
+          "goal_z": -39.75,
+          "heading_deg": 209.28521719258075,
+          "spawn_cell_x": 43,
+          "spawn_cell_z": 61,
+          "goal_cell_x": 20,
+          "goal_cell_z": 6,
+          "path_len_cells": 80
+        }
+      ]
+    },
+    {
+      "scenario_id": 20,
+      "map_index": 20,
+      "map_file": "curved_421.txt",
+      "minimum_endpoint_separation_m": 33.136,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -5.25,
+          "spawn_z": -39.75,
+          "goal_x": -12.75,
+          "goal_z": 39.75,
+          "heading_deg": 81.44863551547381,
+          "spawn_cell_x": 29,
+          "spawn_cell_z": 6,
+          "goal_cell_x": 24,
+          "goal_cell_z": 59,
+          "path_len_cells": 84
+        },
+        {
+          "spawn_x": 32.25,
+          "spawn_z": -45.75,
+          "goal_x": -5.25,
+          "goal_z": 6.75,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 54,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 29,
+          "goal_cell_z": 37,
+          "path_len_cells": 64
+        },
+        {
+          "spawn_x": 36.75,
+          "spawn_z": -0.75,
+          "goal_x": -45.75,
+          "goal_z": 36.75,
+          "heading_deg": 217.23794450162288,
+          "spawn_cell_x": 57,
+          "spawn_cell_z": 32,
+          "goal_cell_x": 2,
+          "goal_cell_z": 57,
+          "path_len_cells": 94
+        },
+        {
+          "spawn_x": 30.75,
+          "spawn_z": 44.25,
+          "goal_x": -44.25,
+          "goal_z": -45.75,
+          "heading_deg": 158.86315549695314,
+          "spawn_cell_x": 53,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 3,
+          "goal_cell_z": 2,
+          "path_len_cells": 110
+        }
+      ]
+    },
+    {
+      "scenario_id": 21,
+      "map_index": 21,
+      "map_file": "curved_422.txt",
+      "minimum_endpoint_separation_m": 30.923,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -24.75,
+          "spawn_z": -24.75,
+          "goal_x": 35.25,
+          "goal_z": 21.75,
+          "heading_deg": 90.0,
+          "spawn_cell_x": 16,
+          "spawn_cell_z": 16,
+          "goal_cell_x": 56,
+          "goal_cell_z": 47,
+          "path_len_cells": 75
+        },
+        {
+          "spawn_x": 12.75,
+          "spawn_z": -44.25,
+          "goal_x": 9.75,
+          "goal_z": 41.25,
+          "heading_deg": 327.6005618227375,
+          "spawn_cell_x": 41,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 39,
+          "goal_cell_z": 60,
+          "path_len_cells": 79
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -27.75,
+          "goal_x": -18.75,
+          "goal_z": 29.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 14,
+          "goal_cell_x": 20,
+          "goal_cell_z": 52,
+          "path_len_cells": 83
+        },
+        {
+          "spawn_x": 18.75,
+          "spawn_z": -6.75,
+          "goal_x": -42.75,
+          "goal_z": 5.25,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 45,
+          "spawn_cell_z": 28,
+          "goal_cell_x": 4,
+          "goal_cell_z": 36,
+          "path_len_cells": 67
+        }
+      ]
+    },
+    {
+      "scenario_id": 22,
+      "map_index": 22,
+      "map_file": "curved_423.txt",
+      "minimum_endpoint_separation_m": 32.101,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -24.75,
+          "goal_x": -41.25,
+          "goal_z": 45.75,
+          "heading_deg": 232.76205549837715,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 16,
+          "goal_cell_x": 5,
+          "goal_cell_z": 63,
+          "path_len_cells": 107
+        },
+        {
+          "spawn_x": 26.25,
+          "spawn_z": 0.75,
+          "goal_x": -45.75,
+          "goal_z": 9.75,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 50,
+          "spawn_cell_z": 33,
+          "goal_cell_x": 2,
+          "goal_cell_z": 39,
+          "path_len_cells": 96
+        },
+        {
+          "spawn_x": 38.25,
+          "spawn_z": 36.75,
+          "goal_x": -11.25,
+          "goal_z": -3.75,
+          "heading_deg": 308.95262146149395,
+          "spawn_cell_x": 58,
+          "spawn_cell_z": 57,
+          "goal_cell_x": 25,
+          "goal_cell_z": 30,
+          "path_len_cells": 100
+        },
+        {
+          "spawn_x": -3.75,
+          "spawn_z": 32.25,
+          "goal_x": -33.75,
+          "goal_z": -44.25,
+          "heading_deg": 127.23794450162286,
+          "spawn_cell_x": 30,
+          "spawn_cell_z": 54,
+          "goal_cell_x": 10,
+          "goal_cell_z": 3,
+          "path_len_cells": 89
+        }
+      ]
+    },
+    {
+      "scenario_id": 23,
+      "map_index": 23,
+      "map_file": "curved_424.txt",
+      "minimum_endpoint_separation_m": 33.305,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 29.25,
+          "spawn_z": -42.75,
+          "goal_x": -42.75,
+          "goal_z": 32.25,
+          "heading_deg": 346.717474411461,
+          "spawn_cell_x": 52,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 4,
+          "goal_cell_z": 54,
+          "path_len_cells": 98
+        },
+        {
+          "spawn_x": 41.25,
+          "spawn_z": 9.75,
+          "goal_x": -42.75,
+          "goal_z": -6.75,
+          "heading_deg": 308.95262146149395,
+          "spawn_cell_x": 60,
+          "spawn_cell_z": 39,
+          "goal_cell_x": 4,
+          "goal_cell_z": 28,
+          "path_len_cells": 77
+        },
+        {
+          "spawn_x": 0.75,
+          "spawn_z": 45.75,
+          "goal_x": -38.25,
+          "goal_z": -42.75,
+          "heading_deg": 193.282525588539,
+          "spawn_cell_x": 33,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 7,
+          "goal_cell_z": 4,
+          "path_len_cells": 91
+        },
+        {
+          "spawn_x": -15.75,
+          "spawn_z": 12.75,
+          "goal_x": -3.75,
+          "goal_z": -27.75,
+          "heading_deg": 166.717474411461,
+          "spawn_cell_x": 22,
+          "spawn_cell_z": 41,
+          "goal_cell_x": 30,
+          "goal_cell_z": 14,
+          "path_len_cells": 47
+        }
+      ]
+    },
+    {
+      "scenario_id": 24,
+      "map_index": 24,
+      "map_file": "curved_425.txt",
+      "minimum_endpoint_separation_m": 33.0,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -30.75,
+          "spawn_z": -42.75,
+          "goal_x": 39.75,
+          "goal_z": 45.75,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 12,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 59,
+          "goal_cell_z": 63,
+          "path_len_cells": 106
+        },
+        {
+          "spawn_x": 0.75,
+          "spawn_z": -18.75,
+          "goal_x": 0.75,
+          "goal_z": 14.25,
+          "heading_deg": 90.0,
+          "spawn_cell_x": 33,
+          "spawn_cell_z": 20,
+          "goal_cell_x": 33,
+          "goal_cell_z": 42,
+          "path_len_cells": 42
+        },
+        {
+          "spawn_x": 21.75,
+          "spawn_z": -44.25,
+          "goal_x": -21.75,
+          "goal_z": 44.25,
+          "heading_deg": 347.7780226097917,
+          "spawn_cell_x": 47,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 18,
+          "goal_cell_z": 62,
+          "path_len_cells": 90
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -15.75,
+          "goal_x": -45.75,
+          "goal_z": 0.75,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 22,
+          "goal_cell_x": 2,
+          "goal_cell_z": 33,
+          "path_len_cells": 80
+        }
+      ]
+    },
+    {
+      "scenario_id": 25,
+      "map_index": 25,
+      "map_file": "curved_426.txt",
+      "minimum_endpoint_separation_m": 36.249,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -3.75,
+          "spawn_z": -3.75,
+          "goal_x": 45.75,
+          "goal_z": 45.75,
+          "heading_deg": 91.89247321074241,
+          "spawn_cell_x": 30,
+          "spawn_cell_z": 30,
+          "goal_cell_x": 63,
+          "goal_cell_z": 63,
+          "path_len_cells": 66
+        },
+        {
+          "spawn_x": -6.75,
+          "spawn_z": -45.75,
+          "goal_x": 3.75,
+          "goal_z": 44.25,
+          "heading_deg": 38.867613136053805,
+          "spawn_cell_x": 28,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 35,
+          "goal_cell_z": 62,
+          "path_len_cells": 87
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -26.25,
+          "goal_x": -45.75,
+          "goal_z": 38.25,
+          "heading_deg": 322.7620554983771,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 15,
+          "goal_cell_x": 2,
+          "goal_cell_z": 58,
+          "path_len_cells": 104
+        },
+        {
+          "spawn_x": 29.25,
+          "spawn_z": 11.25,
+          "goal_x": -42.75,
+          "goal_z": -3.75,
+          "heading_deg": 261.32298768186934,
+          "spawn_cell_x": 52,
+          "spawn_cell_z": 40,
+          "goal_cell_x": 4,
+          "goal_cell_z": 30,
+          "path_len_cells": 68
+        }
+      ]
+    },
+    {
+      "scenario_id": 26,
+      "map_index": 26,
+      "map_file": "curved_427.txt",
+      "minimum_endpoint_separation_m": 33.204,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -44.25,
+          "goal_x": -45.75,
+          "goal_z": 14.25,
+          "heading_deg": 322.7620554983771,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 2,
+          "goal_cell_z": 42,
+          "path_len_cells": 100
+        },
+        {
+          "spawn_x": 24.75,
+          "spawn_z": -2.25,
+          "goal_x": -20.25,
+          "goal_z": -9.75,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 49,
+          "spawn_cell_z": 31,
+          "goal_cell_x": 19,
+          "goal_cell_z": 26,
+          "path_len_cells": 51
+        },
+        {
+          "spawn_x": 24.75,
+          "spawn_z": 41.25,
+          "goal_x": -45.75,
+          "goal_z": -45.75,
+          "heading_deg": 153.43494882292197,
+          "spawn_cell_x": 49,
+          "spawn_cell_z": 60,
+          "goal_cell_x": 2,
+          "goal_cell_z": 2,
+          "path_len_cells": 107
+        },
+        {
+          "spawn_x": -21.75,
+          "spawn_z": 42.75,
+          "goal_x": 14.25,
+          "goal_z": -33.75,
+          "heading_deg": 150.71478280741925,
+          "spawn_cell_x": 18,
+          "spawn_cell_z": 61,
+          "goal_cell_x": 42,
+          "goal_cell_z": 10,
+          "path_len_cells": 81
+        }
+      ]
+    },
+    {
+      "scenario_id": 27,
+      "map_index": 27,
+      "map_file": "curved_428.txt",
+      "minimum_endpoint_separation_m": 34.63,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -45.75,
+          "spawn_z": -30.75,
+          "goal_x": 45.75,
+          "goal_z": 20.25,
+          "heading_deg": 125.78252558853899,
+          "spawn_cell_x": 2,
+          "spawn_cell_z": 12,
+          "goal_cell_x": 63,
+          "goal_cell_z": 46,
+          "path_len_cells": 95
+        },
+        {
+          "spawn_x": -9.75,
+          "spawn_z": -41.25,
+          "goal_x": 6.75,
+          "goal_z": 41.25,
+          "heading_deg": 342.65242323438304,
+          "spawn_cell_x": 26,
+          "spawn_cell_z": 5,
+          "goal_cell_x": 37,
+          "goal_cell_z": 60,
+          "path_len_cells": 76
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -27.75,
+          "goal_x": -30.75,
+          "goal_z": 39.75,
+          "heading_deg": 261.4486355154738,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 14,
+          "goal_cell_x": 12,
+          "goal_cell_z": 59,
+          "path_len_cells": 106
+        },
+        {
+          "spawn_x": 6.75,
+          "spawn_z": -2.25,
+          "goal_x": -41.25,
+          "goal_z": 6.75,
+          "heading_deg": 231.1323868639462,
+          "spawn_cell_x": 37,
+          "spawn_cell_z": 31,
+          "goal_cell_x": 5,
+          "goal_cell_z": 37,
+          "path_len_cells": 64
+        }
+      ]
+    },
+    {
+      "scenario_id": 28,
+      "map_index": 28,
+      "map_file": "curved_429.txt",
+      "minimum_endpoint_separation_m": 28.853,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -5.25,
+          "goal_x": -32.25,
+          "goal_z": 8.25,
+          "heading_deg": 246.4394518016693,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 29,
+          "goal_cell_x": 11,
+          "goal_cell_z": 38,
+          "path_len_cells": 75
+        },
+        {
+          "spawn_x": 12.75,
+          "spawn_z": 45.75,
+          "goal_x": -44.25,
+          "goal_z": -26.25,
+          "heading_deg": 221.11741699078735,
+          "spawn_cell_x": 41,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 3,
+          "goal_cell_z": 15,
+          "path_len_cells": 86
+        },
+        {
+          "spawn_x": -6.75,
+          "spawn_z": 21.75,
+          "goal_x": -2.25,
+          "goal_z": -6.75,
+          "heading_deg": 102.22197739020827,
+          "spawn_cell_x": 28,
+          "spawn_cell_z": 47,
+          "goal_cell_x": 31,
+          "goal_cell_z": 28,
+          "path_len_cells": 26
+        },
+        {
+          "spawn_x": -27.75,
+          "spawn_z": 42.75,
+          "goal_x": 20.25,
+          "goal_z": -42.75,
+          "heading_deg": 142.76205549837712,
+          "spawn_cell_x": 14,
+          "spawn_cell_z": 61,
+          "goal_cell_x": 46,
+          "goal_cell_z": 4,
+          "path_len_cells": 89
+        }
+      ]
+    },
+    {
+      "scenario_id": 29,
+      "map_index": 29,
+      "map_file": "curved_430.txt",
+      "minimum_endpoint_separation_m": 38.331,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 44.25,
+          "spawn_z": 9.75,
+          "goal_x": -45.75,
+          "goal_z": 0.75,
+          "heading_deg": 183.33488421716268,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 39,
+          "goal_cell_x": 2,
+          "goal_cell_z": 33,
+          "path_len_cells": 88
+        },
+        {
+          "spawn_x": 24.75,
+          "spawn_z": 42.75,
+          "goal_x": -29.25,
+          "goal_z": -45.75,
+          "heading_deg": 296.565051177078,
+          "spawn_cell_x": 49,
+          "spawn_cell_z": 61,
+          "goal_cell_x": 13,
+          "goal_cell_z": 2,
+          "path_len_cells": 95
+        },
+        {
+          "spawn_x": -3.75,
+          "spawn_z": 14.25,
+          "goal_x": 5.25,
+          "goal_z": -26.25,
+          "heading_deg": 127.23794450162288,
+          "spawn_cell_x": 30,
+          "spawn_cell_z": 42,
+          "goal_cell_x": 36,
+          "goal_cell_z": 15,
+          "path_len_cells": 37
+        },
+        {
+          "spawn_x": -26.25,
+          "spawn_z": 45.75,
+          "goal_x": 38.25,
+          "goal_z": -45.75,
+          "heading_deg": 142.76205549837712,
+          "spawn_cell_x": 15,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 58,
+          "goal_cell_z": 2,
+          "path_len_cells": 108
+        }
+      ]
+    },
+    {
+      "scenario_id": 30,
+      "map_index": 30,
+      "map_file": "curved_431.txt",
+      "minimum_endpoint_separation_m": 32.898,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 2.25,
+          "spawn_z": -42.75,
+          "goal_x": 18.75,
+          "goal_z": 45.75,
+          "heading_deg": 37.23794450162288,
+          "spawn_cell_x": 34,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 45,
+          "goal_cell_z": 63,
+          "path_len_cells": 72
+        },
+        {
+          "spawn_x": 15.75,
+          "spawn_z": -12.75,
+          "goal_x": -0.75,
+          "goal_z": 15.75,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 43,
+          "spawn_cell_z": 24,
+          "goal_cell_x": 32,
+          "goal_cell_z": 43,
+          "path_len_cells": 34
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -26.25,
+          "goal_x": -36.75,
+          "goal_z": 44.25,
+          "heading_deg": 300.1275593515289,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 15,
+          "goal_cell_x": 8,
+          "goal_cell_z": 62,
+          "path_len_cells": 102
+        },
+        {
+          "spawn_x": 41.25,
+          "spawn_z": 18.75,
+          "goal_x": -36.75,
+          "goal_z": -9.75,
+          "heading_deg": 283.282525588539,
+          "spawn_cell_x": 60,
+          "spawn_cell_z": 45,
+          "goal_cell_x": 8,
+          "goal_cell_z": 26,
+          "path_len_cells": 73
+        }
+      ]
+    },
+    {
+      "scenario_id": 31,
+      "map_index": 31,
+      "map_file": "curved_432.txt",
+      "minimum_endpoint_separation_m": 34.205,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 24.75,
+          "spawn_z": -42.75,
+          "goal_x": -30.75,
+          "goal_z": 44.25,
+          "heading_deg": 24.1832303317149,
+          "spawn_cell_x": 49,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 12,
+          "goal_cell_z": 62,
+          "path_len_cells": 125
+        },
+        {
+          "spawn_x": 23.25,
+          "spawn_z": -5.25,
+          "goal_x": -20.25,
+          "goal_z": 5.25,
+          "heading_deg": 271.8924732107424,
+          "spawn_cell_x": 48,
+          "spawn_cell_z": 29,
+          "goal_cell_x": 19,
+          "goal_cell_z": 36,
+          "path_len_cells": 56
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 27.75,
+          "goal_x": -45.75,
+          "goal_z": -23.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 51,
+          "goal_cell_x": 2,
+          "goal_cell_z": 17,
+          "path_len_cells": 99
+        },
+        {
+          "spawn_x": 8.25,
+          "spawn_z": 32.25,
+          "goal_x": -18.75,
+          "goal_z": -44.25,
+          "heading_deg": 234.217474411461,
+          "spawn_cell_x": 38,
+          "spawn_cell_z": 54,
+          "goal_cell_x": 20,
+          "goal_cell_z": 3,
+          "path_len_cells": 71
+        }
+      ]
+    },
+    {
+      "scenario_id": 32,
+      "map_index": 32,
+      "map_file": "curved_433.txt",
+      "minimum_endpoint_separation_m": 27.372,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 41.25,
+          "spawn_z": -17.25,
+          "goal_x": -30.75,
+          "goal_z": 17.25,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 60,
+          "spawn_cell_z": 21,
+          "goal_cell_x": 12,
+          "goal_cell_z": 44,
+          "path_len_cells": 73
+        },
+        {
+          "spawn_x": 15.75,
+          "spawn_z": 3.75,
+          "goal_x": -33.75,
+          "goal_z": -45.75,
+          "heading_deg": 245.81676966828508,
+          "spawn_cell_x": 43,
+          "spawn_cell_z": 35,
+          "goal_cell_x": 10,
+          "goal_cell_z": 2,
+          "path_len_cells": 68
+        },
+        {
+          "spawn_x": 20.25,
+          "spawn_z": 30.75,
+          "goal_x": -5.25,
+          "goal_z": -15.75,
+          "heading_deg": 128.95262146149395,
+          "spawn_cell_x": 46,
+          "spawn_cell_z": 53,
+          "goal_cell_x": 29,
+          "goal_cell_z": 22,
+          "path_len_cells": 60
+        },
+        {
+          "spawn_x": -8.25,
+          "spawn_z": 35.25,
+          "goal_x": 14.25,
+          "goal_z": -44.25,
+          "heading_deg": 76.71747441146101,
+          "spawn_cell_x": 27,
+          "spawn_cell_z": 56,
+          "goal_cell_x": 42,
+          "goal_cell_z": 3,
+          "path_len_cells": 68
+        }
+      ]
+    },
+    {
+      "scenario_id": 33,
+      "map_index": 33,
+      "map_file": "curved_434.txt",
+      "minimum_endpoint_separation_m": 31.536,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 29.25,
+          "spawn_z": -15.75,
+          "goal_x": -45.75,
+          "goal_z": 8.25,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 52,
+          "spawn_cell_z": 22,
+          "goal_cell_x": 2,
+          "goal_cell_z": 38,
+          "path_len_cells": 80
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 26.25,
+          "goal_x": -35.25,
+          "goal_z": -45.75,
+          "heading_deg": 308.95262146149395,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 50,
+          "goal_cell_x": 9,
+          "goal_cell_z": 2,
+          "path_len_cells": 104
+        },
+        {
+          "spawn_x": 8.25,
+          "spawn_z": 9.75,
+          "goal_x": -12.75,
+          "goal_z": -20.25,
+          "heading_deg": 180.0,
+          "spawn_cell_x": 38,
+          "spawn_cell_z": 39,
+          "goal_cell_x": 24,
+          "goal_cell_z": 19,
+          "path_len_cells": 34
+        },
+        {
+          "spawn_x": -9.75,
+          "spawn_z": 36.75,
+          "goal_x": 15.75,
+          "goal_z": -44.25,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 26,
+          "spawn_cell_z": 57,
+          "goal_cell_x": 43,
+          "goal_cell_z": 3,
+          "path_len_cells": 93
+        }
+      ]
+    },
+    {
+      "scenario_id": 34,
+      "map_index": 34,
+      "map_file": "curved_435.txt",
+      "minimum_endpoint_separation_m": 31.643,
+      "overlapping_route_pairs": 5,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -45.75,
+          "spawn_z": -8.25,
+          "goal_x": 36.75,
+          "goal_z": 8.25,
+          "heading_deg": 120.12755935152889,
+          "spawn_cell_x": 2,
+          "spawn_cell_z": 27,
+          "goal_cell_x": 57,
+          "goal_cell_z": 38,
+          "path_len_cells": 66
+        },
+        {
+          "spawn_x": -26.25,
+          "spawn_z": -45.75,
+          "goal_x": 21.75,
+          "goal_z": 41.25,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 15,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 47,
+          "goal_cell_z": 60,
+          "path_len_cells": 96
+        },
+        {
+          "spawn_x": -3.75,
+          "spawn_z": -8.25,
+          "goal_x": -14.25,
+          "goal_z": 32.25,
+          "heading_deg": 261.4486355154738,
+          "spawn_cell_x": 30,
+          "spawn_cell_z": 27,
+          "goal_cell_x": 23,
+          "goal_cell_z": 54,
+          "path_len_cells": 46
+        },
+        {
+          "spawn_x": 27.75,
+          "spawn_z": -45.75,
+          "goal_x": -45.75,
+          "goal_z": 35.25,
+          "heading_deg": 322.76205549837715,
+          "spawn_cell_x": 51,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 2,
+          "goal_cell_z": 56,
+          "path_len_cells": 129
+        }
+      ]
+    },
+    {
+      "scenario_id": 35,
+      "map_index": 35,
+      "map_file": "curved_436.txt",
+      "minimum_endpoint_separation_m": 31.5,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -17.25,
+          "goal_x": -45.75,
+          "goal_z": 45.75,
+          "heading_deg": 245.8167696682851,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 21,
+          "goal_cell_x": 2,
+          "goal_cell_z": 63,
+          "path_len_cells": 103
+        },
+        {
+          "spawn_x": 35.25,
+          "spawn_z": 14.25,
+          "goal_x": -32.25,
+          "goal_z": 8.25,
+          "heading_deg": 324.217474411461,
+          "spawn_cell_x": 56,
+          "spawn_cell_z": 42,
+          "goal_cell_x": 11,
+          "goal_cell_z": 38,
+          "path_len_cells": 67
+        },
+        {
+          "spawn_x": 35.25,
+          "spawn_z": 45.75,
+          "goal_x": -35.25,
+          "goal_z": -45.75,
+          "heading_deg": 231.04737853850605,
+          "spawn_cell_x": 56,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 9,
+          "goal_cell_z": 2,
+          "path_len_cells": 108
+        },
+        {
+          "spawn_x": -5.25,
+          "spawn_z": 44.25,
+          "goal_x": 0.75,
+          "goal_z": -18.75,
+          "heading_deg": 147.38757028441594,
+          "spawn_cell_x": 29,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 33,
+          "goal_cell_z": 20,
+          "path_len_cells": 64
+        }
+      ]
+    },
+    {
+      "scenario_id": 36,
+      "map_index": 36,
+      "map_file": "curved_437.txt",
+      "minimum_endpoint_separation_m": 31.536,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 24.75,
+          "spawn_z": -21.75,
+          "goal_x": -41.25,
+          "goal_z": 21.75,
+          "heading_deg": 335.8167696682851,
+          "spawn_cell_x": 49,
+          "spawn_cell_z": 18,
+          "goal_cell_x": 5,
+          "goal_cell_z": 47,
+          "path_len_cells": 83
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": 9.75,
+          "goal_x": -45.75,
+          "goal_z": -18.75,
+          "heading_deg": 256.717474411461,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 39,
+          "goal_cell_x": 2,
+          "goal_cell_z": 20,
+          "path_len_cells": 90
+        },
+        {
+          "spawn_x": 2.25,
+          "spawn_z": 45.75,
+          "goal_x": -3.75,
+          "goal_z": -35.25,
+          "heading_deg": 204.1832303317149,
+          "spawn_cell_x": 34,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 30,
+          "goal_cell_z": 9,
+          "path_len_cells": 74
+        },
+        {
+          "spawn_x": -3.75,
+          "spawn_z": 9.75,
+          "goal_x": 45.75,
+          "goal_z": -45.75,
+          "heading_deg": 90.0,
+          "spawn_cell_x": 30,
+          "spawn_cell_z": 39,
+          "goal_cell_x": 63,
+          "goal_cell_z": 2,
+          "path_len_cells": 80
+        }
+      ]
+    },
+    {
+      "scenario_id": 37,
+      "map_index": 37,
+      "map_file": "curved_438.txt",
+      "minimum_endpoint_separation_m": 33.541,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 21.75,
+          "spawn_z": -44.25,
+          "goal_x": -27.75,
+          "goal_z": 42.75,
+          "heading_deg": 45.0,
+          "spawn_cell_x": 47,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 14,
+          "goal_cell_z": 61,
+          "path_len_cells": 93
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -3.75,
+          "goal_x": -42.75,
+          "goal_z": 12.75,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 30,
+          "goal_cell_x": 4,
+          "goal_cell_z": 41,
+          "path_len_cells": 77
+        },
+        {
+          "spawn_x": 30.75,
+          "spawn_z": 44.25,
+          "goal_x": -42.75,
+          "goal_z": -36.75,
+          "heading_deg": 167.77802260979175,
+          "spawn_cell_x": 53,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 4,
+          "goal_cell_z": 8,
+          "path_len_cells": 109
+        },
+        {
+          "spawn_x": 2.25,
+          "spawn_z": 17.25,
+          "goal_x": -6.75,
+          "goal_z": -17.25,
+          "heading_deg": 106.00269160404173,
+          "spawn_cell_x": 34,
+          "spawn_cell_z": 44,
+          "goal_cell_x": 28,
+          "goal_cell_z": 21,
+          "path_len_cells": 29
+        }
+      ]
+    },
+    {
+      "scenario_id": 38,
+      "map_index": 38,
+      "map_file": "curved_439.txt",
+      "minimum_endpoint_separation_m": 29.125,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 42.75,
+          "spawn_z": -15.75,
+          "goal_x": -45.75,
+          "goal_z": 21.75,
+          "heading_deg": 300.1275593515289,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 22,
+          "goal_cell_x": 2,
+          "goal_cell_z": 47,
+          "path_len_cells": 94
+        },
+        {
+          "spawn_x": 26.25,
+          "spawn_z": 8.25,
+          "goal_x": -24.75,
+          "goal_z": -6.75,
+          "heading_deg": 218.95262146149395,
+          "spawn_cell_x": 50,
+          "spawn_cell_z": 38,
+          "goal_cell_x": 16,
+          "goal_cell_z": 28,
+          "path_len_cells": 52
+        },
+        {
+          "spawn_x": 36.75,
+          "spawn_z": 41.25,
+          "goal_x": -21.75,
+          "goal_z": -45.75,
+          "heading_deg": 281.7266599165517,
+          "spawn_cell_x": 57,
+          "spawn_cell_z": 60,
+          "goal_cell_x": 18,
+          "goal_cell_z": 2,
+          "path_len_cells": 97
+        },
+        {
+          "spawn_x": -5.25,
+          "spawn_z": 38.25,
+          "goal_x": 5.25,
+          "goal_z": -21.75,
+          "heading_deg": 90.00000000000001,
+          "spawn_cell_x": 29,
+          "spawn_cell_z": 58,
+          "goal_cell_x": 36,
+          "goal_cell_z": 18,
+          "path_len_cells": 57
+        }
+      ]
+    },
+    {
+      "scenario_id": 39,
+      "map_index": 39,
+      "map_file": "curved_440.txt",
+      "minimum_endpoint_separation_m": 34.792,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -44.25,
+          "spawn_z": -39.75,
+          "goal_x": 45.75,
+          "goal_z": 11.25,
+          "heading_deg": 41.11741699078734,
+          "spawn_cell_x": 3,
+          "spawn_cell_z": 6,
+          "goal_cell_x": 63,
+          "goal_cell_z": 40,
+          "path_len_cells": 94
+        },
+        {
+          "spawn_x": -9.75,
+          "spawn_z": -44.25,
+          "goal_x": 3.75,
+          "goal_z": 27.75,
+          "heading_deg": 30.47269795046143,
+          "spawn_cell_x": 26,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 35,
+          "goal_cell_z": 51,
+          "path_len_cells": 65
+        },
+        {
+          "spawn_x": 29.25,
+          "spawn_z": -45.75,
+          "goal_x": -35.25,
+          "goal_z": 41.25,
+          "heading_deg": 347.7780226097917,
+          "spawn_cell_x": 52,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 9,
+          "goal_cell_z": 60,
+          "path_len_cells": 101
+        },
+        {
+          "spawn_x": 14.25,
+          "spawn_z": -9.75,
+          "goal_x": -32.25,
+          "goal_z": 0.75,
+          "heading_deg": 261.32298768186934,
+          "spawn_cell_x": 42,
+          "spawn_cell_z": 26,
+          "goal_cell_x": 11,
+          "goal_cell_z": 33,
+          "path_len_cells": 40
+        }
+      ]
+    },
+    {
+      "scenario_id": 40,
+      "map_index": 40,
+      "map_file": "curved_441.txt",
+      "minimum_endpoint_separation_m": 31.321,
+      "overlapping_route_pairs": 5,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -44.25,
+          "spawn_z": -0.75,
+          "goal_x": 45.75,
+          "goal_z": 9.75,
+          "heading_deg": 90.0,
+          "spawn_cell_x": 3,
+          "spawn_cell_z": 32,
+          "goal_cell_x": 63,
+          "goal_cell_z": 39,
+          "path_len_cells": 97
+        },
+        {
+          "spawn_x": -14.25,
+          "spawn_z": -9.75,
+          "goal_x": 33.75,
+          "goal_z": 42.75,
+          "heading_deg": 30.12755935152889,
+          "spawn_cell_x": 23,
+          "spawn_cell_z": 26,
+          "goal_cell_x": 55,
+          "goal_cell_z": 61,
+          "path_len_cells": 67
+        },
+        {
+          "spawn_x": -6.75,
+          "spawn_z": -45.75,
+          "goal_x": 3.75,
+          "goal_z": 20.25,
+          "heading_deg": 342.652423234383,
+          "spawn_cell_x": 28,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 35,
+          "goal_cell_z": 46,
+          "path_len_cells": 67
+        },
+        {
+          "spawn_x": 17.25,
+          "spawn_z": -17.25,
+          "goal_x": -41.25,
+          "goal_z": 36.75,
+          "heading_deg": 231.1323868639462,
+          "spawn_cell_x": 44,
+          "spawn_cell_z": 21,
+          "goal_cell_x": 5,
+          "goal_cell_z": 57,
+          "path_len_cells": 91
+        }
+      ]
+    },
+    {
+      "scenario_id": 41,
+      "map_index": 41,
+      "map_file": "curved_442.txt",
+      "minimum_endpoint_separation_m": 30.594,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 15.75,
+          "spawn_z": -0.75,
+          "goal_x": -45.75,
+          "goal_z": 32.25,
+          "heading_deg": 351.4486355154738,
+          "spawn_cell_x": 43,
+          "spawn_cell_z": 32,
+          "goal_cell_x": 2,
+          "goal_cell_z": 54,
+          "path_len_cells": 69
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": 14.25,
+          "goal_x": -18.75,
+          "goal_z": 5.25,
+          "heading_deg": 300.1275593515289,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 42,
+          "goal_cell_x": 20,
+          "goal_cell_z": 36,
+          "path_len_cells": 53
+        },
+        {
+          "spawn_x": 29.25,
+          "spawn_z": 44.25,
+          "goal_x": -24.75,
+          "goal_z": -24.75,
+          "heading_deg": 217.23794450162288,
+          "spawn_cell_x": 52,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 16,
+          "goal_cell_z": 16,
+          "path_len_cells": 82
+        },
+        {
+          "spawn_x": -6.75,
+          "spawn_z": 33.75,
+          "goal_x": 33.75,
+          "goal_z": -41.25,
+          "heading_deg": 228.88258300921268,
+          "spawn_cell_x": 28,
+          "spawn_cell_z": 55,
+          "goal_cell_x": 55,
+          "goal_cell_z": 5,
+          "path_len_cells": 77
+        }
+      ]
+    },
+    {
+      "scenario_id": 42,
+      "map_index": 42,
+      "map_file": "curved_443.txt",
+      "minimum_endpoint_separation_m": 33.305,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 12.75,
+          "spawn_z": -44.25,
+          "goal_x": -3.75,
+          "goal_z": 35.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 41,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 30,
+          "goal_cell_z": 56,
+          "path_len_cells": 64
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -39.75,
+          "goal_x": -42.75,
+          "goal_z": 3.75,
+          "heading_deg": 322.7620554983771,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 6,
+          "goal_cell_x": 4,
+          "goal_cell_z": 35,
+          "path_len_cells": 90
+        },
+        {
+          "spawn_x": 41.25,
+          "spawn_z": 11.25,
+          "goal_x": 0.75,
+          "goal_z": -9.75,
+          "heading_deg": 256.717474411461,
+          "spawn_cell_x": 60,
+          "spawn_cell_z": 40,
+          "goal_cell_x": 33,
+          "goal_cell_z": 26,
+          "path_len_cells": 41
+        },
+        {
+          "spawn_x": 33.75,
+          "spawn_z": 44.25,
+          "goal_x": -29.25,
+          "goal_z": -42.75,
+          "heading_deg": 221.11741699078735,
+          "spawn_cell_x": 55,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 13,
+          "goal_cell_z": 4,
+          "path_len_cells": 100
+        }
+      ]
+    },
+    {
+      "scenario_id": 43,
+      "map_index": 43,
+      "map_file": "curved_444.txt",
+      "minimum_endpoint_separation_m": 32.932,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -42.75,
+          "spawn_z": -11.25,
+          "goal_x": 45.75,
+          "goal_z": 36.75,
+          "heading_deg": 54.99155326094999,
+          "spawn_cell_x": 4,
+          "spawn_cell_z": 25,
+          "goal_cell_x": 63,
+          "goal_cell_z": 57,
+          "path_len_cells": 91
+        },
+        {
+          "spawn_x": -8.25,
+          "spawn_z": -24.75,
+          "goal_x": -0.75,
+          "goal_z": 41.25,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 27,
+          "spawn_cell_z": 16,
+          "goal_cell_x": 32,
+          "goal_cell_z": 60,
+          "path_len_cells": 61
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -12.75,
+          "goal_x": -45.75,
+          "goal_z": 30.75,
+          "heading_deg": 257.7780226097917,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 24,
+          "goal_cell_x": 2,
+          "goal_cell_z": 53,
+          "path_len_cells": 89
+        },
+        {
+          "spawn_x": 17.25,
+          "spawn_z": 9.75,
+          "goal_x": -17.25,
+          "goal_z": 12.75,
+          "heading_deg": 219.79141962317362,
+          "spawn_cell_x": 44,
+          "spawn_cell_z": 39,
+          "goal_cell_x": 21,
+          "goal_cell_z": 41,
+          "path_len_cells": 39
+        }
+      ]
+    },
+    {
+      "scenario_id": 44,
+      "map_index": 44,
+      "map_file": "curved_445.txt",
+      "minimum_endpoint_separation_m": 33.541,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 15.75,
+          "spawn_z": -45.75,
+          "goal_x": -12.75,
+          "goal_z": 29.25,
+          "heading_deg": 4.3371200201775234e-15,
+          "spawn_cell_x": 43,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 24,
+          "goal_cell_z": 52,
+          "path_len_cells": 71
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -15.75,
+          "goal_x": -45.75,
+          "goal_z": 23.25,
+          "heading_deg": 232.76205549837715,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 22,
+          "goal_cell_x": 2,
+          "goal_cell_z": 48,
+          "path_len_cells": 101
+        },
+        {
+          "spawn_x": 23.25,
+          "spawn_z": 12.75,
+          "goal_x": -45.75,
+          "goal_z": -29.25,
+          "heading_deg": 278.5513644845262,
+          "spawn_cell_x": 48,
+          "spawn_cell_z": 41,
+          "goal_cell_x": 2,
+          "goal_cell_z": 13,
+          "path_len_cells": 74
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 41.25,
+          "goal_x": -9.75,
+          "goal_z": -11.25,
+          "heading_deg": 180.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 60,
+          "goal_cell_x": 26,
+          "goal_cell_z": 25,
+          "path_len_cells": 72
+        }
+      ]
+    },
+    {
+      "scenario_id": 45,
+      "map_index": 45,
+      "map_file": "curved_446.txt",
+      "minimum_endpoint_separation_m": 28.657,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -0.75,
+          "spawn_z": -41.25,
+          "goal_x": 21.75,
+          "goal_z": 23.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 32,
+          "spawn_cell_z": 5,
+          "goal_cell_x": 47,
+          "goal_cell_z": 48,
+          "path_len_cells": 74
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -33.75,
+          "goal_x": -39.75,
+          "goal_z": 27.75,
+          "heading_deg": 333.434948822922,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 10,
+          "goal_cell_x": 6,
+          "goal_cell_z": 51,
+          "path_len_cells": 102
+        },
+        {
+          "spawn_x": 23.25,
+          "spawn_z": -8.25,
+          "goal_x": -11.25,
+          "goal_z": 2.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 48,
+          "spawn_cell_z": 27,
+          "goal_cell_x": 25,
+          "goal_cell_z": 34,
+          "path_len_cells": 34
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": 42.75,
+          "goal_x": -42.75,
+          "goal_z": -21.75,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 61,
+          "goal_cell_x": 4,
+          "goal_cell_z": 18,
+          "path_len_cells": 100
+        }
+      ]
+    },
+    {
+      "scenario_id": 46,
+      "map_index": 46,
+      "map_file": "curved_447.txt",
+      "minimum_endpoint_separation_m": 32.381,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 41.25,
+          "spawn_z": -44.25,
+          "goal_x": -42.75,
+          "goal_z": 24.75,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 60,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 4,
+          "goal_cell_z": 49,
+          "path_len_cells": 106
+        },
+        {
+          "spawn_x": 27.75,
+          "spawn_z": -3.75,
+          "goal_x": -44.25,
+          "goal_z": -14.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 51,
+          "spawn_cell_z": 30,
+          "goal_cell_x": 3,
+          "goal_cell_z": 23,
+          "path_len_cells": 67
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": 38.25,
+          "goal_x": -12.75,
+          "goal_z": -6.75,
+          "heading_deg": 238.282525588539,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 58,
+          "goal_cell_x": 24,
+          "goal_cell_z": 28,
+          "path_len_cells": 70
+        },
+        {
+          "spawn_x": -2.25,
+          "spawn_z": 41.25,
+          "goal_x": 0.75,
+          "goal_z": -45.75,
+          "heading_deg": 218.86761313605382,
+          "spawn_cell_x": 31,
+          "spawn_cell_z": 60,
+          "goal_cell_x": 33,
+          "goal_cell_z": 2,
+          "path_len_cells": 80
+        }
+      ]
+    },
+    {
+      "scenario_id": 47,
+      "map_index": 47,
+      "map_file": "curved_448.txt",
+      "minimum_endpoint_separation_m": 32.381,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -44.25,
+          "spawn_z": -21.75,
+          "goal_x": 42.75,
+          "goal_z": 12.75,
+          "heading_deg": 114.1832303317149,
+          "spawn_cell_x": 3,
+          "spawn_cell_z": 18,
+          "goal_cell_x": 61,
+          "goal_cell_z": 41,
+          "path_len_cells": 83
+        },
+        {
+          "spawn_x": -9.75,
+          "spawn_z": -42.75,
+          "goal_x": 35.25,
+          "goal_z": 44.25,
+          "heading_deg": 66.43945180166928,
+          "spawn_cell_x": 26,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 56,
+          "goal_cell_z": 62,
+          "path_len_cells": 98
+        },
+        {
+          "spawn_x": 3.75,
+          "spawn_z": -3.75,
+          "goal_x": -2.25,
+          "goal_z": 36.75,
+          "heading_deg": 294.1832303317149,
+          "spawn_cell_x": 35,
+          "spawn_cell_z": 30,
+          "goal_cell_x": 31,
+          "goal_cell_z": 57,
+          "path_len_cells": 31
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": -42.75,
+          "goal_x": -44.25,
+          "goal_z": 42.75,
+          "heading_deg": 305.00844673905,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 3,
+          "goal_cell_z": 61,
+          "path_len_cells": 115
+        }
+      ]
+    },
+    {
+      "scenario_id": 48,
+      "map_index": 48,
+      "map_file": "curved_449.txt",
+      "minimum_endpoint_separation_m": 32.898,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -45.75,
+          "spawn_z": -14.25,
+          "goal_x": 42.75,
+          "goal_z": 42.75,
+          "heading_deg": 54.99155326094999,
+          "spawn_cell_x": 2,
+          "spawn_cell_z": 23,
+          "goal_cell_x": 61,
+          "goal_cell_z": 61,
+          "path_len_cells": 103
+        },
+        {
+          "spawn_x": -3.75,
+          "spawn_z": -39.75,
+          "goal_x": 5.25,
+          "goal_z": 30.75,
+          "heading_deg": 24.183230331714906,
+          "spawn_cell_x": 30,
+          "spawn_cell_z": 6,
+          "goal_cell_x": 36,
+          "goal_cell_z": 53,
+          "path_len_cells": 65
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -39.75,
+          "goal_x": -45.75,
+          "goal_z": 35.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 6,
+          "goal_cell_x": 2,
+          "goal_cell_z": 56,
+          "path_len_cells": 116
+        },
+        {
+          "spawn_x": 39.75,
+          "spawn_z": 2.25,
+          "goal_x": -23.25,
+          "goal_z": 9.75,
+          "heading_deg": 308.8676131360538,
+          "spawn_cell_x": 59,
+          "spawn_cell_z": 34,
+          "goal_cell_x": 17,
+          "goal_cell_z": 39,
+          "path_len_cells": 53
+        }
+      ]
+    },
+    {
+      "scenario_id": 49,
+      "map_index": 49,
+      "map_file": "curved_450.txt",
+      "minimum_endpoint_separation_m": 29.547,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 5.25,
+          "spawn_z": -32.25,
+          "goal_x": -45.75,
+          "goal_z": 38.25,
+          "heading_deg": 290.9807165094141,
+          "spawn_cell_x": 36,
+          "spawn_cell_z": 11,
+          "goal_cell_x": 2,
+          "goal_cell_z": 58,
+          "path_len_cells": 81
+        },
+        {
+          "spawn_x": 38.25,
+          "spawn_z": -6.75,
+          "goal_x": -30.75,
+          "goal_z": 5.25,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 58,
+          "spawn_cell_z": 28,
+          "goal_cell_x": 12,
+          "goal_cell_z": 36,
+          "path_len_cells": 60
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": 35.25,
+          "goal_x": -45.75,
+          "goal_z": -26.25,
+          "heading_deg": 282.2219773902083,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 56,
+          "goal_cell_x": 2,
+          "goal_cell_z": 15,
+          "path_len_cells": 100
+        },
+        {
+          "spawn_x": -2.25,
+          "spawn_z": 29.25,
+          "goal_x": -21.75,
+          "goal_z": -44.25,
+          "heading_deg": 234.217474411461,
+          "spawn_cell_x": 31,
+          "spawn_cell_z": 52,
+          "goal_cell_x": 18,
+          "goal_cell_z": 3,
+          "path_len_cells": 86
+        }
+      ]
+    },
+    {
+      "scenario_id": 50,
+      "map_index": 50,
+      "map_file": "curved_451.txt",
+      "minimum_endpoint_separation_m": 34.63,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -44.25,
+          "spawn_z": -26.25,
+          "goal_x": 45.75,
+          "goal_z": 29.25,
+          "heading_deg": 77.77802260979175,
+          "spawn_cell_x": 3,
+          "spawn_cell_z": 15,
+          "goal_cell_x": 63,
+          "goal_cell_z": 52,
+          "path_len_cells": 97
+        },
+        {
+          "spawn_x": -8.25,
+          "spawn_z": -39.75,
+          "goal_x": 2.25,
+          "goal_z": 42.75,
+          "heading_deg": 59.87244064847111,
+          "spawn_cell_x": 27,
+          "spawn_cell_z": 6,
+          "goal_cell_x": 34,
+          "goal_cell_z": 61,
+          "path_len_cells": 76
+        },
+        {
+          "spawn_x": 32.25,
+          "spawn_z": -45.75,
+          "goal_x": -0.75,
+          "goal_z": 8.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 54,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 32,
+          "goal_cell_z": 38,
+          "path_len_cells": 62
+        },
+        {
+          "spawn_x": 35.25,
+          "spawn_z": -8.25,
+          "goal_x": -44.25,
+          "goal_z": 32.25,
+          "heading_deg": 335.8167696682851,
+          "spawn_cell_x": 56,
+          "spawn_cell_z": 27,
+          "goal_cell_x": 3,
+          "goal_cell_z": 54,
+          "path_len_cells": 84
+        }
+      ]
+    },
+    {
+      "scenario_id": 51,
+      "map_index": 51,
+      "map_file": "curved_452.txt",
+      "minimum_endpoint_separation_m": 38.565,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 6.75,
+          "spawn_z": 5.25,
+          "goal_x": -36.75,
+          "goal_z": 5.25,
+          "heading_deg": 324.217474411461,
+          "spawn_cell_x": 37,
+          "spawn_cell_z": 36,
+          "goal_cell_x": 8,
+          "goal_cell_z": 36,
+          "path_len_cells": 49
+        },
+        {
+          "spawn_x": 41.25,
+          "spawn_z": 42.75,
+          "goal_x": -44.25,
+          "goal_z": -33.75,
+          "heading_deg": 243.43494882292202,
+          "spawn_cell_x": 60,
+          "spawn_cell_z": 61,
+          "goal_cell_x": 3,
+          "goal_cell_z": 10,
+          "path_len_cells": 108
+        },
+        {
+          "spawn_x": -0.75,
+          "spawn_z": 44.25,
+          "goal_x": -2.25,
+          "goal_z": -45.75,
+          "heading_deg": 210.1275593515289,
+          "spawn_cell_x": 32,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 31,
+          "goal_cell_z": 2,
+          "path_len_cells": 85
+        },
+        {
+          "spawn_x": -45.75,
+          "spawn_z": 42.75,
+          "goal_x": 41.25,
+          "goal_z": -44.25,
+          "heading_deg": 135.0,
+          "spawn_cell_x": 2,
+          "spawn_cell_z": 61,
+          "goal_cell_x": 60,
+          "goal_cell_z": 3,
+          "path_len_cells": 116
+        }
+      ]
+    },
+    {
+      "scenario_id": 52,
+      "map_index": 52,
+      "map_file": "curved_453.txt",
+      "minimum_endpoint_separation_m": 33.842,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -30.75,
+          "goal_x": -17.25,
+          "goal_z": 0.75,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 12,
+          "goal_cell_x": 21,
+          "goal_cell_z": 33,
+          "path_len_cells": 62
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 35.25,
+          "goal_x": -44.25,
+          "goal_z": -35.25,
+          "heading_deg": 218.95262146149395,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 56,
+          "goal_cell_x": 3,
+          "goal_cell_z": 9,
+          "path_len_cells": 107
+        },
+        {
+          "spawn_x": 3.75,
+          "spawn_z": 27.75,
+          "goal_x": -11.25,
+          "goal_z": -42.75,
+          "heading_deg": 245.8167696682851,
+          "spawn_cell_x": 35,
+          "spawn_cell_z": 51,
+          "goal_cell_x": 25,
+          "goal_cell_z": 4,
+          "path_len_cells": 69
+        },
+        {
+          "spawn_x": -39.75,
+          "spawn_z": 26.25,
+          "goal_x": 12.75,
+          "goal_z": -15.75,
+          "heading_deg": 90.0,
+          "spawn_cell_x": 6,
+          "spawn_cell_z": 50,
+          "goal_cell_x": 41,
+          "goal_cell_z": 22,
+          "path_len_cells": 65
+        }
+      ]
+    },
+    {
+      "scenario_id": 53,
+      "map_index": 53,
+      "map_file": "curved_454.txt",
+      "minimum_endpoint_separation_m": 30.373,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -45.75,
+          "spawn_z": 0.75,
+          "goal_x": 32.25,
+          "goal_z": 11.25,
+          "heading_deg": 98.55136448452619,
+          "spawn_cell_x": 2,
+          "spawn_cell_z": 33,
+          "goal_cell_x": 54,
+          "goal_cell_z": 40,
+          "path_len_cells": 67
+        },
+        {
+          "spawn_x": -15.75,
+          "spawn_z": -26.25,
+          "goal_x": 45.75,
+          "goal_z": 45.75,
+          "heading_deg": 45.00000000000003,
+          "spawn_cell_x": 22,
+          "spawn_cell_z": 15,
+          "goal_cell_x": 63,
+          "goal_cell_z": 63,
+          "path_len_cells": 99
+        },
+        {
+          "spawn_x": 20.25,
+          "spawn_z": -45.75,
+          "goal_x": -11.25,
+          "goal_z": 45.75,
+          "heading_deg": 30.12755935152889,
+          "spawn_cell_x": 46,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 25,
+          "goal_cell_z": 63,
+          "path_len_cells": 86
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": -17.25,
+          "goal_x": -11.25,
+          "goal_z": 11.25,
+          "heading_deg": 3.180554681463515e-15,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 21,
+          "goal_cell_x": 25,
+          "goal_cell_z": 40,
+          "path_len_cells": 63
+        }
+      ]
+    },
+    {
+      "scenario_id": 54,
+      "map_index": 54,
+      "map_file": "curved_455.txt",
+      "minimum_endpoint_separation_m": 32.381,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 38.25,
+          "spawn_z": -42.75,
+          "goal_x": -36.75,
+          "goal_z": 42.75,
+          "heading_deg": 322.7620554983771,
+          "spawn_cell_x": 58,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 8,
+          "goal_cell_z": 61,
+          "path_len_cells": 107
+        },
+        {
+          "spawn_x": 21.75,
+          "spawn_z": -11.25,
+          "goal_x": -12.75,
+          "goal_z": 3.75,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 47,
+          "spawn_cell_z": 25,
+          "goal_cell_x": 24,
+          "goal_cell_z": 35,
+          "path_len_cells": 45
+        },
+        {
+          "spawn_x": 30.75,
+          "spawn_z": 23.25,
+          "goal_x": -45.75,
+          "goal_z": -8.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 53,
+          "spawn_cell_z": 48,
+          "goal_cell_x": 2,
+          "goal_cell_z": 27,
+          "path_len_cells": 72
+        },
+        {
+          "spawn_x": -5.25,
+          "spawn_z": 35.25,
+          "goal_x": -26.25,
+          "goal_z": -44.25,
+          "heading_deg": 135.0,
+          "spawn_cell_x": 29,
+          "spawn_cell_z": 56,
+          "goal_cell_x": 15,
+          "goal_cell_z": 3,
+          "path_len_cells": 83
+        }
+      ]
+    },
+    {
+      "scenario_id": 55,
+      "map_index": 55,
+      "map_file": "curved_456.txt",
+      "minimum_endpoint_separation_m": 36.0,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 8.25,
+          "spawn_z": -27.75,
+          "goal_x": 8.25,
+          "goal_z": 8.25,
+          "heading_deg": 300.1275593515289,
+          "spawn_cell_x": 38,
+          "spawn_cell_z": 14,
+          "goal_cell_x": 38,
+          "goal_cell_z": 38,
+          "path_len_cells": 42
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -44.25,
+          "goal_x": -11.25,
+          "goal_z": 45.75,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 25,
+          "goal_cell_z": 63,
+          "path_len_cells": 98
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 8.25,
+          "goal_x": -44.25,
+          "goal_z": 20.25,
+          "heading_deg": 210.47269795046142,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 38,
+          "goal_cell_x": 3,
+          "goal_cell_z": 46,
+          "path_len_cells": 76
+        },
+        {
+          "spawn_x": 41.25,
+          "spawn_z": 44.25,
+          "goal_x": -23.25,
+          "goal_z": -45.75,
+          "heading_deg": 218.95262146149395,
+          "spawn_cell_x": 60,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 17,
+          "goal_cell_z": 2,
+          "path_len_cells": 105
+        }
+      ]
+    },
+    {
+      "scenario_id": 56,
+      "map_index": 56,
+      "map_file": "curved_457.txt",
+      "minimum_endpoint_separation_m": 36.0,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 39.75,
+          "spawn_z": -45.75,
+          "goal_x": -45.75,
+          "goal_z": 33.75,
+          "heading_deg": 311.1174169907873,
+          "spawn_cell_x": 59,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 2,
+          "goal_cell_z": 55,
+          "path_len_cells": 110
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -8.25,
+          "goal_x": -30.75,
+          "goal_z": 0.75,
+          "heading_deg": 283.282525588539,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 27,
+          "goal_cell_x": 12,
+          "goal_cell_z": 33,
+          "path_len_cells": 85
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 27.75,
+          "goal_x": -45.75,
+          "goal_z": -32.25,
+          "heading_deg": 294.18323033171487,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 51,
+          "goal_cell_x": 2,
+          "goal_cell_z": 11,
+          "path_len_cells": 149
+        },
+        {
+          "spawn_x": 3.75,
+          "spawn_z": 12.75,
+          "goal_x": -6.75,
+          "goal_z": -44.25,
+          "heading_deg": 135.0,
+          "spawn_cell_x": 35,
+          "spawn_cell_z": 41,
+          "goal_cell_x": 28,
+          "goal_cell_z": 3,
+          "path_len_cells": 63
+        }
+      ]
+    },
+    {
+      "scenario_id": 57,
+      "map_index": 57,
+      "map_file": "curved_458.txt",
+      "minimum_endpoint_separation_m": 34.63,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -45.75,
+          "spawn_z": -0.75,
+          "goal_x": 45.75,
+          "goal_z": 14.25,
+          "heading_deg": 113.56054819833072,
+          "spawn_cell_x": 2,
+          "spawn_cell_z": 32,
+          "goal_cell_x": 63,
+          "goal_cell_z": 42,
+          "path_len_cells": 73
+        },
+        {
+          "spawn_x": -33.75,
+          "spawn_z": -35.25,
+          "goal_x": 12.75,
+          "goal_z": 44.25,
+          "heading_deg": 103.282525588539,
+          "spawn_cell_x": 10,
+          "spawn_cell_z": 9,
+          "goal_cell_x": 41,
+          "goal_cell_z": 62,
+          "path_len_cells": 120
+        },
+        {
+          "spawn_x": 3.75,
+          "spawn_z": -32.25,
+          "goal_x": 2.25,
+          "goal_z": 11.25,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 35,
+          "spawn_cell_z": 11,
+          "goal_cell_x": 34,
+          "goal_cell_z": 40,
+          "path_len_cells": 54
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -38.25,
+          "goal_x": -23.25,
+          "goal_z": 45.75,
+          "heading_deg": 245.8167696682851,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 7,
+          "goal_cell_x": 17,
+          "goal_cell_z": 63,
+          "path_len_cells": 102
+        }
+      ]
+    },
+    {
+      "scenario_id": 58,
+      "map_index": 58,
+      "map_file": "curved_459.txt",
+      "minimum_endpoint_separation_m": 36.0,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 44.25,
+          "spawn_z": 2.25,
+          "goal_x": -41.25,
+          "goal_z": 8.25,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 34,
+          "goal_cell_x": 5,
+          "goal_cell_z": 38,
+          "path_len_cells": 77
+        },
+        {
+          "spawn_x": 26.25,
+          "spawn_z": 42.75,
+          "goal_x": -39.75,
+          "goal_z": -29.25,
+          "heading_deg": 217.23794450162288,
+          "spawn_cell_x": 50,
+          "spawn_cell_z": 61,
+          "goal_cell_x": 6,
+          "goal_cell_z": 13,
+          "path_len_cells": 92
+        },
+        {
+          "spawn_x": -0.75,
+          "spawn_z": 17.25,
+          "goal_x": 3.75,
+          "goal_z": -32.25,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 32,
+          "spawn_cell_z": 44,
+          "goal_cell_x": 35,
+          "goal_cell_z": 11,
+          "path_len_cells": 54
+        },
+        {
+          "spawn_x": -41.25,
+          "spawn_z": 44.25,
+          "goal_x": 45.75,
+          "goal_z": -45.75,
+          "heading_deg": 135.0,
+          "spawn_cell_x": 5,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 63,
+          "goal_cell_z": 2,
+          "path_len_cells": 122
+        }
+      ]
+    },
+    {
+      "scenario_id": 59,
+      "map_index": 59,
+      "map_file": "curved_460.txt",
+      "minimum_endpoint_separation_m": 34.63,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -27.75,
+          "spawn_z": -42.75,
+          "goal_x": 45.75,
+          "goal_z": 36.75,
+          "heading_deg": 335.8167696682851,
+          "spawn_cell_x": 14,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 63,
+          "goal_cell_z": 57,
+          "path_len_cells": 102
+        },
+        {
+          "spawn_x": 9.75,
+          "spawn_z": -17.25,
+          "goal_x": 12.75,
+          "goal_z": 26.25,
+          "heading_deg": 294.18323033171487,
+          "spawn_cell_x": 39,
+          "spawn_cell_z": 21,
+          "goal_cell_x": 41,
+          "goal_cell_z": 50,
+          "path_len_cells": 43
+        },
+        {
+          "spawn_x": 30.75,
+          "spawn_z": -45.75,
+          "goal_x": -45.75,
+          "goal_z": 41.25,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 53,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 2,
+          "goal_cell_z": 60,
+          "path_len_cells": 109
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": -2.25,
+          "goal_x": -24.75,
+          "goal_z": 2.25,
+          "heading_deg": 294.1832303317149,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 31,
+          "goal_cell_x": 16,
+          "goal_cell_z": 34,
+          "path_len_cells": 58
+        }
+      ]
+    },
+    {
+      "scenario_id": 60,
+      "map_index": 60,
+      "map_file": "curved_461.txt",
+      "minimum_endpoint_separation_m": 33.541,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 9.75,
+          "spawn_z": -44.25,
+          "goal_x": -21.75,
+          "goal_z": 44.25,
+          "heading_deg": 35.782525588538995,
+          "spawn_cell_x": 39,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 18,
+          "goal_cell_z": 62,
+          "path_len_cells": 88
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -24.75,
+          "goal_x": -30.75,
+          "goal_z": 6.75,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 16,
+          "goal_cell_x": 12,
+          "goal_cell_z": 37,
+          "path_len_cells": 75
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 17.25,
+          "goal_x": -30.75,
+          "goal_z": -45.75,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 44,
+          "goal_cell_x": 12,
+          "goal_cell_z": 2,
+          "path_len_cells": 103
+        },
+        {
+          "spawn_x": 15.75,
+          "spawn_z": 41.25,
+          "goal_x": 3.75,
+          "goal_z": -11.25,
+          "heading_deg": 128.8676131360538,
+          "spawn_cell_x": 43,
+          "spawn_cell_z": 60,
+          "goal_cell_x": 35,
+          "goal_cell_z": 25,
+          "path_len_cells": 59
+        }
+      ]
+    },
+    {
+      "scenario_id": 61,
+      "map_index": 61,
+      "map_file": "curved_462.txt",
+      "minimum_endpoint_separation_m": 32.066,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 15.75,
+          "spawn_z": -45.75,
+          "goal_x": -20.25,
+          "goal_z": 44.25,
+          "heading_deg": 29.285217192580745,
+          "spawn_cell_x": 43,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 19,
+          "goal_cell_z": 62,
+          "path_len_cells": 88
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -9.75,
+          "goal_x": -42.75,
+          "goal_z": 18.75,
+          "heading_deg": 232.76205549837712,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 26,
+          "goal_cell_x": 4,
+          "goal_cell_z": 45,
+          "path_len_cells": 103
+        },
+        {
+          "spawn_x": 12.75,
+          "spawn_z": -0.75,
+          "goal_x": -29.25,
+          "goal_z": -14.25,
+          "heading_deg": 307.23794450162285,
+          "spawn_cell_x": 41,
+          "spawn_cell_z": 32,
+          "goal_cell_x": 13,
+          "goal_cell_z": 23,
+          "path_len_cells": 53
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": 35.25,
+          "goal_x": -35.25,
+          "goal_z": -45.75,
+          "heading_deg": 307.23794450162285,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 56,
+          "goal_cell_x": 9,
+          "goal_cell_z": 2,
+          "path_len_cells": 106
+        }
+      ]
+    },
+    {
+      "scenario_id": 62,
+      "map_index": 62,
+      "map_file": "curved_463.txt",
+      "minimum_endpoint_separation_m": 34.271,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -30.75,
+          "goal_x": -38.25,
+          "goal_z": 41.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 12,
+          "goal_cell_x": 7,
+          "goal_cell_z": 60,
+          "path_len_cells": 104
+        },
+        {
+          "spawn_x": 32.25,
+          "spawn_z": 6.75,
+          "goal_x": -9.75,
+          "goal_z": -15.75,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 54,
+          "spawn_cell_z": 37,
+          "goal_cell_x": 26,
+          "goal_cell_z": 22,
+          "path_len_cells": 45
+        },
+        {
+          "spawn_x": 27.75,
+          "spawn_z": 45.75,
+          "goal_x": -36.75,
+          "goal_z": -45.75,
+          "heading_deg": 180.0,
+          "spawn_cell_x": 51,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 8,
+          "goal_cell_z": 2,
+          "path_len_cells": 104
+        },
+        {
+          "spawn_x": 0.75,
+          "spawn_z": 20.25,
+          "goal_x": 14.25,
+          "goal_z": -44.25,
+          "heading_deg": 243.43494882292205,
+          "spawn_cell_x": 33,
+          "spawn_cell_z": 46,
+          "goal_cell_x": 42,
+          "goal_cell_z": 3,
+          "path_len_cells": 70
+        }
+      ]
+    },
+    {
+      "scenario_id": 63,
+      "map_index": 63,
+      "map_file": "curved_464.txt",
+      "minimum_endpoint_separation_m": 37.977,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -9.75,
+          "spawn_z": -45.75,
+          "goal_x": 2.25,
+          "goal_z": 45.75,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 26,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 34,
+          "goal_cell_z": 63,
+          "path_len_cells": 75
+        },
+        {
+          "spawn_x": 32.25,
+          "spawn_z": -45.75,
+          "goal_x": -45.75,
+          "goal_z": 33.75,
+          "heading_deg": 4.3371200201775234e-15,
+          "spawn_cell_x": 54,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 2,
+          "goal_cell_z": 55,
+          "path_len_cells": 105
+        },
+        {
+          "spawn_x": 39.75,
+          "spawn_z": 8.25,
+          "goal_x": -8.25,
+          "goal_z": 2.25,
+          "heading_deg": 329.8724406484711,
+          "spawn_cell_x": 59,
+          "spawn_cell_z": 38,
+          "goal_cell_x": 27,
+          "goal_cell_z": 34,
+          "path_len_cells": 46
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 45.75,
+          "goal_x": -44.25,
+          "goal_z": -24.75,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 3,
+          "goal_cell_z": 16,
+          "path_len_cells": 117
+        }
+      ]
+    },
+    {
+      "scenario_id": 64,
+      "map_index": 64,
+      "map_file": "curved_465.txt",
+      "minimum_endpoint_separation_m": 31.536,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 32.25,
+          "spawn_z": -9.75,
+          "goal_x": -15.75,
+          "goal_z": 15.75,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 54,
+          "spawn_cell_z": 26,
+          "goal_cell_x": 22,
+          "goal_cell_z": 43,
+          "path_len_cells": 55
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 33.75,
+          "goal_x": -44.25,
+          "goal_z": -15.75,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 55,
+          "goal_cell_x": 3,
+          "goal_cell_z": 22,
+          "path_len_cells": 93
+        },
+        {
+          "spawn_x": 14.25,
+          "spawn_z": 30.75,
+          "goal_x": 0.75,
+          "goal_z": -11.25,
+          "heading_deg": 111.13684450304687,
+          "spawn_cell_x": 42,
+          "spawn_cell_z": 53,
+          "goal_cell_x": 33,
+          "goal_cell_z": 25,
+          "path_len_cells": 57
+        },
+        {
+          "spawn_x": -41.25,
+          "spawn_z": 45.75,
+          "goal_x": 30.75,
+          "goal_z": -44.25,
+          "heading_deg": 114.1832303317149,
+          "spawn_cell_x": 5,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 53,
+          "goal_cell_z": 3,
+          "path_len_cells": 108
+        }
+      ]
+    },
+    {
+      "scenario_id": 65,
+      "map_index": 65,
+      "map_file": "curved_466.txt",
+      "minimum_endpoint_separation_m": 33.708,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 3.75,
+          "spawn_z": -41.25,
+          "goal_x": -11.25,
+          "goal_z": 26.25,
+          "heading_deg": 35.782525588539,
+          "spawn_cell_x": 35,
+          "spawn_cell_z": 5,
+          "goal_cell_x": 25,
+          "goal_cell_z": 50,
+          "path_len_cells": 55
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -20.25,
+          "goal_x": -42.75,
+          "goal_z": 41.25,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 19,
+          "goal_cell_x": 4,
+          "goal_cell_z": 60,
+          "path_len_cells": 125
+        },
+        {
+          "spawn_x": 6.75,
+          "spawn_z": -2.25,
+          "goal_x": -33.75,
+          "goal_z": 0.75,
+          "heading_deg": 256.717474411461,
+          "spawn_cell_x": 37,
+          "spawn_cell_z": 31,
+          "goal_cell_x": 10,
+          "goal_cell_z": 33,
+          "path_len_cells": 35
+        },
+        {
+          "spawn_x": 18.75,
+          "spawn_z": 42.75,
+          "goal_x": -36.75,
+          "goal_z": -41.25,
+          "heading_deg": 180.0,
+          "spawn_cell_x": 45,
+          "spawn_cell_z": 61,
+          "goal_cell_x": 8,
+          "goal_cell_z": 5,
+          "path_len_cells": 93
+        }
+      ]
+    },
+    {
+      "scenario_id": 66,
+      "map_index": 66,
+      "map_file": "curved_467.txt",
+      "minimum_endpoint_separation_m": 28.302,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -23.25,
+          "spawn_z": -44.25,
+          "goal_x": 45.75,
+          "goal_z": 12.75,
+          "heading_deg": 37.98187826603676,
+          "spawn_cell_x": 17,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 63,
+          "goal_cell_z": 41,
+          "path_len_cells": 84
+        },
+        {
+          "spawn_x": -8.25,
+          "spawn_z": -20.25,
+          "goal_x": 8.25,
+          "goal_z": 42.75,
+          "heading_deg": 45.00000000000003,
+          "spawn_cell_x": 27,
+          "spawn_cell_z": 19,
+          "goal_cell_x": 38,
+          "goal_cell_z": 61,
+          "path_len_cells": 63
+        },
+        {
+          "spawn_x": 21.75,
+          "spawn_z": -44.25,
+          "goal_x": -42.75,
+          "goal_z": 26.25,
+          "heading_deg": 300.1275593515289,
+          "spawn_cell_x": 47,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 4,
+          "goal_cell_z": 50,
+          "path_len_cells": 90
+        },
+        {
+          "spawn_x": 15.75,
+          "spawn_z": -5.25,
+          "goal_x": -27.75,
+          "goal_z": 0.75,
+          "heading_deg": 342.65242323438304,
+          "spawn_cell_x": 43,
+          "spawn_cell_z": 29,
+          "goal_cell_x": 14,
+          "goal_cell_z": 33,
+          "path_len_cells": 53
+        }
+      ]
+    },
+    {
+      "scenario_id": 67,
+      "map_index": 67,
+      "map_file": "curved_468.txt",
+      "minimum_endpoint_separation_m": 32.066,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 39.75,
+          "spawn_z": -11.25,
+          "goal_x": -41.25,
+          "goal_z": 8.25,
+          "heading_deg": 261.4486355154738,
+          "spawn_cell_x": 59,
+          "spawn_cell_z": 25,
+          "goal_cell_x": 5,
+          "goal_cell_z": 38,
+          "path_len_cells": 69
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 23.25,
+          "goal_x": -45.75,
+          "goal_z": -29.25,
+          "heading_deg": 240.71478280741928,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 48,
+          "goal_cell_x": 2,
+          "goal_cell_z": 13,
+          "path_len_cells": 96
+        },
+        {
+          "spawn_x": -0.75,
+          "spawn_z": 2.25,
+          "goal_x": -11.25,
+          "goal_z": -32.25,
+          "heading_deg": 138.88258300921268,
+          "spawn_cell_x": 32,
+          "spawn_cell_z": 34,
+          "goal_cell_x": 25,
+          "goal_cell_z": 11,
+          "path_len_cells": 36
+        },
+        {
+          "spawn_x": -6.75,
+          "spawn_z": 45.75,
+          "goal_x": 20.25,
+          "goal_z": -38.25,
+          "heading_deg": 193.282525588539,
+          "spawn_cell_x": 28,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 46,
+          "goal_cell_z": 7,
+          "path_len_cells": 74
+        }
+      ]
+    },
+    {
+      "scenario_id": 68,
+      "map_index": 68,
+      "map_file": "curved_469.txt",
+      "minimum_endpoint_separation_m": 39.029,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 2.25,
+          "spawn_z": -6.75,
+          "goal_x": 6.75,
+          "goal_z": 45.75,
+          "heading_deg": 351.4486355154738,
+          "spawn_cell_x": 34,
+          "spawn_cell_z": 28,
+          "goal_cell_x": 37,
+          "goal_cell_z": 63,
+          "path_len_cells": 56
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -45.75,
+          "goal_x": -38.25,
+          "goal_z": 32.25,
+          "heading_deg": 37.23794450162288,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 7,
+          "goal_cell_z": 54,
+          "path_len_cells": 111
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -3.75,
+          "goal_x": -45.75,
+          "goal_z": -6.75,
+          "heading_deg": 335.8167696682851,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 30,
+          "goal_cell_x": 2,
+          "goal_cell_z": 28,
+          "path_len_cells": 110
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 35.25,
+          "goal_x": -36.75,
+          "goal_z": -45.75,
+          "heading_deg": 229.4863133074482,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 56,
+          "goal_cell_x": 8,
+          "goal_cell_z": 2,
+          "path_len_cells": 121
+        }
+      ]
+    },
+    {
+      "scenario_id": 69,
+      "map_index": 69,
+      "map_file": "curved_470.txt",
+      "minimum_endpoint_separation_m": 34.271,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -2.25,
+          "goal_x": -44.25,
+          "goal_z": 8.25,
+          "heading_deg": 215.782525588539,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 31,
+          "goal_cell_x": 3,
+          "goal_cell_z": 38,
+          "path_len_cells": 73
+        },
+        {
+          "spawn_x": 26.25,
+          "spawn_z": 45.75,
+          "goal_x": -27.75,
+          "goal_z": -45.75,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 50,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 14,
+          "goal_cell_z": 2,
+          "path_len_cells": 97
+        },
+        {
+          "spawn_x": 6.75,
+          "spawn_z": 14.25,
+          "goal_x": 6.75,
+          "goal_z": -32.25,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 37,
+          "spawn_cell_z": 42,
+          "goal_cell_x": 37,
+          "goal_cell_z": 11,
+          "path_len_cells": 53
+        },
+        {
+          "spawn_x": -24.75,
+          "spawn_z": 45.75,
+          "goal_x": 38.25,
+          "goal_z": -45.75,
+          "heading_deg": 180.0,
+          "spawn_cell_x": 16,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 58,
+          "goal_cell_z": 2,
+          "path_len_cells": 103
+        }
+      ]
+    },
+    {
+      "scenario_id": 70,
+      "map_index": 70,
+      "map_file": "curved_471.txt",
+      "minimum_endpoint_separation_m": 34.271,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -44.25,
+          "spawn_z": -14.25,
+          "goal_x": 29.25,
+          "goal_z": 44.25,
+          "heading_deg": 59.87244064847113,
+          "spawn_cell_x": 3,
+          "spawn_cell_z": 23,
+          "goal_cell_x": 52,
+          "goal_cell_z": 62,
+          "path_len_cells": 122
+        },
+        {
+          "spawn_x": -23.25,
+          "spawn_z": -44.25,
+          "goal_x": -6.75,
+          "goal_z": 41.25,
+          "heading_deg": 33.583172911041224,
+          "spawn_cell_x": 17,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 28,
+          "goal_cell_z": 60,
+          "path_len_cells": 76
+        },
+        {
+          "spawn_x": 17.25,
+          "spawn_z": -42.75,
+          "goal_x": -45.75,
+          "goal_z": 27.75,
+          "heading_deg": 35.782525588539,
+          "spawn_cell_x": 44,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 2,
+          "goal_cell_z": 51,
+          "path_len_cells": 93
+        },
+        {
+          "spawn_x": 32.25,
+          "spawn_z": -3.75,
+          "goal_x": -12.75,
+          "goal_z": -0.75,
+          "heading_deg": 228.88258300921268,
+          "spawn_cell_x": 54,
+          "spawn_cell_z": 30,
+          "goal_cell_x": 24,
+          "goal_cell_z": 32,
+          "path_len_cells": 50
+        }
+      ]
+    },
+    {
+      "scenario_id": 71,
+      "map_index": 71,
+      "map_file": "curved_472.txt",
+      "minimum_endpoint_separation_m": 34.205,
+      "overlapping_route_pairs": 5,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 9.75,
+          "spawn_z": -23.25,
+          "goal_x": -30.75,
+          "goal_z": 44.25,
+          "heading_deg": 41.11741699078734,
+          "spawn_cell_x": 39,
+          "spawn_cell_z": 17,
+          "goal_cell_x": 12,
+          "goal_cell_z": 62,
+          "path_len_cells": 72
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -27.75,
+          "goal_x": -32.25,
+          "goal_z": 9.75,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 14,
+          "goal_cell_x": 11,
+          "goal_cell_z": 39,
+          "path_len_cells": 77
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 24.75,
+          "goal_x": -45.75,
+          "goal_z": -23.25,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 49,
+          "goal_cell_x": 2,
+          "goal_cell_z": 17,
+          "path_len_cells": 93
+        },
+        {
+          "spawn_x": 3.75,
+          "spawn_z": 20.25,
+          "goal_x": -17.25,
+          "goal_z": -44.25,
+          "heading_deg": 264.79990347697867,
+          "spawn_cell_x": 35,
+          "spawn_cell_z": 46,
+          "goal_cell_x": 21,
+          "goal_cell_z": 3,
+          "path_len_cells": 59
+        }
+      ]
+    },
+    {
+      "scenario_id": 72,
+      "map_index": 72,
+      "map_file": "curved_473.txt",
+      "minimum_endpoint_separation_m": 33.541,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 35.25,
+          "spawn_z": -30.75,
+          "goal_x": -33.75,
+          "goal_z": 30.75,
+          "heading_deg": 231.04737853850605,
+          "spawn_cell_x": 56,
+          "spawn_cell_z": 12,
+          "goal_cell_x": 10,
+          "goal_cell_z": 53,
+          "path_len_cells": 89
+        },
+        {
+          "spawn_x": 33.75,
+          "spawn_z": 6.75,
+          "goal_x": -39.75,
+          "goal_z": -2.25,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 55,
+          "spawn_cell_z": 37,
+          "goal_cell_x": 6,
+          "goal_cell_z": 31,
+          "path_len_cells": 77
+        },
+        {
+          "spawn_x": 27.75,
+          "spawn_z": 45.75,
+          "goal_x": -45.75,
+          "goal_z": -35.25,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 51,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 2,
+          "goal_cell_z": 9,
+          "path_len_cells": 107
+        },
+        {
+          "spawn_x": 2.25,
+          "spawn_z": 21.75,
+          "goal_x": -6.75,
+          "goal_z": -11.25,
+          "heading_deg": 189.66580096845948,
+          "spawn_cell_x": 34,
+          "spawn_cell_z": 47,
+          "goal_cell_x": 28,
+          "goal_cell_z": 25,
+          "path_len_cells": 44
+        }
+      ]
+    },
+    {
+      "scenario_id": 73,
+      "map_index": 73,
+      "map_file": "curved_474.txt",
+      "minimum_endpoint_separation_m": 34.889,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -36.75,
+          "spawn_z": -6.75,
+          "goal_x": 39.75,
+          "goal_z": 2.25,
+          "heading_deg": 8.677012318130656,
+          "spawn_cell_x": 8,
+          "spawn_cell_z": 28,
+          "goal_cell_x": 59,
+          "goal_cell_z": 34,
+          "path_len_cells": 77
+        },
+        {
+          "spawn_x": -44.25,
+          "spawn_z": -42.75,
+          "goal_x": 24.75,
+          "goal_z": 33.75,
+          "heading_deg": 113.56054819833072,
+          "spawn_cell_x": 3,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 49,
+          "goal_cell_z": 55,
+          "path_len_cells": 97
+        },
+        {
+          "spawn_x": -0.75,
+          "spawn_z": -17.25,
+          "goal_x": -9.75,
+          "goal_z": 44.25,
+          "heading_deg": 38.867613136053805,
+          "spawn_cell_x": 32,
+          "spawn_cell_z": 21,
+          "goal_cell_x": 26,
+          "goal_cell_z": 62,
+          "path_len_cells": 49
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -33.75,
+          "goal_x": -42.75,
+          "goal_z": 29.25,
+          "heading_deg": 3.3348842171626853,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 10,
+          "goal_cell_x": 4,
+          "goal_cell_z": 52,
+          "path_len_cells": 101
+        }
+      ]
+    },
+    {
+      "scenario_id": 74,
+      "map_index": 74,
+      "map_file": "curved_475.txt",
+      "minimum_endpoint_separation_m": 28.657,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -11.25,
+          "goal_x": -32.25,
+          "goal_z": 36.75,
+          "heading_deg": 305.782525588539,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 25,
+          "goal_cell_x": 11,
+          "goal_cell_z": 57,
+          "path_len_cells": 84
+        },
+        {
+          "spawn_x": 9.75,
+          "spawn_z": 11.25,
+          "goal_x": -35.25,
+          "goal_z": 8.25,
+          "heading_deg": 235.51875551271092,
+          "spawn_cell_x": 39,
+          "spawn_cell_z": 40,
+          "goal_cell_x": 9,
+          "goal_cell_z": 38,
+          "path_len_cells": 44
+        },
+        {
+          "spawn_x": 35.25,
+          "spawn_z": 45.75,
+          "goal_x": -45.75,
+          "goal_z": -20.25,
+          "heading_deg": 215.00844673905002,
+          "spawn_cell_x": 56,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 2,
+          "goal_cell_z": 19,
+          "path_len_cells": 112
+        },
+        {
+          "spawn_x": 0.75,
+          "spawn_z": 44.25,
+          "goal_x": -3.75,
+          "goal_z": -44.25,
+          "heading_deg": 141.13238686394618,
+          "spawn_cell_x": 33,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 30,
+          "goal_cell_z": 3,
+          "path_len_cells": 76
+        }
+      ]
+    },
+    {
+      "scenario_id": 75,
+      "map_index": 75,
+      "map_file": "curved_476.txt",
+      "minimum_endpoint_separation_m": 35.401,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -14.25,
+          "spawn_z": -14.25,
+          "goal_x": 42.75,
+          "goal_z": 30.75,
+          "heading_deg": 134.99999999999997,
+          "spawn_cell_x": 23,
+          "spawn_cell_z": 23,
+          "goal_cell_x": 61,
+          "goal_cell_z": 53,
+          "path_len_cells": 70
+        },
+        {
+          "spawn_x": -32.25,
+          "spawn_z": -45.75,
+          "goal_x": 6.75,
+          "goal_z": 14.25,
+          "heading_deg": 13.282525588538988,
+          "spawn_cell_x": 11,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 37,
+          "goal_cell_z": 42,
+          "path_len_cells": 66
+        },
+        {
+          "spawn_x": 32.25,
+          "spawn_z": -45.75,
+          "goal_x": -15.75,
+          "goal_z": 44.25,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 54,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 22,
+          "goal_cell_z": 62,
+          "path_len_cells": 142
+        },
+        {
+          "spawn_x": 36.75,
+          "spawn_z": -6.75,
+          "goal_x": -45.75,
+          "goal_z": 15.75,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 57,
+          "spawn_cell_z": 28,
+          "goal_cell_x": 2,
+          "goal_cell_z": 43,
+          "path_len_cells": 94
+        }
+      ]
+    },
+    {
+      "scenario_id": 76,
+      "map_index": 76,
+      "map_file": "curved_477.txt",
+      "minimum_endpoint_separation_m": 34.5,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -42.75,
+          "spawn_z": -27.75,
+          "goal_x": 11.25,
+          "goal_z": 26.25,
+          "heading_deg": 65.8167696682851,
+          "spawn_cell_x": 4,
+          "spawn_cell_z": 14,
+          "goal_cell_x": 40,
+          "goal_cell_z": 50,
+          "path_len_cells": 98
+        },
+        {
+          "spawn_x": 17.25,
+          "spawn_z": -30.75,
+          "goal_x": -18.75,
+          "goal_z": 45.75,
+          "heading_deg": 342.65242323438304,
+          "spawn_cell_x": 44,
+          "spawn_cell_z": 12,
+          "goal_cell_x": 20,
+          "goal_cell_z": 63,
+          "path_len_cells": 85
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -8.25,
+          "goal_x": -45.75,
+          "goal_z": 23.25,
+          "heading_deg": 278.5513644845262,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 27,
+          "goal_cell_x": 2,
+          "goal_cell_z": 48,
+          "path_len_cells": 84
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 26.25,
+          "goal_x": -14.25,
+          "goal_z": 2.25,
+          "heading_deg": 300.1275593515289,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 50,
+          "goal_cell_x": 23,
+          "goal_cell_z": 34,
+          "path_len_cells": 86
+        }
+      ]
+    },
+    {
+      "scenario_id": 77,
+      "map_index": 77,
+      "map_file": "curved_478.txt",
+      "minimum_endpoint_separation_m": 37.947,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -42.75,
+          "spawn_z": -2.25,
+          "goal_x": 41.25,
+          "goal_z": -5.25,
+          "heading_deg": 180.0,
+          "spawn_cell_x": 4,
+          "spawn_cell_z": 31,
+          "goal_cell_x": 60,
+          "goal_cell_z": 29,
+          "path_len_cells": 76
+        },
+        {
+          "spawn_x": -45.75,
+          "spawn_z": -41.25,
+          "goal_x": 33.75,
+          "goal_z": 45.75,
+          "heading_deg": 45.0,
+          "spawn_cell_x": 2,
+          "spawn_cell_z": 5,
+          "goal_cell_x": 55,
+          "goal_cell_z": 63,
+          "path_len_cells": 111
+        },
+        {
+          "spawn_x": -6.75,
+          "spawn_z": -17.25,
+          "goal_x": 5.25,
+          "goal_z": 18.75,
+          "heading_deg": 342.652423234383,
+          "spawn_cell_x": 28,
+          "spawn_cell_z": 21,
+          "goal_cell_x": 36,
+          "goal_cell_z": 45,
+          "path_len_cells": 34
+        },
+        {
+          "spawn_x": 20.25,
+          "spawn_z": -44.25,
+          "goal_x": -42.75,
+          "goal_z": 42.75,
+          "heading_deg": 342.652423234383,
+          "spawn_cell_x": 46,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 4,
+          "goal_cell_z": 61,
+          "path_len_cells": 100
+        }
+      ]
+    },
+    {
+      "scenario_id": 78,
+      "map_index": 78,
+      "map_file": "curved_479.txt",
+      "minimum_endpoint_separation_m": 35.018,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -27.75,
+          "spawn_z": -44.25,
+          "goal_x": 45.75,
+          "goal_z": 27.75,
+          "heading_deg": 347.7780226097917,
+          "spawn_cell_x": 14,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 63,
+          "goal_cell_z": 51,
+          "path_len_cells": 97
+        },
+        {
+          "spawn_x": 11.25,
+          "spawn_z": -44.25,
+          "goal_x": -5.25,
+          "goal_z": 6.75,
+          "heading_deg": 318.92530545147645,
+          "spawn_cell_x": 40,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 29,
+          "goal_cell_z": 37,
+          "path_len_cells": 49
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -38.25,
+          "goal_x": -32.25,
+          "goal_z": 45.75,
+          "heading_deg": 300.1275593515289,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 7,
+          "goal_cell_x": 11,
+          "goal_cell_z": 63,
+          "path_len_cells": 124
+        },
+        {
+          "spawn_x": 29.25,
+          "spawn_z": -5.25,
+          "goal_x": -44.25,
+          "goal_z": -11.25,
+          "heading_deg": 180.0,
+          "spawn_cell_x": 52,
+          "spawn_cell_z": 29,
+          "goal_cell_x": 3,
+          "goal_cell_z": 25,
+          "path_len_cells": 83
+        }
+      ]
+    },
+    {
+      "scenario_id": 79,
+      "map_index": 79,
+      "map_file": "curved_480.txt",
+      "minimum_endpoint_separation_m": 32.932,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -2.25,
+          "spawn_z": -41.25,
+          "goal_x": -20.25,
+          "goal_z": 45.75,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 31,
+          "spawn_cell_z": 5,
+          "goal_cell_x": 19,
+          "goal_cell_z": 63,
+          "path_len_cells": 96
+        },
+        {
+          "spawn_x": 33.75,
+          "spawn_z": -42.75,
+          "goal_x": -42.75,
+          "goal_z": 17.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 55,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 4,
+          "goal_cell_z": 44,
+          "path_len_cells": 91
+        },
+        {
+          "spawn_x": 29.25,
+          "spawn_z": 14.25,
+          "goal_x": -11.25,
+          "goal_z": -2.25,
+          "heading_deg": 335.8167696682851,
+          "spawn_cell_x": 52,
+          "spawn_cell_z": 42,
+          "goal_cell_x": 25,
+          "goal_cell_z": 31,
+          "path_len_cells": 42
+        },
+        {
+          "spawn_x": 12.75,
+          "spawn_z": 42.75,
+          "goal_x": -39.75,
+          "goal_z": -39.75,
+          "heading_deg": 204.1832303317149,
+          "spawn_cell_x": 41,
+          "spawn_cell_z": 61,
+          "goal_cell_x": 6,
+          "goal_cell_z": 6,
+          "path_len_cells": 90
+        }
+      ]
+    },
+    {
+      "scenario_id": 80,
+      "map_index": 80,
+      "map_file": "curved_481.txt",
+      "minimum_endpoint_separation_m": 37.5,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -12.75,
+          "spawn_z": -8.25,
+          "goal_x": 38.25,
+          "goal_z": 0.75,
+          "heading_deg": 155.8167696682851,
+          "spawn_cell_x": 24,
+          "spawn_cell_z": 27,
+          "goal_cell_x": 58,
+          "goal_cell_z": 33,
+          "path_len_cells": 56
+        },
+        {
+          "spawn_x": -42.75,
+          "spawn_z": -30.75,
+          "goal_x": 45.75,
+          "goal_z": 41.25,
+          "heading_deg": 107.34757676561699,
+          "spawn_cell_x": 4,
+          "spawn_cell_z": 12,
+          "goal_cell_x": 63,
+          "goal_cell_z": 60,
+          "path_len_cells": 113
+        },
+        {
+          "spawn_x": 0.75,
+          "spawn_z": -45.75,
+          "goal_x": 8.25,
+          "goal_z": 24.75,
+          "heading_deg": 360.0,
+          "spawn_cell_x": 33,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 38,
+          "goal_cell_z": 49,
+          "path_len_cells": 72
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -39.75,
+          "goal_x": -45.75,
+          "goal_z": 32.25,
+          "heading_deg": 294.1832303317149,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 6,
+          "goal_cell_x": 2,
+          "goal_cell_z": 54,
+          "path_len_cells": 108
+        }
+      ]
+    },
+    {
+      "scenario_id": 81,
+      "map_index": 81,
+      "map_file": "curved_482.txt",
+      "minimum_endpoint_separation_m": 30.037,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -11.25,
+          "goal_x": -24.75,
+          "goal_z": 8.25,
+          "heading_deg": 214.4812444872891,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 25,
+          "goal_cell_x": 16,
+          "goal_cell_z": 38,
+          "path_len_cells": 76
+        },
+        {
+          "spawn_x": 21.75,
+          "spawn_z": 20.25,
+          "goal_x": -23.25,
+          "goal_z": -21.75,
+          "heading_deg": 294.18323033171487,
+          "spawn_cell_x": 47,
+          "spawn_cell_z": 46,
+          "goal_cell_x": 17,
+          "goal_cell_z": 18,
+          "path_len_cells": 66
+        },
+        {
+          "spawn_x": -6.75,
+          "spawn_z": 45.75,
+          "goal_x": 11.25,
+          "goal_z": -14.25,
+          "heading_deg": 97.01812173396324,
+          "spawn_cell_x": 28,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 40,
+          "goal_cell_z": 23,
+          "path_len_cells": 72
+        },
+        {
+          "spawn_x": -41.25,
+          "spawn_z": 33.75,
+          "goal_x": 32.25,
+          "goal_z": -39.75,
+          "heading_deg": 90.0,
+          "spawn_cell_x": 5,
+          "spawn_cell_z": 55,
+          "goal_cell_x": 54,
+          "goal_cell_z": 6,
+          "path_len_cells": 98
+        }
+      ]
+    },
+    {
+      "scenario_id": 82,
+      "map_index": 82,
+      "map_file": "curved_483.txt",
+      "minimum_endpoint_separation_m": 26.58,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 12.75,
+          "spawn_z": -9.75,
+          "goal_x": -44.25,
+          "goal_z": 39.75,
+          "heading_deg": 333.43494882292197,
+          "spawn_cell_x": 41,
+          "spawn_cell_z": 26,
+          "goal_cell_x": 3,
+          "goal_cell_z": 59,
+          "path_len_cells": 71
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 20.25,
+          "goal_x": -44.25,
+          "goal_z": -6.75,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 46,
+          "goal_cell_x": 3,
+          "goal_cell_z": 28,
+          "path_len_cells": 80
+        },
+        {
+          "spawn_x": 23.25,
+          "spawn_z": 41.25,
+          "goal_x": -18.75,
+          "goal_z": 0.75,
+          "heading_deg": 234.217474411461,
+          "spawn_cell_x": 48,
+          "spawn_cell_z": 60,
+          "goal_cell_x": 20,
+          "goal_cell_z": 33,
+          "path_len_cells": 55
+        },
+        {
+          "spawn_x": 0.75,
+          "spawn_z": 21.75,
+          "goal_x": 24.75,
+          "goal_z": -42.75,
+          "heading_deg": 84.79990347697867,
+          "spawn_cell_x": 33,
+          "spawn_cell_z": 47,
+          "goal_cell_x": 49,
+          "goal_cell_z": 4,
+          "path_len_cells": 59
+        }
+      ]
+    },
+    {
+      "scenario_id": 83,
+      "map_index": 83,
+      "map_file": "curved_484.txt",
+      "minimum_endpoint_separation_m": 31.5,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 42.75,
+          "spawn_z": -38.25,
+          "goal_x": -32.25,
+          "goal_z": 32.25,
+          "heading_deg": 294.18323033171487,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 7,
+          "goal_cell_x": 11,
+          "goal_cell_z": 54,
+          "path_len_cells": 97
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 5.25,
+          "goal_x": -41.25,
+          "goal_z": -29.25,
+          "heading_deg": 232.76205549837715,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 36,
+          "goal_cell_x": 5,
+          "goal_cell_z": 13,
+          "path_len_cells": 89
+        },
+        {
+          "spawn_x": 29.25,
+          "spawn_z": 45.75,
+          "goal_x": 2.25,
+          "goal_z": -5.25,
+          "heading_deg": 209.28521719258075,
+          "spawn_cell_x": 52,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 34,
+          "goal_cell_z": 29,
+          "path_len_cells": 52
+        },
+        {
+          "spawn_x": -2.25,
+          "spawn_z": 45.75,
+          "goal_x": 0.75,
+          "goal_z": -45.75,
+          "heading_deg": 188.55136448452618,
+          "spawn_cell_x": 31,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 33,
+          "goal_cell_z": 2,
+          "path_len_cells": 87
+        }
+      ]
+    },
+    {
+      "scenario_id": 84,
+      "map_index": 84,
+      "map_file": "curved_485.txt",
+      "minimum_endpoint_separation_m": 30.777,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -23.25,
+          "spawn_z": -5.25,
+          "goal_x": 21.75,
+          "goal_z": -5.25,
+          "heading_deg": 150.71478280741925,
+          "spawn_cell_x": 17,
+          "spawn_cell_z": 29,
+          "goal_cell_x": 47,
+          "goal_cell_z": 29,
+          "path_len_cells": 60
+        },
+        {
+          "spawn_x": -45.75,
+          "spawn_z": -26.25,
+          "goal_x": 42.75,
+          "goal_z": 27.75,
+          "heading_deg": 90.0,
+          "spawn_cell_x": 2,
+          "spawn_cell_z": 15,
+          "goal_cell_x": 61,
+          "goal_cell_z": 51,
+          "path_len_cells": 101
+        },
+        {
+          "spawn_x": -21.75,
+          "spawn_z": -45.75,
+          "goal_x": 6.75,
+          "goal_z": 29.25,
+          "heading_deg": 330.7147828074193,
+          "spawn_cell_x": 18,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 37,
+          "goal_cell_z": 52,
+          "path_len_cells": 69
+        },
+        {
+          "spawn_x": 26.25,
+          "spawn_z": -45.75,
+          "goal_x": -26.25,
+          "goal_z": 44.25,
+          "heading_deg": 336.4394518016693,
+          "spawn_cell_x": 50,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 15,
+          "goal_cell_z": 62,
+          "path_len_cells": 101
+        }
+      ]
+    },
+    {
+      "scenario_id": 85,
+      "map_index": 85,
+      "map_file": "curved_486.txt",
+      "minimum_endpoint_separation_m": 32.45,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 18.75,
+          "spawn_z": 5.25,
+          "goal_x": -14.25,
+          "goal_z": 5.25,
+          "heading_deg": 245.8167696682851,
+          "spawn_cell_x": 45,
+          "spawn_cell_z": 36,
+          "goal_cell_x": 23,
+          "goal_cell_z": 36,
+          "path_len_cells": 40
+        },
+        {
+          "spawn_x": 30.75,
+          "spawn_z": 42.75,
+          "goal_x": -44.25,
+          "goal_z": -30.75,
+          "heading_deg": 180.0,
+          "spawn_cell_x": 53,
+          "spawn_cell_z": 61,
+          "goal_cell_x": 3,
+          "goal_cell_z": 12,
+          "path_len_cells": 99
+        },
+        {
+          "spawn_x": -6.75,
+          "spawn_z": 41.25,
+          "goal_x": 0.75,
+          "goal_z": -44.25,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 28,
+          "spawn_cell_z": 60,
+          "goal_cell_x": 33,
+          "goal_cell_z": 3,
+          "path_len_cells": 76
+        },
+        {
+          "spawn_x": -42.75,
+          "spawn_z": 33.75,
+          "goal_x": 45.75,
+          "goal_z": -12.75,
+          "heading_deg": 90.0,
+          "spawn_cell_x": 4,
+          "spawn_cell_z": 55,
+          "goal_cell_x": 63,
+          "goal_cell_z": 24,
+          "path_len_cells": 90
+        }
+      ]
+    },
+    {
+      "scenario_id": 86,
+      "map_index": 86,
+      "map_file": "curved_487.txt",
+      "minimum_endpoint_separation_m": 30.887,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 14.25,
+          "spawn_z": -36.75,
+          "goal_x": -11.25,
+          "goal_z": 44.25,
+          "heading_deg": 24.183230331714896,
+          "spawn_cell_x": 42,
+          "spawn_cell_z": 8,
+          "goal_cell_x": 25,
+          "goal_cell_z": 62,
+          "path_len_cells": 81
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -2.25,
+          "goal_x": -42.75,
+          "goal_z": 32.25,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 31,
+          "goal_cell_x": 4,
+          "goal_cell_z": 54,
+          "path_len_cells": 89
+        },
+        {
+          "spawn_x": 36.75,
+          "spawn_z": 45.75,
+          "goal_x": -21.75,
+          "goal_z": -9.75,
+          "heading_deg": 236.41682708895877,
+          "spawn_cell_x": 57,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 18,
+          "goal_cell_z": 26,
+          "path_len_cells": 76
+        },
+        {
+          "spawn_x": 3.75,
+          "spawn_z": 17.25,
+          "goal_x": -44.25,
+          "goal_z": -35.25,
+          "heading_deg": 150.71478280741925,
+          "spawn_cell_x": 35,
+          "spawn_cell_z": 44,
+          "goal_cell_x": 3,
+          "goal_cell_z": 9,
+          "path_len_cells": 71
+        }
+      ]
+    },
+    {
+      "scenario_id": 87,
+      "map_index": 87,
+      "map_file": "curved_488.txt",
+      "minimum_endpoint_separation_m": 30.923,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 14.25,
+          "spawn_z": -45.75,
+          "goal_x": -8.25,
+          "goal_z": 44.25,
+          "heading_deg": 333.434948822922,
+          "spawn_cell_x": 42,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 27,
+          "goal_cell_z": 62,
+          "path_len_cells": 79
+        },
+        {
+          "spawn_x": 11.25,
+          "spawn_z": -8.25,
+          "goal_x": -45.75,
+          "goal_z": 30.75,
+          "heading_deg": 225.0,
+          "spawn_cell_x": 40,
+          "spawn_cell_z": 27,
+          "goal_cell_x": 2,
+          "goal_cell_z": 53,
+          "path_len_cells": 66
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -8.25,
+          "goal_x": -14.25,
+          "goal_z": 12.75,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 27,
+          "goal_cell_x": 23,
+          "goal_cell_z": 41,
+          "path_len_cells": 67
+        },
+        {
+          "spawn_x": 32.25,
+          "spawn_z": 45.75,
+          "goal_x": -33.75,
+          "goal_z": -11.25,
+          "heading_deg": 171.32298768186934,
+          "spawn_cell_x": 54,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 10,
+          "goal_cell_z": 25,
+          "path_len_cells": 82
+        }
+      ]
+    },
+    {
+      "scenario_id": 88,
+      "map_index": 88,
+      "map_file": "curved_489.txt",
+      "minimum_endpoint_separation_m": 31.82,
+      "overlapping_route_pairs": 5,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -6.75,
+          "spawn_z": -35.25,
+          "goal_x": 0.75,
+          "goal_z": 45.75,
+          "heading_deg": 341.9863133074482,
+          "spawn_cell_x": 28,
+          "spawn_cell_z": 9,
+          "goal_cell_x": 33,
+          "goal_cell_z": 63,
+          "path_len_cells": 87
+        },
+        {
+          "spawn_x": 27.75,
+          "spawn_z": -44.25,
+          "goal_x": -8.25,
+          "goal_z": 8.25,
+          "heading_deg": 24.183230331714896,
+          "spawn_cell_x": 51,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 27,
+          "goal_cell_z": 38,
+          "path_len_cells": 69
+        },
+        {
+          "spawn_x": 23.25,
+          "spawn_z": -11.25,
+          "goal_x": -45.75,
+          "goal_z": 15.75,
+          "heading_deg": 311.1174169907873,
+          "spawn_cell_x": 48,
+          "spawn_cell_z": 25,
+          "goal_cell_x": 2,
+          "goal_cell_z": 43,
+          "path_len_cells": 76
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 11.25,
+          "goal_x": -42.75,
+          "goal_z": -36.75,
+          "heading_deg": 239.87244064847113,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 40,
+          "goal_cell_x": 4,
+          "goal_cell_z": 8,
+          "path_len_cells": 97
+        }
+      ]
+    },
+    {
+      "scenario_id": 89,
+      "map_index": 89,
+      "map_file": "curved_490.txt",
+      "minimum_endpoint_separation_m": 32.898,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 2.25,
+          "spawn_z": -42.75,
+          "goal_x": 9.75,
+          "goal_z": 45.75,
+          "heading_deg": 326.41682708895877,
+          "spawn_cell_x": 34,
+          "spawn_cell_z": 4,
+          "goal_cell_x": 39,
+          "goal_cell_z": 63,
+          "path_len_cells": 90
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -41.25,
+          "goal_x": -2.25,
+          "goal_z": 3.75,
+          "heading_deg": 35.78252558853899,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 5,
+          "goal_cell_x": 31,
+          "goal_cell_z": 35,
+          "path_len_cells": 62
+        },
+        {
+          "spawn_x": 38.25,
+          "spawn_z": -0.75,
+          "goal_x": -44.25,
+          "goal_z": 11.25,
+          "heading_deg": 283.282525588539,
+          "spawn_cell_x": 58,
+          "spawn_cell_z": 32,
+          "goal_cell_x": 3,
+          "goal_cell_z": 40,
+          "path_len_cells": 81
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 35.25,
+          "goal_x": -26.25,
+          "goal_z": -18.75,
+          "heading_deg": 153.434948822922,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 56,
+          "goal_cell_x": 15,
+          "goal_cell_z": 20,
+          "path_len_cells": 84
+        }
+      ]
+    },
+    {
+      "scenario_id": 90,
+      "map_index": 90,
+      "map_file": "curved_491.txt",
+      "minimum_endpoint_separation_m": 33.708,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -9.75,
+          "goal_x": -42.75,
+          "goal_z": 44.25,
+          "heading_deg": 243.43494882292202,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 26,
+          "goal_cell_x": 4,
+          "goal_cell_z": 62,
+          "path_len_cells": 113
+        },
+        {
+          "spawn_x": 17.25,
+          "spawn_z": 8.25,
+          "goal_x": -21.75,
+          "goal_z": -2.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 44,
+          "spawn_cell_z": 38,
+          "goal_cell_x": 18,
+          "goal_cell_z": 31,
+          "path_len_cells": 35
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": 35.25,
+          "goal_x": -38.25,
+          "goal_z": -42.75,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 56,
+          "goal_cell_x": 7,
+          "goal_cell_z": 4,
+          "path_len_cells": 107
+        },
+        {
+          "spawn_x": -0.75,
+          "spawn_z": 36.75,
+          "goal_x": 14.25,
+          "goal_z": -45.75,
+          "heading_deg": 193.282525588539,
+          "spawn_cell_x": 32,
+          "spawn_cell_z": 57,
+          "goal_cell_x": 42,
+          "goal_cell_z": 2,
+          "path_len_cells": 75
+        }
+      ]
+    },
+    {
+      "scenario_id": 91,
+      "map_index": 91,
+      "map_file": "curved_492.txt",
+      "minimum_endpoint_separation_m": 36.125,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 44.25,
+          "spawn_z": -12.75,
+          "goal_x": -42.75,
+          "goal_z": -0.75,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 24,
+          "goal_cell_x": 4,
+          "goal_cell_z": 32,
+          "path_len_cells": 84
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 39.75,
+          "goal_x": -30.75,
+          "goal_z": -45.75,
+          "heading_deg": 252.65242323438304,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 59,
+          "goal_cell_x": 12,
+          "goal_cell_z": 2,
+          "path_len_cells": 110
+        },
+        {
+          "spawn_x": 18.75,
+          "spawn_z": 15.75,
+          "goal_x": -5.25,
+          "goal_z": -17.25,
+          "heading_deg": 299.2852171925807,
+          "spawn_cell_x": 45,
+          "spawn_cell_z": 43,
+          "goal_cell_x": 29,
+          "goal_cell_z": 21,
+          "path_len_cells": 38
+        },
+        {
+          "spawn_x": -30.75,
+          "spawn_z": 45.75,
+          "goal_x": 27.75,
+          "goal_z": -45.75,
+          "heading_deg": 180.0,
+          "spawn_cell_x": 12,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 51,
+          "goal_cell_z": 2,
+          "path_len_cells": 102
+        }
+      ]
+    },
+    {
+      "scenario_id": 92,
+      "map_index": 92,
+      "map_file": "curved_493.txt",
+      "minimum_endpoint_separation_m": 31.5,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -0.75,
+          "spawn_z": 8.25,
+          "goal_x": -44.25,
+          "goal_z": 11.25,
+          "heading_deg": 243.43494882292202,
+          "spawn_cell_x": 32,
+          "spawn_cell_z": 38,
+          "goal_cell_x": 3,
+          "goal_cell_z": 40,
+          "path_len_cells": 45
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": 32.25,
+          "goal_x": -44.25,
+          "goal_z": -20.25,
+          "heading_deg": 232.76205549837712,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 54,
+          "goal_cell_x": 3,
+          "goal_cell_z": 19,
+          "path_len_cells": 95
+        },
+        {
+          "spawn_x": -3.75,
+          "spawn_z": 45.75,
+          "goal_x": 3.75,
+          "goal_z": -44.25,
+          "heading_deg": 150.71478280741925,
+          "spawn_cell_x": 30,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 35,
+          "goal_cell_z": 3,
+          "path_len_cells": 77
+        },
+        {
+          "spawn_x": -42.75,
+          "spawn_z": 42.75,
+          "goal_x": 42.75,
+          "goal_z": -15.75,
+          "heading_deg": 128.95262146149395,
+          "spawn_cell_x": 4,
+          "spawn_cell_z": 61,
+          "goal_cell_x": 61,
+          "goal_cell_z": 22,
+          "path_len_cells": 100
+        }
+      ]
+    },
+    {
+      "scenario_id": 93,
+      "map_index": 93,
+      "map_file": "curved_494.txt",
+      "minimum_endpoint_separation_m": 25.807,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -15.75,
+          "spawn_z": -17.25,
+          "goal_x": -20.25,
+          "goal_z": 44.25,
+          "heading_deg": 296.565051177078,
+          "spawn_cell_x": 22,
+          "spawn_cell_z": 21,
+          "goal_cell_x": 19,
+          "goal_cell_z": 62,
+          "path_len_cells": 62
+        },
+        {
+          "spawn_x": 3.75,
+          "spawn_z": -38.25,
+          "goal_x": -44.25,
+          "goal_z": 26.25,
+          "heading_deg": 291.13684450304686,
+          "spawn_cell_x": 35,
+          "spawn_cell_z": 7,
+          "goal_cell_x": 3,
+          "goal_cell_z": 50,
+          "path_len_cells": 75
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": 11.25,
+          "goal_x": -41.25,
+          "goal_z": -8.25,
+          "heading_deg": 245.8167696682851,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 40,
+          "goal_cell_x": 5,
+          "goal_cell_z": 27,
+          "path_len_cells": 77
+        },
+        {
+          "spawn_x": -0.75,
+          "spawn_z": 3.75,
+          "goal_x": -29.25,
+          "goal_z": -42.75,
+          "heading_deg": 239.52730204953858,
+          "spawn_cell_x": 32,
+          "spawn_cell_z": 35,
+          "goal_cell_x": 13,
+          "goal_cell_z": 4,
+          "path_len_cells": 54
+        }
+      ]
+    },
+    {
+      "scenario_id": 94,
+      "map_index": 94,
+      "map_file": "curved_495.txt",
+      "minimum_endpoint_separation_m": 34.986,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 26.25,
+          "spawn_z": 0.75,
+          "goal_x": -33.75,
+          "goal_z": 0.75,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 50,
+          "spawn_cell_z": 33,
+          "goal_cell_x": 10,
+          "goal_cell_z": 33,
+          "path_len_cells": 68
+        },
+        {
+          "spawn_x": 32.25,
+          "spawn_z": 44.25,
+          "goal_x": -45.75,
+          "goal_z": -41.25,
+          "heading_deg": 155.81676966828508,
+          "spawn_cell_x": 54,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 2,
+          "goal_cell_z": 5,
+          "path_len_cells": 109
+        },
+        {
+          "spawn_x": 0.75,
+          "spawn_z": 26.25,
+          "goal_x": -5.25,
+          "goal_z": -23.25,
+          "heading_deg": 234.217474411461,
+          "spawn_cell_x": 33,
+          "spawn_cell_z": 50,
+          "goal_cell_x": 29,
+          "goal_cell_z": 17,
+          "path_len_cells": 51
+        },
+        {
+          "spawn_x": -29.25,
+          "spawn_z": 44.25,
+          "goal_x": 23.25,
+          "goal_z": -45.75,
+          "heading_deg": 180.0,
+          "spawn_cell_x": 13,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 48,
+          "goal_cell_z": 2,
+          "path_len_cells": 95
+        }
+      ]
+    },
+    {
+      "scenario_id": 95,
+      "map_index": 95,
+      "map_file": "curved_496.txt",
+      "minimum_endpoint_separation_m": 35.401,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -41.25,
+          "spawn_z": -45.75,
+          "goal_x": 11.25,
+          "goal_z": 42.75,
+          "heading_deg": 30.472697950461438,
+          "spawn_cell_x": 5,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 40,
+          "goal_cell_z": 61,
+          "path_len_cells": 102
+        },
+        {
+          "spawn_x": 26.25,
+          "spawn_z": -45.75,
+          "goal_x": -24.75,
+          "goal_z": 45.75,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 50,
+          "spawn_cell_z": 2,
+          "goal_cell_x": 16,
+          "goal_cell_z": 63,
+          "path_len_cells": 95
+        },
+        {
+          "spawn_x": 23.25,
+          "spawn_z": -9.75,
+          "goal_x": -45.75,
+          "goal_z": 17.25,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 48,
+          "spawn_cell_z": 26,
+          "goal_cell_x": 2,
+          "goal_cell_z": 44,
+          "path_len_cells": 64
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": 27.75,
+          "goal_x": -17.25,
+          "goal_z": -12.75,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 51,
+          "goal_cell_x": 21,
+          "goal_cell_z": 24,
+          "path_len_cells": 86
+        }
+      ]
+    },
+    {
+      "scenario_id": 96,
+      "map_index": 96,
+      "map_file": "curved_497.txt",
+      "minimum_endpoint_separation_m": 29.698,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": -5.25,
+          "spawn_z": -3.75,
+          "goal_x": 44.25,
+          "goal_z": 30.75,
+          "heading_deg": 342.652423234383,
+          "spawn_cell_x": 29,
+          "spawn_cell_z": 30,
+          "goal_cell_x": 62,
+          "goal_cell_z": 53,
+          "path_len_cells": 62
+        },
+        {
+          "spawn_x": -5.25,
+          "spawn_z": -44.25,
+          "goal_x": 14.25,
+          "goal_z": 21.75,
+          "heading_deg": 17.34757676561699,
+          "spawn_cell_x": 29,
+          "spawn_cell_z": 3,
+          "goal_cell_x": 42,
+          "goal_cell_z": 47,
+          "path_len_cells": 63
+        },
+        {
+          "spawn_x": 45.75,
+          "spawn_z": -38.25,
+          "goal_x": -14.25,
+          "goal_z": 45.75,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 63,
+          "spawn_cell_z": 7,
+          "goal_cell_x": 23,
+          "goal_cell_z": 63,
+          "path_len_cells": 100
+        },
+        {
+          "spawn_x": 35.25,
+          "spawn_z": 0.75,
+          "goal_x": -45.75,
+          "goal_z": 6.75,
+          "heading_deg": 335.8167696682851,
+          "spawn_cell_x": 56,
+          "spawn_cell_z": 33,
+          "goal_cell_x": 2,
+          "goal_cell_z": 37,
+          "path_len_cells": 74
+        }
+      ]
+    },
+    {
+      "scenario_id": 97,
+      "map_index": 97,
+      "map_file": "curved_498.txt",
+      "minimum_endpoint_separation_m": 31.643,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 20.25,
+          "spawn_z": -5.25,
+          "goal_x": -45.75,
+          "goal_z": 5.25,
+          "heading_deg": 283.282525588539,
+          "spawn_cell_x": 46,
+          "spawn_cell_z": 29,
+          "goal_cell_x": 2,
+          "goal_cell_z": 36,
+          "path_len_cells": 57
+        },
+        {
+          "spawn_x": 33.75,
+          "spawn_z": 27.75,
+          "goal_x": -14.25,
+          "goal_z": -11.25,
+          "heading_deg": 315.0,
+          "spawn_cell_x": 55,
+          "spawn_cell_z": 51,
+          "goal_cell_x": 23,
+          "goal_cell_z": 25,
+          "path_len_cells": 62
+        },
+        {
+          "spawn_x": 2.25,
+          "spawn_z": 45.75,
+          "goal_x": -9.75,
+          "goal_z": -45.75,
+          "heading_deg": 149.8724406484711,
+          "spawn_cell_x": 34,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 26,
+          "goal_cell_z": 2,
+          "path_len_cells": 77
+        },
+        {
+          "spawn_x": -24.75,
+          "spawn_z": 29.25,
+          "goal_x": 30.75,
+          "goal_z": -42.75,
+          "heading_deg": 193.282525588539,
+          "spawn_cell_x": 16,
+          "spawn_cell_z": 52,
+          "goal_cell_x": 53,
+          "goal_cell_z": 4,
+          "path_len_cells": 87
+        }
+      ]
+    },
+    {
+      "scenario_id": 98,
+      "map_index": 98,
+      "map_file": "curved_499.txt",
+      "minimum_endpoint_separation_m": 32.206,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 27.75,
+          "spawn_z": -33.75,
+          "goal_x": -32.25,
+          "goal_z": 45.75,
+          "heading_deg": 37.23794450162287,
+          "spawn_cell_x": 51,
+          "spawn_cell_z": 10,
+          "goal_cell_x": 11,
+          "goal_cell_z": 63,
+          "path_len_cells": 105
+        },
+        {
+          "spawn_x": 42.75,
+          "spawn_z": -5.25,
+          "goal_x": -23.25,
+          "goal_z": 14.25,
+          "heading_deg": 278.5513644845262,
+          "spawn_cell_x": 61,
+          "spawn_cell_z": 29,
+          "goal_cell_x": 17,
+          "goal_cell_z": 42,
+          "path_len_cells": 59
+        },
+        {
+          "spawn_x": 44.25,
+          "spawn_z": 30.75,
+          "goal_x": -35.25,
+          "goal_z": -20.25,
+          "heading_deg": 210.1275593515289,
+          "spawn_cell_x": 62,
+          "spawn_cell_z": 53,
+          "goal_cell_x": 9,
+          "goal_cell_z": 19,
+          "path_len_cells": 93
+        },
+        {
+          "spawn_x": 9.75,
+          "spawn_z": 6.75,
+          "goal_x": -5.25,
+          "goal_z": -33.75,
+          "heading_deg": 218.95262146149395,
+          "spawn_cell_x": 39,
+          "spawn_cell_z": 37,
+          "goal_cell_x": 29,
+          "goal_cell_z": 10,
+          "path_len_cells": 43
+        }
+      ]
+    },
+    {
+      "scenario_id": 99,
+      "map_index": 99,
+      "map_file": "curved_500.txt",
+      "minimum_endpoint_separation_m": 36.125,
+      "overlapping_route_pairs": 6,
+      "first_two_routes_overlap": true,
+      "routes": [
+        {
+          "spawn_x": 41.25,
+          "spawn_z": 9.75,
+          "goal_x": -45.75,
+          "goal_z": 6.75,
+          "heading_deg": 270.0,
+          "spawn_cell_x": 60,
+          "spawn_cell_z": 39,
+          "goal_cell_x": 2,
+          "goal_cell_z": 37,
+          "path_len_cells": 84
+        },
+        {
+          "spawn_x": 24.75,
+          "spawn_z": 45.75,
+          "goal_x": -42.75,
+          "goal_z": -29.25,
+          "heading_deg": 171.4486355154738,
+          "spawn_cell_x": 49,
+          "spawn_cell_z": 63,
+          "goal_cell_x": 4,
+          "goal_cell_z": 13,
+          "path_len_cells": 99
+        },
+        {
+          "spawn_x": -2.25,
+          "spawn_z": 6.75,
+          "goal_x": -2.25,
+          "goal_z": -36.75,
+          "heading_deg": 138.88258300921268,
+          "spawn_cell_x": 31,
+          "spawn_cell_z": 37,
+          "goal_cell_x": 31,
+          "goal_cell_z": 8,
+          "path_len_cells": 35
+        },
+        {
+          "spawn_x": -27.75,
+          "spawn_z": 44.25,
+          "goal_x": 44.25,
+          "goal_z": -38.25,
+          "heading_deg": 171.4486355154738,
+          "spawn_cell_x": 14,
+          "spawn_cell_z": 62,
+          "goal_cell_x": 62,
+          "goal_cell_z": 7,
+          "path_len_cells": 103
+        }
+      ]
+    }
+  ]
+}

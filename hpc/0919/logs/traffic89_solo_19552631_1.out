@@ -1,0 +1,343 @@
+Wrote /d/hpc/home/kk42117/mag/car1/configs/traffic89_solo20m_s1.yaml; init=scratch, steps=20000000, environments=64
+FORCE_RESTART=1: replacing the known-invalid previous contents of traffic89_solo20m_s1.
+Launch attempt 1/4 using base port 33168
+
+            ┐  ╖
+        ╓╖╬│╡  ││╬╖╖
+    ╓╖╬│││││┘  ╬│││││╬╖
+ ╖╬│││││╬╜        ╙╬│││││╖╖                               ╗╗╗
+ ╬╬╬╬╖││╦╖        ╖╬││╗╣╣╣╬      ╟╣╣╬    ╟╣╣╣             ╜╜╜  ╟╣╣
+ ╬╬╬╬╬╬╬╬╖│╬╖╖╓╬╪│╓╣╣╣╣╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╒╣╣╖╗╣╣╣╗   ╣╣╣ ╣╣╣╣╣╣ ╟╣╣╖   ╣╣╣
+ ╬╬╬╬┐  ╙╬╬╬╬│╓╣╣╣╝╜  ╫╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╟╣╣╣╙ ╙╣╣╣  ╣╣╣ ╙╟╣╣╜╙  ╫╣╣  ╟╣╣
+ ╬╬╬╬┐     ╙╬╬╣╣      ╫╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╟╣╣╬   ╣╣╣  ╣╣╣  ╟╣╣     ╣╣╣┌╣╣╜
+ ╬╬╬╜       ╬╬╣╣      ╙╝╣╣╬      ╙╣╣╣╗╖╓╗╣╣╣╜ ╟╣╣╬   ╣╣╣  ╣╣╣  ╟╣╣╦╓    ╣╣╣╣╣
+ ╙   ╓╦╖    ╬╬╣╣   ╓╗╗╖            ╙╝╣╣╣╣╝╜   ╘╝╝╜   ╝╝╝  ╝╝╝   ╙╣╣╣    ╟╣╣╣
+   ╩╬╬╬╬╬╬╦╦╬╬╣╣╗╣╣╣╣╣╣╣╝                                             ╫╣╣╣╣
+      ╙╬╬╬╬╬╬╬╣╣╣╣╣╣╝╜
+          ╙╬╬╬╣╣╣╜
+             ╙
+        
+ Version information:
+  ml-agents: 1.1.0,
+  ml-agents-envs: 1.1.0,
+  Communicator API: 1.5.0,
+  PyTorch: 2.1.2+cu121
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[WARNING] Deleting TensorBoard data events.out.tfevents.1789927693.wn026.arnes.si.370899.0 that was left over from a previous run.
+[INFO] Hyperparameters for behavior name CarAgent: 
+	trainer_type:	ppo
+	hyperparameters:	
+	  batch_size:	1024
+	  buffer_size:	16384
+	  learning_rate:	0.0003
+	  beta:	0.005
+	  epsilon:	0.2
+	  lambd:	0.95
+	  num_epoch:	3
+	  shared_critic:	False
+	  learning_rate_schedule:	linear
+	  beta_schedule:	linear
+	  epsilon_schedule:	linear
+	checkpoint_interval:	1000000
+	network_settings:	
+	  normalize:	True
+	  hidden_units:	128
+	  num_layers:	2
+	  vis_encode_type:	simple
+	  memory:	None
+	  goal_conditioning_type:	hyper
+	  deterministic:	False
+	reward_signals:	
+	  extrinsic:	
+	    gamma:	0.99
+	    strength:	1.0
+	    network_settings:	
+	      normalize:	False
+	      hidden_units:	128
+	      num_layers:	2
+	      vis_encode_type:	simple
+	      memory:	None
+	      goal_conditioning_type:	hyper
+	      deterministic:	False
+	init_path:	None
+	keep_checkpoints:	22
+	even_checkpoints:	False
+	max_steps:	20000000
+	time_horizon:	128
+	summary_freq:	10000
+	threaded:	False
+	self_play:	None
+	behavioral_cloning:	None
+[INFO] Parameter 'vehicle_speed_cap_enabled' is in lesson 'vehicle_speed_cap_enabled' and has value 'Float: value=1.0'.
+[INFO] Parameter 'vehicle_speed_cap_ms' is in lesson 'vehicle_speed_cap_ms' and has value 'Float: value=3.0'.
+[INFO] Parameter 'vehicle_speed_cap_governor_start_fraction' is in lesson 'vehicle_speed_cap_governor_start_fraction' and has value 'Float: value=0.9'.
+[INFO] Parameter 'vehicle_speed_cap_overspeed_margin_ms' is in lesson 'vehicle_speed_cap_overspeed_margin_ms' and has value 'Float: value=0.5'.
+[INFO] Parameter 'vehicle_speed_cap_brake_torque' is in lesson 'vehicle_speed_cap_brake_torque' and has value 'Float: value=900.0'.
+[INFO] Parameter 'regen_brake_torque' is in lesson 'regen_brake_torque' and has value 'Float: value=450.0'.
+[INFO] Parameter 'sensor_observations_enabled' is in lesson 'sensor_observations_enabled' and has value 'Float: value=1.0'.
+[INFO] Parameter 'laser_special_distance_scale_m' is in lesson 'laser_special_distance_scale_m' and has value 'Float: value=10.0'.
+[INFO] Parameter 'laser_road_boundary_distance_scale_m' is in lesson 'laser_road_boundary_distance_scale_m' and has value 'Float: value=3.0'.
+[INFO] Parameter 'reward_goal' is in lesson 'reward_goal' and has value 'Float: value=8.0'.
+[INFO] Parameter 'reward_approach_bonus' is in lesson 'reward_approach_bonus' and has value 'Float: value=0.0'.
+[INFO] Parameter 'reward_terminal_penalty' is in lesson 'reward_terminal_penalty' and has value 'Float: value=-10.0'.
+[INFO] Parameter 'reward_time_penalty' is in lesson 'reward_time_penalty' and has value 'Float: value=-0.002'.
+[INFO] Parameter 'reward_time_penalty_growth' is in lesson 'reward_time_penalty_growth' and has value 'Float: value=0.0'.
+[INFO] Parameter 'reward_checkpoint' is in lesson 'reward_checkpoint' and has value 'Float: value=0.02'.
+[INFO] Parameter 'total_training_steps' is in lesson 'total_training_steps' and has value 'Float: value=20000000.0'.
+[INFO] Parameter 'training_num_envs' is in lesson 'training_num_envs' and has value 'Float: value=64.0'.
+[INFO] Parameter 'terminal_penalty_escalation_enabled' is in lesson 'terminal_penalty_escalation_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'terminal_penalty_escalation_step' is in lesson 'terminal_penalty_escalation_step' and has value 'Float: value=10000000.0'.
+[INFO] Parameter 'terminal_penalty_escalated_value' is in lesson 'terminal_penalty_escalated_value' and has value 'Float: value=-15.0'.
+[INFO] Parameter 'goal_reward_escalation_enabled' is in lesson 'goal_reward_escalation_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'goal_reward_escalation_step' is in lesson 'goal_reward_escalation_step' and has value 'Float: value=15000000.0'.
+[INFO] Parameter 'goal_reward_escalated_value' is in lesson 'goal_reward_escalated_value' and has value 'Float: value=16.0'.
+[INFO] Parameter 'idle_penalty_enabled' is in lesson 'idle_penalty_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'idle_speed_threshold' is in lesson 'idle_speed_threshold' and has value 'Float: value=0.001'.
+[INFO] Parameter 'idle_grace_steps' is in lesson 'idle_grace_steps' and has value 'Float: value=20.0'.
+[INFO] Parameter 'idle_penalty_base' is in lesson 'idle_penalty_base' and has value 'Float: value=-0.02'.
+[INFO] Parameter 'idle_penalty_growth' is in lesson 'idle_penalty_growth' and has value 'Float: value=0.05'.
+[INFO] Parameter 'lagrangian_penalty_enabled' is in lesson 'lagrangian_penalty_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'lagrangian_target_crash_rate' is in lesson 'lagrangian_target_crash_rate' and has value 'Float: value=0.15'.
+[INFO] Parameter 'lagrangian_lambda_init' is in lesson 'lagrangian_lambda_init' and has value 'Float: value=5.0'.
+[INFO] Parameter 'lagrangian_lambda_lr' is in lesson 'lagrangian_lambda_lr' and has value 'Float: value=10.0'.
+[INFO] Parameter 'lagrangian_lambda_max' is in lesson 'lagrangian_lambda_max' and has value 'Float: value=30.0'.
+[INFO] Parameter 'lagrangian_maxstep_enabled' is in lesson 'lagrangian_maxstep_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'lagrangian_target_maxstep_rate' is in lesson 'lagrangian_target_maxstep_rate' and has value 'Float: value=0.15'.
+[INFO] Parameter 'lagrangian_maxstep_lambda_init' is in lesson 'lagrangian_maxstep_lambda_init' and has value 'Float: value=0.002'.
+[INFO] Parameter 'lagrangian_maxstep_lambda_lr' is in lesson 'lagrangian_maxstep_lambda_lr' and has value 'Float: value=0.01'.
+[INFO] Parameter 'lagrangian_maxstep_lambda_max' is in lesson 'lagrangian_maxstep_lambda_max' and has value 'Float: value=0.01'.
+[INFO] Parameter 'sensor_terminal_lagrangian_enabled' is in lesson 'sensor_terminal_lagrangian_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'sensor_terminal_target_exposure' is in lesson 'sensor_terminal_target_exposure' and has value 'Float: value=0.15'.
+[INFO] Parameter 'sensor_terminal_lambda_init' is in lesson 'sensor_terminal_lambda_init' and has value 'Float: value=1.0'.
+[INFO] Parameter 'sensor_terminal_lambda_lr' is in lesson 'sensor_terminal_lambda_lr' and has value 'Float: value=10.0'.
+[INFO] Parameter 'sensor_terminal_lambda_max' is in lesson 'sensor_terminal_lambda_max' and has value 'Float: value=30.0'.
+[INFO] Parameter 'sensor_terminal_penalty_lambda' is in lesson 'sensor_terminal_penalty_lambda' and has value 'Float: value=0.0'.
+[INFO] Parameter 'sensor_severity_exponent' is in lesson 'sensor_severity_exponent' and has value 'Float: value=1.0'.
+[INFO] Parameter 'adaptive_step_budget_enabled' is in lesson 'adaptive_step_budget_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'max_step_budget' is in lesson 'max_step_budget' and has value 'Float: value=5000.0'.
+[INFO] Parameter 'adaptive_step_budget_lr' is in lesson 'adaptive_step_budget_lr' and has value 'Float: value=2000.0'.
+[INFO] Parameter 'adaptive_step_budget_min' is in lesson 'adaptive_step_budget_min' and has value 'Float: value=2500.0'.
+[INFO] Parameter 'adaptive_step_budget_max' is in lesson 'adaptive_step_budget_max' and has value 'Float: value=8000.0'.
+[INFO] Parameter 'reward_maxstep_penalty' is in lesson 'reward_maxstep_penalty' and has value 'Float: value=0.0'.
+[INFO] Parameter 'bootstrap_curriculum_enabled' is in lesson 'bootstrap_curriculum_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'bootstrap_approach_bonus' is in lesson 'bootstrap_approach_bonus' and has value 'Float: value=5.0'.
+[INFO] Parameter 'bootstrap_stage_front_steps' is in lesson 'bootstrap_stage_front_steps' and has value 'Float: value=200000.0'.
+[INFO] Parameter 'bootstrap_front_distance' is in lesson 'bootstrap_front_distance' and has value 'Float: value=9.0'.
+[INFO] Parameter 'bootstrap_stage_behind_steps' is in lesson 'bootstrap_stage_behind_steps' and has value 'Float: value=500000.0'.
+[INFO] Parameter 'bootstrap_behind_distance' is in lesson 'bootstrap_behind_distance' and has value 'Float: value=3.0'.
+[INFO] Parameter 'bootstrap_behind_spawn_reverse_prob_start' is in lesson 'bootstrap_behind_spawn_reverse_prob_start' and has value 'Float: value=1.0'.
+[INFO] Parameter 'bootstrap_behind_spawn_reverse_prob_end' is in lesson 'bootstrap_behind_spawn_reverse_prob_end' and has value 'Float: value=0.3'.
+[INFO] Parameter 'bootstrap_behind_terminal_distance' is in lesson 'bootstrap_behind_terminal_distance' and has value 'Float: value=4.0'.
+[INFO] Parameter 'bootstrap_stage_deadend_steps' is in lesson 'bootstrap_stage_deadend_steps' and has value 'Float: value=500000.0'.
+[INFO] Parameter 'bootstrap_deadend_depth_cells' is in lesson 'bootstrap_deadend_depth_cells' and has value 'Float: value=3.0'.
+[INFO] Parameter 'bootstrap_deadend_goal_distance_min' is in lesson 'bootstrap_deadend_goal_distance_min' and has value 'Float: value=10.0'.
+[INFO] Parameter 'bootstrap_deadend_goal_distance_max' is in lesson 'bootstrap_deadend_goal_distance_max' and has value 'Float: value=18.0'.
+[INFO] Parameter 'bootstrap_deadend_goal_angle_spread_deg' is in lesson 'bootstrap_deadend_goal_angle_spread_deg' and has value 'Float: value=60.0'.
+[INFO] Parameter 'bootstrap_deadend_spawn_reverse_prob_start' is in lesson 'bootstrap_deadend_spawn_reverse_prob_start' and has value 'Float: value=1.0'.
+[INFO] Parameter 'bootstrap_deadend_spawn_reverse_prob_end' is in lesson 'bootstrap_deadend_spawn_reverse_prob_end' and has value 'Float: value=0.0'.
+[INFO] Parameter 'bootstrap_stage_side_steps' is in lesson 'bootstrap_stage_side_steps' and has value 'Float: value=300000.0'.
+[INFO] Parameter 'bootstrap_side_distance_min' is in lesson 'bootstrap_side_distance_min' and has value 'Float: value=8.0'.
+[INFO] Parameter 'bootstrap_side_distance_max' is in lesson 'bootstrap_side_distance_max' and has value 'Float: value=15.0'.
+[INFO] Parameter 'bootstrap_side_angle_min_deg' is in lesson 'bootstrap_side_angle_min_deg' and has value 'Float: value=30.0'.
+[INFO] Parameter 'bootstrap_side_angle_max_deg' is in lesson 'bootstrap_side_angle_max_deg' and has value 'Float: value=150.0'.
+[INFO] Parameter 'voronoi_near_goal_enabled' is in lesson 'voronoi_near_goal_enabled' and has value 'Float: value=1.0'.
+[INFO] Parameter 'voronoi_near_goal_steps' is in lesson 'voronoi_near_goal_steps' and has value 'Float: value=10000000.0'.
+[INFO] Parameter 'voronoi_near_goal_distance_start' is in lesson 'voronoi_near_goal_distance_start' and has value 'Float: value=15.0'.
+[INFO] Parameter 'voronoi_near_goal_distance_end' is in lesson 'voronoi_near_goal_distance_end' and has value 'Float: value=100.0'.
+[INFO] Parameter 'use_validation_maps' is in lesson 'use_validation_maps' and has value 'Float: value=0.0'.
+[INFO] Parameter 'laser_vehicle_distance_observation_enabled' is in lesson 'laser_vehicle_distance_observation_enabled' and has value 'Float: value=1'.
+[INFO] Parameter 'laser_vehicle_distance_scale_m' is in lesson 'laser_vehicle_distance_scale_m' and has value 'Float: value=10.0'.
+[INFO] CarAgent. Step: 10000. Time Elapsed: 20.984 s. Episodes: 11. Mean Reward: 1.497. Std of Reward: 8.985. Mean Episode Length: 100.636. Std of Episode Length: 100.103. Goals: 8. Terminated: 4. FwdTerminalExposure: 0.333. Training.
+[INFO] CarAgent. Step: 20000. Time Elapsed: 31.834 s. Episodes: 4. Mean Reward: -10.207. Std of Reward: 0.593. Mean Episode Length: 279.750. Std of Episode Length: 12.617. Terminated: 4. FwdTerminalExposure: 1.000. Training.
+[INFO] CarAgent. Step: 30000. Time Elapsed: 40.399 s. Episodes: 5. Mean Reward: -6.288. Std of Reward: 7.642. Mean Episode Length: 381.000. Std of Episode Length: 70.390. Goals: 1. Terminated: 4. FwdTerminalExposure: 0.800. Training.
+[INFO] CarAgent. Step: 40000. Time Elapsed: 52.714 s. Episodes: 3. Mean Reward: -4.631. Std of Reward: 9.162. Mean Episode Length: 634.333. Std of Episode Length: 29.238. Goals: 1. Terminated: 2. FwdTerminalExposure: 0.667. Training.
+[INFO] CarAgent. Step: 50000. Time Elapsed: 69.096 s. No episode was completed since last summary. Training.
+[INFO] CarAgent. Step: 60000. Time Elapsed: 76.164 s. Episodes: 21. Mean Reward: -1.204. Std of Reward: 3.559. Mean Episode Length: 961.658. Std of Episode Length: 165.216. Goals: 4. Terminated: 1. MaxStep: 35. FwdTerminalExposure: 0.143. Training.
+[INFO] CarAgent. Step: 70000. Time Elapsed: 87.127 s. Episodes: 33. Mean Reward: -1.265. Std of Reward: 3.048. Mean Episode Length: 856.812. Std of Episode Length: 318.553. Goals: 2. Terminated: 1. MaxStep: 13. FwdTerminalExposure: 0.375. Training.
+[INFO] CarAgent. Step: 80000. Time Elapsed: 99.123 s. Episodes: 8. Mean Reward: -1.283. Std of Reward: 4.628. Mean Episode Length: 805.375. Std of Episode Length: 335.920. Goals: 1. Terminated: 1. MaxStep: 6. FwdTerminalExposure: 0.250. Training.
+[INFO] CarAgent. Step: 90000. Time Elapsed: 114.391 s. Episodes: 8. Mean Reward: -1.111. Std of Reward: 7.078. Mean Episode Length: 638.125. Std of Episode Length: 379.363. Goals: 2. Terminated: 2. MaxStep: 4. FwdTerminalExposure: 0.375. Training.
+[INFO] CarAgent. Step: 100000. Time Elapsed: 125.783 s. Episodes: 3. Mean Reward: -1.319. Std of Reward: 8.364. Mean Episode Length: 592.000. Std of Episode Length: 336.471. Goals: 1. Terminated: 1. MaxStep: 1. FwdTerminalExposure: 0.524. Training.
+[INFO] CarAgent. Step: 110000. Time Elapsed: 134.159 s. Episodes: 6. Mean Reward: -4.749. Std of Reward: 7.514. Mean Episode Length: 690.333. Std of Episode Length: 310.487. Goals: 1. Terminated: 3. MaxStep: 2. FwdTerminalExposure: 0.833. Training.
+[INFO] CarAgent. Step: 120000. Time Elapsed: 147.272 s. Episodes: 4. Mean Reward: -11.344. Std of Reward: 0.606. Mean Episode Length: 791.000. Std of Episode Length: 101.995. Terminated: 4. FwdTerminalExposure: 1.000. Training.
+[INFO] CarAgent. Step: 130000. Time Elapsed: 159.783 s. Episodes: 44. Mean Reward: -0.864. Std of Reward: 3.533. Mean Episode Length: 911.659. Std of Episode Length: 273.341. Goals: 6. Terminated: 1. MaxStep: 39. FwdTerminalExposure: 0.186. Training.
+[INFO] CarAgent. Step: 140000. Time Elapsed: 171.400 s. Episodes: 5. Mean Reward: 2.742. Std of Reward: 8.494. Mean Episode Length: 482.200. Std of Episode Length: 404.947. Goals: 3. Terminated: 1. MaxStep: 1. FwdTerminalExposure: 0.286. Training.
+[INFO] CarAgent. Step: 150000. Time Elapsed: 182.553 s. Episodes: 7. Mean Reward: 1.467. Std of Reward: 4.987. Mean Episode Length: 724.286. Std of Episode Length: 434.363. Goals: 2. MaxStep: 5. FwdTerminalExposure: 0.327. Training.
+[INFO] CarAgent. Step: 160000. Time Elapsed: 194.155 s. Episodes: 5. Mean Reward: -1.868. Std of Reward: 0.217. Mean Episode Length: 999.000. Std of Episode Length: 0.000. MaxStep: 5. FwdTerminalExposure: 0.600. Training.
+[INFO] CarAgent. Step: 170000. Time Elapsed: 207.748 s. Episodes: 10. Mean Reward: 0.454. Std of Reward: 3.929. Mean Episode Length: 931.900. Std of Episode Length: 134.544. Goals: 2. MaxStep: 8. FwdTerminalExposure: 0.271. Training.
+[INFO] CarAgent. Step: 180000. Time Elapsed: 218.053 s. Episodes: 3. Mean Reward: -1.847. Std of Reward: 0.217. Mean Episode Length: 999.000. Std of Episode Length: 0.000. MaxStep: 3. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 190000. Time Elapsed: 229.363 s. Episodes: 26. Mean Reward: -1.988. Std of Reward: 1.783. Mean Episode Length: 997.923. Std of Episode Length: 5.385. Terminated: 1. MaxStep: 26. FwdTerminalExposure: 0.181. Training.
+[INFO] CarAgent. Step: 200000. Time Elapsed: 242.743 s. Episodes: 15. Mean Reward: 1.302. Std of Reward: 4.661. Mean Episode Length: 784.867. Std of Episode Length: 382.486. Goals: 4. MaxStep: 10. FwdTerminalExposure: 0.248. Training.
+[INFO] CarAgent. Step: 210000. Time Elapsed: 253.703 s. Episodes: 10. Mean Reward: 0.628. Std of Reward: 4.377. Mean Episode Length: 810.200. Std of Episode Length: 377.677. Goals: 2. MaxStep: 8. FwdTerminalExposure: 0.171. Training.
+[INFO] CarAgent. Step: 220000. Time Elapsed: 265.957 s. Episodes: 8. Mean Reward: -2.725. Std of Reward: 5.935. Mean Episode Length: 771.250. Std of Episode Length: 337.958. Goals: 1. Terminated: 2. MaxStep: 5. FwdTerminalExposure: 0.357. Training.
+[INFO] CarAgent. Step: 230000. Time Elapsed: 274.844 s. Episodes: 5. Mean Reward: 0.688. Std of Reward: 4.215. Mean Episode Length: 856.800. Std of Episode Length: 284.400. Goals: 1. MaxStep: 4. FwdTerminalExposure: 0.200. Training.
+[INFO] CarAgent. Step: 240000. Time Elapsed: 288.227 s. Episodes: 11. Mean Reward: 1.352. Std of Reward: 6.353. Mean Episode Length: 621.364. Std of Episode Length: 448.852. Goals: 4. Terminated: 1. MaxStep: 6. FwdTerminalExposure: 0.143. Training.
+[INFO] CarAgent. Step: 250000. Time Elapsed: 301.496 s. Episodes: 6. Mean Reward: -1.507. Std of Reward: 0.585. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 1. MaxStep: 6. FwdTerminalExposure: 0.122. Training.
+[INFO] CarAgent. Step: 260000. Time Elapsed: 310.953 s. Episodes: 32. Mean Reward: -0.998. Std of Reward: 2.543. Mean Episode Length: 937.500. Std of Episode Length: 238.214. Goals: 2. MaxStep: 30. FwdTerminalExposure: 0.094. Training.
+[INFO] CarAgent. Step: 270000. Time Elapsed: 323.491 s. Episodes: 7. Mean Reward: 1.353. Std of Reward: 4.664. Mean Episode Length: 846.714. Std of Episode Length: 286.367. Goals: 2. MaxStep: 5. FwdTerminalExposure: 0.061. Training.
+[INFO] CarAgent. Step: 280000. Time Elapsed: 334.380 s. Episodes: 8. Mean Reward: -0.367. Std of Reward: 3.302. Mean Episode Length: 949.889. Std of Episode Length: 138.907. Goals: 2. MaxStep: 8. FwdTerminalExposure: 0.314. Training.
+[INFO] CarAgent. Step: 290000. Time Elapsed: 348.405 s. Episodes: 8. Mean Reward: 2.131. Std of Reward: 5.107. Mean Episode Length: 623.857. Std of Episode Length: 445.803. Goals: 3. MaxStep: 4. FwdTerminalExposure: 0.143. Training.
+[INFO] CarAgent. Step: 300000. Time Elapsed: 360.791 s. Episodes: 11. Mean Reward: 1.255. Std of Reward: 4.712. Mean Episode Length: 735.909. Std of Episode Length: 429.940. Goals: 3. MaxStep: 8. FwdTerminalExposure: 0.195. Training.
+[INFO] CarAgent. Step: 310000. Time Elapsed: 369.872 s. Episodes: 9. Mean Reward: 3.552. Std of Reward: 6.969. Mean Episode Length: 457.222. Std of Episode Length: 460.141. Goals: 5. Terminated: 1. MaxStep: 3. FwdTerminalExposure: 0.111. Training.
+[INFO] CarAgent. Step: 320000. Time Elapsed: 383.318 s. Episodes: 33. Mean Reward: -1.479. Std of Reward: 3.520. Mean Episode Length: 925.147. Std of Episode Length: 236.775. Goals: 2. Terminated: 2. MaxStep: 30. FwdTerminalExposure: 0.265. Training.
+[INFO] CarAgent. Step: 330000. Time Elapsed: 394.353 s. Episodes: 9. Mean Reward: 1.842. Std of Reward: 5.146. Mean Episode Length: 711.625. Std of Episode Length: 402.332. Goals: 3. MaxStep: 5. FwdTerminalExposure: 0.393. Training.
+[INFO] CarAgent. Step: 340000. Time Elapsed: 406.533 s. Episodes: 12. Mean Reward: 1.218. Std of Reward: 6.178. Mean Episode Length: 654.917. Std of Episode Length: 414.754. Goals: 4. Terminated: 1. MaxStep: 7. FwdTerminalExposure: 0.298. Training.
+[INFO] CarAgent. Step: 350000. Time Elapsed: 419.584 s. Episodes: 10. Mean Reward: 4.862. Std of Reward: 5.163. Mean Episode Length: 416.100. Std of Episode Length: 476.128. Goals: 6. MaxStep: 4. FwdTerminalExposure: 0.171. Training.
+[INFO] CarAgent. Step: 360000. Time Elapsed: 430.072 s. Episodes: 9. Mean Reward: -0.329. Std of Reward: 5.542. Mean Episode Length: 772.333. Std of Episode Length: 352.090. Goals: 3. Terminated: 1. MaxStep: 6. FwdTerminalExposure: 0.200. Training.
+[INFO] CarAgent. Step: 370000. Time Elapsed: 443.443 s. Episodes: 8. Mean Reward: 0.682. Std of Reward: 3.837. Mean Episode Length: 951.625. Std of Episode Length: 100.919. Goals: 2. MaxStep: 6. FwdTerminalExposure: 0.286. Training.
+[INFO] CarAgent. Step: 380000. Time Elapsed: 455.830 s. Episodes: 19. Mean Reward: -0.504. Std of Reward: 3.234. Mean Episode Length: 910.773. Std of Episode Length: 279.122. Goals: 3. MaxStep: 20. FwdTerminalExposure: 0.373. Training.
+[INFO] CarAgent. Step: 390000. Time Elapsed: 468.021 s. Episodes: 20. Mean Reward: 0.946. Std of Reward: 4.570. Mean Episode Length: 735.278. Std of Episode Length: 427.033. Goals: 5. MaxStep: 13. FwdTerminalExposure: 0.254. Training.
+[INFO] CarAgent. Step: 400000. Time Elapsed: 482.314 s. Episodes: 7. Mean Reward: -1.640. Std of Reward: 0.437. Mean Episode Length: 999.000. Std of Episode Length: 0.000. MaxStep: 6. FwdTerminalExposure: 0.310. Training.
+[INFO] CarAgent. Step: 410000. Time Elapsed: 496.048 s. Episodes: 11. Mean Reward: -1.336. Std of Reward: 5.870. Mean Episode Length: 802.083. Std of Episode Length: 324.430. Goals: 3. Terminated: 2. MaxStep: 8. FwdTerminalExposure: 0.462. Training.
+[INFO] CarAgent. Step: 420000. Time Elapsed: 510.675 s. Episodes: 8. Mean Reward: -0.237. Std of Reward: 5.728. Mean Episode Length: 770.000. Std of Episode Length: 350.270. Goals: 2. Terminated: 1. MaxStep: 4. FwdTerminalExposure: 0.510. Training.
+[INFO] CarAgent. Step: 430000. Time Elapsed: 525.234 s. Episodes: 7. Mean Reward: -0.429. Std of Reward: 3.332. Mean Episode Length: 962.286. Std of Episode Length: 89.931. Goals: 1. MaxStep: 6. FwdTerminalExposure: 0.143. Training.
+[INFO] CarAgent. Step: 440000. Time Elapsed: 537.198 s. Episodes: 8. Mean Reward: -1.478. Std of Reward: 0.611. Mean Episode Length: 999.000. Std of Episode Length: 0.000. MaxStep: 8. FwdTerminalExposure: 0.375. Training.
+[INFO] CarAgent. Step: 450000. Time Elapsed: 553.277 s. Episodes: 27. Mean Reward: -0.367. Std of Reward: 3.508. Mean Episode Length: 893.185. Std of Episode Length: 299.376. Goals: 3. MaxStep: 24. FwdTerminalExposure: 0.365. Training.
+[INFO] CarAgent. Step: 460000. Time Elapsed: 565.086 s. Episodes: 7. Mean Reward: -0.256. Std of Reward: 3.960. Mean Episode Length: 865.714. Std of Episode Length: 326.482. Goals: 1. MaxStep: 6. FwdTerminalExposure: 0.388. Training.
+[INFO] CarAgent. Step: 470000. Time Elapsed: 580.163 s. Episodes: 10. Mean Reward: -0.385. Std of Reward: 3.044. Mean Episode Length: 949.600. Std of Episode Length: 148.200. Goals: 1. MaxStep: 9. FwdTerminalExposure: 0.386. Training.
+[INFO] CarAgent. Step: 480000. Time Elapsed: 594.309 s. Episodes: 11. Mean Reward: 0.525. Std of Reward: 5.656. Mean Episode Length: 717.455. Std of Episode Length: 382.248. Goals: 3. Terminated: 1. MaxStep: 7. FwdTerminalExposure: 0.130. Training.
+[INFO] CarAgent. Step: 490000. Time Elapsed: 606.933 s. Episodes: 11. Mean Reward: 0.435. Std of Reward: 5.989. Mean Episode Length: 735.500. Std of Episode Length: 405.313. Goals: 3. Terminated: 1. MaxStep: 8. FwdTerminalExposure: 0.333. Training.
+[INFO] CarAgent. Step: 500000. Time Elapsed: 622.135 s. Episodes: 10. Mean Reward: 2.613. Std of Reward: 4.952. Mean Episode Length: 658.556. Std of Episode Length: 405.963. Goals: 4. MaxStep: 5. FwdTerminalExposure: 0.159. Training.
+[INFO] CarAgent. Step: 510000. Time Elapsed: 634.282 s. Episodes: 23. Mean Reward: -0.682. Std of Reward: 4.208. Mean Episode Length: 921.870. Std of Episode Length: 228.981. Goals: 3. Terminated: 1. MaxStep: 19. FwdTerminalExposure: 0.248. Training.
+[INFO] CarAgent. Step: 520000. Time Elapsed: 648.499 s. Episodes: 10. Mean Reward: 2.894. Std of Reward: 4.899. Mean Episode Length: 655.200. Std of Episode Length: 434.114. Goals: 4. MaxStep: 6. FwdTerminalExposure: 0.400. Training.
+[INFO] CarAgent. Step: 530000. Time Elapsed: 663.487 s. Episodes: 13. Mean Reward: -4.038. Std of Reward: 5.492. Mean Episode Length: 692.692. Std of Episode Length: 376.723. Goals: 2. Terminated: 5. MaxStep: 7. FwdTerminalExposure: 0.429. Training.
+[INFO] CarAgent. Step: 540000. Time Elapsed: 676.083 s. Episodes: 12. Mean Reward: 0.343. Std of Reward: 4.077. Mean Episode Length: 840.167. Std of Episode Length: 355.266. Goals: 2. MaxStep: 10. FwdTerminalExposure: 0.286. Training.
+[INFO] CarAgent. Step: 550000. Time Elapsed: 691.297 s. Episodes: 10. Mean Reward: -0.213. Std of Reward: 5.585. Mean Episode Length: 757.400. Std of Episode Length: 389.845. Goals: 2. Terminated: 1. MaxStep: 7. FwdTerminalExposure: 0.300. Training.
+[INFO] CarAgent. Step: 560000. Time Elapsed: 701.851 s. Episodes: 10. Mean Reward: 0.764. Std of Reward: 4.247. Mean Episode Length: 841.100. Std of Episode Length: 316.426. Goals: 2. MaxStep: 8. FwdTerminalExposure: 0.186. Training.
+[INFO] CarAgent. Step: 570000. Time Elapsed: 714.416 s. Episodes: 12. Mean Reward: 2.012. Std of Reward: 6.337. Mean Episode Length: 631.333. Std of Episode Length: 440.916. Goals: 5. Terminated: 1. MaxStep: 6. FwdTerminalExposure: 0.167. Training.
+[INFO] CarAgent. Step: 580000. Time Elapsed: 727.224 s. Episodes: 20. Mean Reward: -0.795. Std of Reward: 3.317. Mean Episode Length: 905.350. Std of Episode Length: 281.174. Goals: 2. MaxStep: 18. FwdTerminalExposure: 0.429. Training.
+[INFO] CarAgent. Step: 590000. Time Elapsed: 737.782 s. Episodes: 9. Mean Reward: 0.770. Std of Reward: 4.237. Mean Episode Length: 879.333. Std of Episode Length: 237.708. Goals: 2. MaxStep: 7. FwdTerminalExposure: 0.397. Training.
+[INFO] CarAgent. Step: 600000. Time Elapsed: 750.822 s. Episodes: 11. Mean Reward: -1.344. Std of Reward: 0.635. Mean Episode Length: 999.000. Std of Episode Length: 0.000. MaxStep: 12. FwdTerminalExposure: 0.321. Training.
+[INFO] CarAgent. Step: 610000. Time Elapsed: 761.122 s. Episodes: 10. Mean Reward: 0.936. Std of Reward: 6.111. Mean Episode Length: 705.100. Std of Episode Length: 393.642. Goals: 3. Terminated: 1. MaxStep: 6. FwdTerminalExposure: 0.357. Training.
+[INFO] CarAgent. Step: 620000. Time Elapsed: 774.011 s. Episodes: 10. Mean Reward: 0.716. Std of Reward: 4.380. Mean Episode Length: 795.444. Std of Episode Length: 381.261. Goals: 2. MaxStep: 7. FwdTerminalExposure: 0.254. Training.
+[INFO] CarAgent. Step: 630000. Time Elapsed: 787.320 s. Episodes: 6. Mean Reward: -2.641. Std of Reward: 3.298. Mean Episode Length: 933.000. Std of Episode Length: 147.580. Terminated: 1. MaxStep: 5. FwdTerminalExposure: 0.333. Training.
+[INFO] CarAgent. Step: 640000. Time Elapsed: 798.199 s. Episodes: 26. Mean Reward: 0.664. Std of Reward: 3.936. Mean Episode Length: 846.731. Std of Episode Length: 346.057. Goals: 5. MaxStep: 21. FwdTerminalExposure: 0.412. Training.
+[INFO] CarAgent. Step: 650000. Time Elapsed: 810.644 s. Episodes: 9. Mean Reward: 3.038. Std of Reward: 5.037. Mean Episode Length: 702.111. Std of Episode Length: 389.313. Goals: 4. MaxStep: 5. FwdTerminalExposure: 0.222. Training.
+[INFO] CarAgent. Step: 660000. Time Elapsed: 823.282 s. Episodes: 12. Mean Reward: -0.707. Std of Reward: 5.112. Mean Episode Length: 884.833. Std of Episode Length: 260.306. Goals: 3. Terminated: 1. MaxStep: 9. FwdTerminalExposure: 0.286. Training.
+[INFO] CarAgent. Step: 670000. Time Elapsed: 834.097 s. Episodes: 9. Mean Reward: -1.616. Std of Reward: 0.541. Mean Episode Length: 999.000. Std of Episode Length: 0.000. MaxStep: 9. FwdTerminalExposure: 0.302. Training.

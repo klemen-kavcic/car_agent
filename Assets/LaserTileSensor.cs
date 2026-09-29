@@ -4,6 +4,7 @@ using Unity.MLAgents.Sensors;
 // Twelve continuous, car-relative tile lasers: seven evenly-spaced forward rays from -45 to +45
 // degrees plus the five existing side/rear rays. Each direction reports the first special tile
 // (Slippery, SpeedLimited or Terminal) plus its distance, and one road-boundary distance.
+// An optional sixth value reports nearest vehicle distance independently of floor tiles.
 // Traversal is through GridManager.tileTypes, rather than Physics.Raycast, so it is exact at
 // tile borders, works on every generated map, and regards the map edge as Terminal.
 public class LaserTileSensor : MonoBehaviour
@@ -11,6 +12,7 @@ public class LaserTileSensor : MonoBehaviour
     public const int DirectionCount = 12;
     public const int ObservationsPerDirection = 5; // special type one-hot (3), special distance, road boundary distance
     public const int ObservationCount = DirectionCount * ObservationsPerDirection;
+    public const int VehicleObservationCount = DirectionCount; // one extra vehicle distance per ray
 
     [Tooltip("Grid whose logical tile map the lasers traverse.")]
     public GridManager gridManager;
@@ -21,6 +23,16 @@ public class LaserTileSensor : MonoBehaviour
     [Min(0.001f)] public float specialDistanceScaleM = 50f;
     [Tooltip("Characteristic distance S for the Asphalt/non-Asphalt road boundary in d/(d+S). The generated roads are about 6 m wide, so 3 m represents their half-width and maps a centred side-boundary reading to about 0.5.")]
     [Min(0.001f)] public float roadBoundaryDistanceScaleM = 3f;
+    [Header("Optional traffic observation")]
+    [Tooltip("Add one vehicle-distance reading per ray (77 -> 89 total observations). " +
+             "When disabled, cars retain the legacy Terminal-tile laser behavior. " +
+             "Set Behavior Parameters Vector Observation Size to 89 before training with this enabled.")]
+    public bool includeVehicleDistanceObservations = false;
+    [Tooltip("Characteristic distance S in d/(d+S) for other cars. 10 m suits the current 3 m/s cap; this is not a detection range limit. YAML can override it.")]
+    [Min(0.001f)] public float vehicleDistanceScaleM = 10f;
+
+    public int ActiveObservationCount => ObservationCount +
+        (includeVehicleDistanceObservations ? VehicleObservationCount : 0);
 
     [Tooltip("Draw the exact grid-traversal rays while this object is selected during Play mode.")]
     public bool showGizmos = true;
@@ -95,11 +107,16 @@ public class LaserTileSensor : MonoBehaviour
         for (int i = 0; i < DirectionCount; i++)
         {
             Vector3 direction = transform.TransformDirection(LocalDirections[i]);
-            Trace(transform.position, direction, out TileType type, out float specialDistance, out _);
-            Color color = type == TileType.Terminal ? Color.red :
+            TraceWithVehicle(transform.position, direction, out TileType type,
+                out float specialDistance, out _, out float vehicleDistance);
+            bool vehicleFirst = includeVehicleDistanceObservations &&
+                vehicleDistance < gridManager.GridDiagonal - 0.001f &&
+                vehicleDistance < specialDistance;
+            Color color = vehicleFirst ? Color.magenta : type == TileType.Terminal ? Color.red :
                 type == TileType.Slippery ? Color.cyan : Color.green;
             Vector3 start = transform.position + Vector3.up * runtimeLineHeight;
-            Vector3 end = start + direction.normalized * specialDistance;
+            Vector3 end = start + direction.normalized *
+                (vehicleFirst ? vehicleDistance : specialDistance);
             LineRenderer line = runtimeLines[i];
             line.startColor = color;
             line.endColor = color;
@@ -152,8 +169,8 @@ public class LaserTileSensor : MonoBehaviour
         Vector3 origin = transform.position;
         foreach (Vector3 localDirection in LocalDirections)
         {
-            Trace(origin, transform.TransformDirection(localDirection), out TileType specialType,
-                out float specialDistance, out float roadBoundaryDistance);
+            TraceWithVehicle(origin, transform.TransformDirection(localDirection), out TileType specialType,
+                out float specialDistance, out float roadBoundaryDistance, out float vehicleDistance);
 
             // Special tile identity. Asphalt/Gravel are intentionally absent: the separate road
             // boundary reading below conveys whether to remain centred on / return to Asphalt.
@@ -162,6 +179,8 @@ public class LaserTileSensor : MonoBehaviour
             sensor.AddObservation(specialType == TileType.Terminal ? 1f : 0f);
             sensor.AddObservation(NormalizeDistance(specialDistance, specialDistanceScaleM));
             sensor.AddObservation(NormalizeDistance(roadBoundaryDistance, roadBoundaryDistanceScaleM));
+            if (includeVehicleDistanceObservations)
+                sensor.AddObservation(NormalizeDistance(vehicleDistance, vehicleDistanceScaleM));
         }
     }
 
@@ -176,7 +195,7 @@ public class LaserTileSensor : MonoBehaviour
 
     public void AddZeros(VectorSensor sensor)
     {
-        for (int i = 0; i < ObservationCount; i++) sensor.AddObservation(0f);
+        for (int i = 0; i < ActiveObservationCount; i++) sensor.AddObservation(0f);
     }
 
     // The road-boundary distance has deliberately asymmetric semantics determined by the current
@@ -188,9 +207,21 @@ public class LaserTileSensor : MonoBehaviour
     public void Trace(Vector3 origin, Vector3 worldDirection, out TileType specialType,
         out float specialDistance, out float roadBoundaryDistance)
     {
+        TraceWithVehicle(origin, worldDirection, out specialType, out specialDistance,
+            out roadBoundaryDistance, out _);
+    }
+
+    // In the 89-value mode the tile trace runs through cars, while this separate
+    // channel measures the closest car body on the ray. No hit uses GridDiagonal,
+    // which NormalizeDistance maps to 1. In legacy mode the extra value is unused
+    // and a car still interrupts the tile trace as Terminal.
+    public void TraceWithVehicle(Vector3 origin, Vector3 worldDirection, out TileType specialType,
+        out float specialDistance, out float roadBoundaryDistance, out float vehicleDistance)
+    {
         specialType = TileType.Terminal;
         specialDistance = 0f;
         roadBoundaryDistance = gridManager != null ? gridManager.GridDiagonal : 1f;
+        vehicleDistance = roadBoundaryDistance;
         if (gridManager == null || gridManager.tileTypes == null) return;
 
         // Tile rays live on the XZ map plane. Ignore transient chassis pitch/roll so a bump
@@ -202,12 +233,14 @@ public class LaserTileSensor : MonoBehaviour
         Vector2Int cell = gridManager.WorldToGrid(origin);
         if (!gridManager.IsInBounds(cell)) return; // map edge is an immediate Terminal.
 
-        // Traffic cars are dynamic geometry, not tileTypes. Preserve the existing five
-        // values per ray so a 77-observation laser checkpoint can be evaluated unchanged.
+        // Traffic cars are dynamic geometry, not tileTypes. In legacy mode, preserve
+        // the existing five values per ray so 77-observation checkpoints still work.
         if (agent == null) agent = GetComponent<CarAgent>();
-        float vehicleDistance = float.PositiveInfinity;
+        float vehicleHitDistance = float.PositiveInfinity;
         if (agent != null && agent.trafficManager != null)
-            agent.trafficManager.TryVehicleHit(agent, origin, direction, out vehicleDistance);
+            agent.trafficManager.TryVehicleHit(agent, origin, direction, out vehicleHitDistance);
+        if (includeVehicleDistanceObservations && !float.IsPositiveInfinity(vehicleHitDistance))
+            vehicleDistance = Mathf.Min(vehicleHitDistance, gridManager.GridDiagonal);
 
         TileType startType = gridManager.GetTileAtCell(cell);
         bool startedOnAsphalt = startType == TileType.Asphalt;
@@ -235,12 +268,12 @@ public class LaserTileSensor : MonoBehaviour
         for (int crossed = 0; crossed <= gridManager.gridSize * 2 + 2; crossed++)
         {
             float distance = Mathf.Min(nextX, nextZ);
-            if (vehicleDistance <= distance)
+            if (!includeVehicleDistanceObservations && vehicleHitDistance <= distance)
             {
                 if (!specialFound)
                 {
                     specialType = TileType.Terminal;
-                    specialDistance = vehicleDistance;
+                    specialDistance = vehicleHitDistance;
                 }
                 // The separate road-boundary channel cannot see through a car. If no
                 // boundary was already observed, leave the existing no-hit sentinel.
@@ -297,8 +330,8 @@ public class LaserTileSensor : MonoBehaviour
         if (!showGizmos || !Application.isPlaying || gridManager == null || gridManager.tileTypes == null) return;
         foreach (Vector3 localDirection in LocalDirections)
         {
-            Trace(transform.position, transform.TransformDirection(localDirection), out TileType type,
-                out float specialDistance, out float roadBoundaryDistance);
+            TraceWithVehicle(transform.position, transform.TransformDirection(localDirection), out TileType type,
+                out float specialDistance, out float roadBoundaryDistance, out float vehicleDistance);
             Gizmos.color = type == TileType.Terminal ? Color.red :
                 type == TileType.Slippery ? Color.cyan : Color.green;
             Gizmos.DrawLine(transform.position + Vector3.up * 0.1f,
@@ -312,6 +345,14 @@ public class LaserTileSensor : MonoBehaviour
                 Gizmos.color = Color.yellow;
                 Vector3 boundary = transform.position + transform.TransformDirection(localDirection) * roadBoundaryDistance;
                 Gizmos.DrawWireSphere(boundary + Vector3.up * 0.12f, 0.35f);
+            }
+            if (includeVehicleDistanceObservations &&
+                vehicleDistance < gridManager.GridDiagonal - 0.001f)
+            {
+                Gizmos.color = Color.magenta;
+                Vector3 hit = transform.position +
+                    transform.TransformDirection(localDirection) * vehicleDistance;
+                Gizmos.DrawWireSphere(hit + Vector3.up * 0.16f, 0.55f);
             }
         }
     }
