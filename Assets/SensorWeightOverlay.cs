@@ -205,7 +205,7 @@ public class SensorWeightOverlay : MonoBehaviour
 
     void BuildLaserUI(Transform panelTransform)
     {
-        int n = LaserTileSensor.DirectionCount;
+        int n = laserTileSensor != null ? laserTileSensor.DirectionCount : 0;
         dotTransforms = new RectTransform[n];             // nearest-special endpoints
         dotImages = new Image[n];
         laserLineTransforms = new RectTransform[n];
@@ -293,9 +293,9 @@ public class SensorWeightOverlay : MonoBehaviour
         float mapDiagonal = Mathf.Max(0.001f, laserTileSensor.gridManager.GridDiagonal);
         float displayRange = Mathf.Max(0.001f, laserDisplayRangeMeters);
         float displayRadius = Mathf.Min(panelSize.x, panelSize.y) * 0.5f - maxDotRadius;
-        for (int i = 0; i < LaserTileSensor.DirectionCount; i++)
+        for (int i = 0; i < laserTileSensor.DirectionCount; i++)
         {
-            Vector3 localDirection3 = LaserTileSensor.GetLocalDirection(i);
+            Vector3 localDirection3 = laserTileSensor.GetLocalDirection(i);
             Vector2 panelDirection = new Vector2(localDirection3.x, localDirection3.z);
             laserTileSensor.TraceWithVehicle(laserTileSensor.transform.position,
                 laserTileSensor.transform.TransformDirection(localDirection3), out TileType specialType,

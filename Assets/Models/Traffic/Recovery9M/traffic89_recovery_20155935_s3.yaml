@@ -1,0 +1,812 @@
+default_settings: null
+behaviors:
+  CarAgent:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 1024
+      buffer_size: 16384
+      learning_rate: 0.0003
+      beta: 0.005
+      epsilon: 0.2
+      lambd: 0.95
+      num_epoch: 3
+      shared_critic: false
+      learning_rate_schedule: linear
+      beta_schedule: linear
+      epsilon_schedule: linear
+    checkpoint_interval: 1000000
+    network_settings:
+      normalize: true
+      hidden_units: 128
+      num_layers: 2
+      vis_encode_type: simple
+      memory: null
+      goal_conditioning_type: hyper
+      deterministic: false
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+        network_settings:
+          normalize: false
+          hidden_units: 128
+          num_layers: 2
+          vis_encode_type: simple
+          memory: null
+          goal_conditioning_type: hyper
+          deterministic: false
+    init_path: null
+    keep_checkpoints: 42
+    even_checkpoints: false
+    max_steps: 40000000
+    time_horizon: 128
+    summary_freq: 100000
+    threaded: false
+    self_play: null
+    behavioral_cloning: null
+env_settings:
+  env_path: /d/hpc/home/kk42117/mag/car1/Linux_traffic_training_vehicle/car.x86_64
+  env_args:
+  - -job-worker-count
+  - '1'
+  - -traffic-car-count
+  - '10'
+  base_port: 34832
+  num_envs: 6
+  num_areas: 1
+  timeout_wait: 60
+  seed: 3
+  max_lifetime_restarts: 10
+  restarts_rate_limit_n: 1
+  restarts_rate_limit_period_s: 60
+engine_settings:
+  width: 84
+  height: 84
+  quality_level: 5
+  time_scale: 20.0
+  target_frame_rate: -1
+  capture_frame_rate: 60
+  no_graphics: true
+  no_graphics_monitor: false
+environment_parameters:
+  vehicle_speed_cap_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 0
+          value: 1.0
+      name: vehicle_speed_cap_enabled
+      completion_criteria: null
+  vehicle_speed_cap_ms:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 1
+          value: 3.0
+      name: vehicle_speed_cap_ms
+      completion_criteria: null
+  vehicle_speed_cap_governor_start_fraction:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 2
+          value: 0.9
+      name: vehicle_speed_cap_governor_start_fraction
+      completion_criteria: null
+  vehicle_speed_cap_overspeed_margin_ms:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 3
+          value: 0.5
+      name: vehicle_speed_cap_overspeed_margin_ms
+      completion_criteria: null
+  vehicle_speed_cap_brake_torque:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 4
+          value: 900.0
+      name: vehicle_speed_cap_brake_torque
+      completion_criteria: null
+  regen_brake_torque:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 5
+          value: 450.0
+      name: regen_brake_torque
+      completion_criteria: null
+  sensor_observations_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 6
+          value: 1.0
+      name: sensor_observations_enabled
+      completion_criteria: null
+  laser_special_distance_scale_m:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 7
+          value: 10.0
+      name: laser_special_distance_scale_m
+      completion_criteria: null
+  laser_road_boundary_distance_scale_m:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 8
+          value: 3.0
+      name: laser_road_boundary_distance_scale_m
+      completion_criteria: null
+  reward_goal:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 9
+          value: 8.0
+      name: reward_goal
+      completion_criteria: null
+  reward_approach_bonus:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 10
+          value: 0.0
+      name: reward_approach_bonus
+      completion_criteria: null
+  reward_terminal_penalty:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 11
+          value: -10.0
+      name: reward_terminal_penalty
+      completion_criteria: null
+  reward_time_penalty:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 12
+          value: -0.002
+      name: reward_time_penalty
+      completion_criteria: null
+  reward_time_penalty_growth:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 13
+          value: 0.0
+      name: reward_time_penalty_growth
+      completion_criteria: null
+  reward_checkpoint:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 14
+          value: 0.02
+      name: reward_checkpoint
+      completion_criteria: null
+  total_training_steps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 15
+          value: 40000000.0
+      name: total_training_steps
+      completion_criteria: null
+  training_num_envs:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 16
+          value: 6.0
+      name: training_num_envs
+      completion_criteria: null
+  terminal_penalty_escalation_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 17
+          value: 0.0
+      name: terminal_penalty_escalation_enabled
+      completion_criteria: null
+  terminal_penalty_escalation_step:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 18
+          value: 10000000.0
+      name: terminal_penalty_escalation_step
+      completion_criteria: null
+  terminal_penalty_escalated_value:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 19
+          value: -15.0
+      name: terminal_penalty_escalated_value
+      completion_criteria: null
+  goal_reward_escalation_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 20
+          value: 0.0
+      name: goal_reward_escalation_enabled
+      completion_criteria: null
+  goal_reward_escalation_step:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 21
+          value: 15000000.0
+      name: goal_reward_escalation_step
+      completion_criteria: null
+  goal_reward_escalated_value:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 22
+          value: 16.0
+      name: goal_reward_escalated_value
+      completion_criteria: null
+  idle_penalty_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 23
+          value: 0.0
+      name: idle_penalty_enabled
+      completion_criteria: null
+  idle_speed_threshold:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 24
+          value: 0.001
+      name: idle_speed_threshold
+      completion_criteria: null
+  idle_grace_steps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 25
+          value: 20.0
+      name: idle_grace_steps
+      completion_criteria: null
+  idle_penalty_base:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 26
+          value: -0.02
+      name: idle_penalty_base
+      completion_criteria: null
+  idle_penalty_growth:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 27
+          value: 0.05
+      name: idle_penalty_growth
+      completion_criteria: null
+  lagrangian_penalty_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 28
+          value: 0.0
+      name: lagrangian_penalty_enabled
+      completion_criteria: null
+  lagrangian_target_crash_rate:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 29
+          value: 0.15
+      name: lagrangian_target_crash_rate
+      completion_criteria: null
+  lagrangian_lambda_init:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 30
+          value: 5.0
+      name: lagrangian_lambda_init
+      completion_criteria: null
+  lagrangian_lambda_lr:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 31
+          value: 10.0
+      name: lagrangian_lambda_lr
+      completion_criteria: null
+  lagrangian_lambda_max:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 32
+          value: 30.0
+      name: lagrangian_lambda_max
+      completion_criteria: null
+  lagrangian_maxstep_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 33
+          value: 0.0
+      name: lagrangian_maxstep_enabled
+      completion_criteria: null
+  lagrangian_target_maxstep_rate:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 34
+          value: 0.15
+      name: lagrangian_target_maxstep_rate
+      completion_criteria: null
+  lagrangian_maxstep_lambda_init:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 35
+          value: 0.002
+      name: lagrangian_maxstep_lambda_init
+      completion_criteria: null
+  lagrangian_maxstep_lambda_lr:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 36
+          value: 0.01
+      name: lagrangian_maxstep_lambda_lr
+      completion_criteria: null
+  lagrangian_maxstep_lambda_max:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 37
+          value: 0.01
+      name: lagrangian_maxstep_lambda_max
+      completion_criteria: null
+  sensor_terminal_lagrangian_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 38
+          value: 0.0
+      name: sensor_terminal_lagrangian_enabled
+      completion_criteria: null
+  sensor_terminal_target_exposure:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 39
+          value: 0.15
+      name: sensor_terminal_target_exposure
+      completion_criteria: null
+  sensor_terminal_lambda_init:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 40
+          value: 1.0
+      name: sensor_terminal_lambda_init
+      completion_criteria: null
+  sensor_terminal_lambda_lr:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 41
+          value: 10.0
+      name: sensor_terminal_lambda_lr
+      completion_criteria: null
+  sensor_terminal_lambda_max:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 42
+          value: 30.0
+      name: sensor_terminal_lambda_max
+      completion_criteria: null
+  sensor_terminal_penalty_lambda:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 43
+          value: 0.0
+      name: sensor_terminal_penalty_lambda
+      completion_criteria: null
+  sensor_severity_exponent:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 44
+          value: 1.0
+      name: sensor_severity_exponent
+      completion_criteria: null
+  adaptive_step_budget_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 45
+          value: 0.0
+      name: adaptive_step_budget_enabled
+      completion_criteria: null
+  max_step_budget:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 46
+          value: 5000.0
+      name: max_step_budget
+      completion_criteria: null
+  adaptive_step_budget_lr:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 47
+          value: 2000.0
+      name: adaptive_step_budget_lr
+      completion_criteria: null
+  adaptive_step_budget_min:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 48
+          value: 2500.0
+      name: adaptive_step_budget_min
+      completion_criteria: null
+  adaptive_step_budget_max:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 49
+          value: 8000.0
+      name: adaptive_step_budget_max
+      completion_criteria: null
+  reward_maxstep_penalty:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 50
+          value: 0.0
+      name: reward_maxstep_penalty
+      completion_criteria: null
+  bootstrap_curriculum_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 51
+          value: 0.0
+      name: bootstrap_curriculum_enabled
+      completion_criteria: null
+  bootstrap_approach_bonus:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 52
+          value: 5.0
+      name: bootstrap_approach_bonus
+      completion_criteria: null
+  bootstrap_stage_front_steps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 53
+          value: 200000.0
+      name: bootstrap_stage_front_steps
+      completion_criteria: null
+  bootstrap_front_distance:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 54
+          value: 9.0
+      name: bootstrap_front_distance
+      completion_criteria: null
+  bootstrap_stage_behind_steps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 55
+          value: 500000.0
+      name: bootstrap_stage_behind_steps
+      completion_criteria: null
+  bootstrap_behind_distance:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 56
+          value: 3.0
+      name: bootstrap_behind_distance
+      completion_criteria: null
+  bootstrap_behind_spawn_reverse_prob_start:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 57
+          value: 1.0
+      name: bootstrap_behind_spawn_reverse_prob_start
+      completion_criteria: null
+  bootstrap_behind_spawn_reverse_prob_end:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 58
+          value: 0.3
+      name: bootstrap_behind_spawn_reverse_prob_end
+      completion_criteria: null
+  bootstrap_behind_terminal_distance:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 59
+          value: 4.0
+      name: bootstrap_behind_terminal_distance
+      completion_criteria: null
+  bootstrap_stage_deadend_steps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 60
+          value: 500000.0
+      name: bootstrap_stage_deadend_steps
+      completion_criteria: null
+  bootstrap_deadend_depth_cells:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 61
+          value: 3.0
+      name: bootstrap_deadend_depth_cells
+      completion_criteria: null
+  bootstrap_deadend_goal_distance_min:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 62
+          value: 10.0
+      name: bootstrap_deadend_goal_distance_min
+      completion_criteria: null
+  bootstrap_deadend_goal_distance_max:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 63
+          value: 18.0
+      name: bootstrap_deadend_goal_distance_max
+      completion_criteria: null
+  bootstrap_deadend_goal_angle_spread_deg:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 64
+          value: 60.0
+      name: bootstrap_deadend_goal_angle_spread_deg
+      completion_criteria: null
+  bootstrap_deadend_spawn_reverse_prob_start:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 65
+          value: 1.0
+      name: bootstrap_deadend_spawn_reverse_prob_start
+      completion_criteria: null
+  bootstrap_deadend_spawn_reverse_prob_end:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 66
+          value: 0.0
+      name: bootstrap_deadend_spawn_reverse_prob_end
+      completion_criteria: null
+  bootstrap_stage_side_steps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 67
+          value: 300000.0
+      name: bootstrap_stage_side_steps
+      completion_criteria: null
+  bootstrap_side_distance_min:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 68
+          value: 8.0
+      name: bootstrap_side_distance_min
+      completion_criteria: null
+  bootstrap_side_distance_max:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 69
+          value: 15.0
+      name: bootstrap_side_distance_max
+      completion_criteria: null
+  bootstrap_side_angle_min_deg:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 70
+          value: 30.0
+      name: bootstrap_side_angle_min_deg
+      completion_criteria: null
+  bootstrap_side_angle_max_deg:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 71
+          value: 150.0
+      name: bootstrap_side_angle_max_deg
+      completion_criteria: null
+  voronoi_near_goal_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 72
+          value: 1.0
+      name: voronoi_near_goal_enabled
+      completion_criteria: null
+  voronoi_near_goal_steps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 73
+          value: 10000000.0
+      name: voronoi_near_goal_steps
+      completion_criteria: null
+  voronoi_near_goal_distance_start:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 74
+          value: 15.0
+      name: voronoi_near_goal_distance_start
+      completion_criteria: null
+  voronoi_near_goal_distance_end:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 75
+          value: 100.0
+      name: voronoi_near_goal_distance_end
+      completion_criteria: null
+  use_validation_maps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 76
+          value: 0.0
+      name: use_validation_maps
+      completion_criteria: null
+  laser_vehicle_distance_observation_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 3
+          value: 1
+      name: laser_vehicle_distance_observation_enabled
+      completion_criteria: null
+  laser_vehicle_distance_scale_m:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 4
+          value: 10.0
+      name: laser_vehicle_distance_scale_m
+      completion_criteria: null
+  traffic_recovery_curriculum_enabled:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 5
+          value: 1
+      name: traffic_recovery_curriculum_enabled
+      completion_criteria: null
+  traffic_recovery_curriculum_end_steps:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 6
+          value: 9000000
+      name: traffic_recovery_curriculum_end_steps
+      completion_criteria: null
+checkpoint_settings:
+  run_id: traffic89_recovery_20155935_s3
+  initialize_from: null
+  load_model: false
+  resume: false
+  force: false
+  train_model: false
+  inference: false
+  results_dir: /d/hpc/home/kk42117/mag/car1/results
+torch_settings:
+  device: cpu
+debug: false

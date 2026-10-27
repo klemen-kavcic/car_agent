@@ -49,6 +49,21 @@ public class car_component : MonoBehaviour
     [Tooltip("Gear can only be toggled when speed is at or below this (m/s).")]
     public float reverseEngageSpeed = 0.5f;
     public bool reverseGear; // true = wheels driven backward; flip with ToggleReverseGear()
+    [Header("Optional arcade reverse controls")]
+    [Tooltip("Off: policy selects gear and pedal separately. On: brake first stops a forward car, then drives it backward; accelerator first stops a reversing car, then drives it forward. Requires the matching one-discrete-branch arcade ML-Agents build.")]
+    public bool arcadeAutomaticReverse = false;
+    [Range(0.01f, 1f), Tooltip("Pedal magnitude required before a stopped car changes direction in arcade mode. Prevents a near-zero/no-pedal action from silently changing gear.")]
+    public float arcadeShiftPedalThreshold = 0.10f;
+    [Tooltip("Alternative arcade control: one signed pedal (-1 reverse request, 0 hold, +1 forward request) and no discrete gear/brake action. Requires the matching zero-discrete-branch build.")]
+    public bool signedPedalArcadeControls = false;
+    [Range(-1f, 1f), Tooltip("Signed drive-direction request used only by signed-pedal arcade controls. Opposite-direction requests brake first, then drive after the car is nearly stopped.")]
+    public float signedPedalInput;
+    [Range(0f, 0.5f), Tooltip("Signed-pedal values within +/- this range are neutral. They apply no motor torque and use the gentle holding brake.")]
+    public float signedPedalNeutralDeadzone = 0.10f;
+    [Range(0f, 1f), Tooltip("Negative-pedal motor-torque multiplier in signed-pedal mode. This is a torque scale, not a hard reverse-speed cap; 1 preserves the original signed-pedal behaviour.")]
+    public float signedPedalReverseTorqueFraction = 1f;
+    [Min(0f), Tooltip("Maximum local forward/reverse speed (m/s) at which a signed-pedal direction change may engage motor torque. Above this, the opposite request uses wheel brake torque.")]
+    public float signedPedalDirectionChangeSpeed = 0.10f;
 
     [HideInInspector] public float currentSteerAngle = 0f;
     public float currentSpeedMS; // read-only display, shows live speed in Inspector during play
@@ -105,15 +120,59 @@ public class car_component : MonoBehaviour
 
         currentSpeedMS = rigid.linearVelocity.magnitude;
 
-        float gearDirection = reverseGear ? -1f : 1f;
-        float gearSpeedFraction = reverseGear ? reverseSpeedFraction : 1f;
-        float frontMotor = frontDriveSpeed * accelerationInput * gearDirection * gearSpeedFraction;
-        float rearMotor = rearDriveSpeed * accelerationInput * gearDirection * gearSpeedFraction;
+        float frontMotor;
+        float rearMotor;
+        float signedPedalBrakeFraction = 0f;
+        if (signedPedalArcadeControls)
+        {
+            // A signed action is a requested direction, rather than a command to
+            // instantaneously reverse wheel torque.  This gives one-pedal control
+            // a stable neutral/hold zone and prevents a forward-moving car from
+            // immediately becoming a reversing car when PPO merely wants to stop.
+            float requestedPedal = Mathf.Clamp(signedPedalInput, -1f, 1f);
+            float magnitude = Mathf.Abs(requestedPedal);
+            float signedTorque = 0f;
+            float localForwardSpeed = Vector3.Dot(rigid.linearVelocity, transform.forward);
+
+            if (magnitude > signedPedalNeutralDeadzone)
+            {
+                bool requestsOppositeDirection = localForwardSpeed * requestedPedal < 0f;
+                bool mustBrakeBeforeChangingDirection = requestsOppositeDirection &&
+                    Mathf.Abs(localForwardSpeed) > signedPedalDirectionChangeSpeed;
+
+                if (mustBrakeBeforeChangingDirection)
+                {
+                    // Reuse the regular per-wheel brakes.  Motor torque stays at
+                    // zero until the car is almost stationary, then the same held
+                    // action engages torque in its requested direction.
+                    signedPedalBrakeFraction = magnitude;
+                }
+                else
+                {
+                    signedTorque = requestedPedal;
+                }
+            }
+
+            float signedDirectionTorqueScale = signedTorque < 0f ? signedPedalReverseTorqueFraction : 1f;
+            frontMotor = frontDriveSpeed * signedTorque * signedDirectionTorqueScale;
+            rearMotor = rearDriveSpeed * signedTorque * signedDirectionTorqueScale;
+            // In signed-pedal mode this is telemetry only; there is no actual
+            // transmission state.  It now represents physical reverse drive,
+            // not merely a negative request that is still braking.
+            reverseGear = signedTorque < -signedPedalNeutralDeadzone;
+        }
+        else
+        {
+            float gearDirection = reverseGear ? -1f : 1f;
+            float gearSpeedFraction = reverseGear ? reverseSpeedFraction : 1f;
+            frontMotor = frontDriveSpeed * accelerationInput * gearDirection * gearSpeedFraction;
+            rearMotor = rearDriveSpeed * accelerationInput * gearDirection * gearSpeedFraction;
+        }
 
         float steerDeltaThisStep = steerDeltaInput * maxSteerDeltaPerDecision / stepsPerDecision;
         currentSteerAngle = Mathf.Clamp(currentSteerAngle + steerDeltaThisStep, -maxSteerAngle, maxSteerAngle);
 
-        ApplyTileEffects(frontMotor, rearMotor);
+        ApplyTileEffects(frontMotor, rearMotor, signedPedalBrakeFraction);
 
         wheel1.steerAngle = currentSteerAngle;
         wheel2.steerAngle = currentSteerAngle;
@@ -133,6 +192,63 @@ public class car_component : MonoBehaviour
             reverseGear = desiredReverse;
     }
 
+    // Arcade-style two-pedal mapping. The brake pedal reverses a stopped
+    // forward car; the accelerator reverses the process for a stopped backing
+    // car. Until then, the opposing pedal is an ordinary brake. This keeps
+    // direction changes physically gated but removes the policy's separate
+    // "select a gear" action branch.
+    public void ApplyArcadePedals(bool brakePedal, float pedalMagnitude)
+    {
+        float pedal = Mathf.Clamp01(pedalMagnitude);
+        bool requestDirectionChange = pedal >= arcadeShiftPedalThreshold;
+
+        if (!reverseGear)
+        {
+            if (brakePedal && requestDirectionChange && CanShiftGear())
+                reverseGear = true;
+
+            if (reverseGear)
+            {
+                accelerationInput = pedal;
+                brakeInput = 0f;
+            }
+            else
+            {
+                accelerationInput = 0f;
+                brakeInput = brakePedal ? pedal : 0f;
+            }
+            return;
+        }
+
+        if (!brakePedal && requestDirectionChange && CanShiftGear())
+            reverseGear = false;
+
+        if (reverseGear)
+        {
+            accelerationInput = brakePedal ? pedal : 0f;
+            brakeInput = brakePedal ? 0f : pedal;
+        }
+        else
+        {
+            accelerationInput = pedal;
+            brakeInput = 0f;
+        }
+    }
+
+    // One-pedal arcade mapping. The sign directly selects wheel-torque direction
+    // and the magnitude selects torque strength. There is no gear action or
+    // automatic shift gate in this mode; an opposite torque naturally slows the
+    // car, then drives it in the opposite direction.
+    public void ApplySignedArcadePedal(float signedPedal)
+    {
+        float clamped = Mathf.Clamp(signedPedal, -1f, 1f);
+        signedPedalInput = clamped;
+        accelerationInput = Mathf.Abs(clamped); // preserves existing magnitude observation
+        brakeInput = 0f;
+        // FixedUpdate determines whether this request currently brakes or
+        // physically drives in reverse, and updates reverseGear for telemetry.
+    }
+
     bool CanShiftGear()
     {
         return currentSpeedMS <= reverseEngageSpeed;
@@ -148,7 +264,7 @@ public class car_component : MonoBehaviour
         Gizmos.DrawSphere(comWorldPos, 0.2f);
     }
 
-    void ApplyTileEffects(float frontMotor, float rearMotor)
+    void ApplyTileEffects(float frontMotor, float rearMotor, float signedPedalBrakeFraction = 0f)
     {
         float sidewaysStiffness = defaultSidewaysStiffness;
         float forwardStiffness = defaultForwardStiffness;
@@ -208,10 +324,14 @@ public class car_component : MonoBehaviour
             }
         }
 
-        regenActive = accelerationInput <= 0.01f;
+        regenActive = signedPedalArcadeControls
+            ? Mathf.Abs(signedPedalInput) <= signedPedalNeutralDeadzone
+            : accelerationInput <= 0.01f;
         float regenTorque = regenActive ? regenBrakeTorque : 0f;
-        float frontBrakeTorque = Mathf.Max(tileBrakeTorque, vehicleCapBrakeTorque, brakeInput * frontMaxBrakeTorque, regenTorque);
-        float rearBrakeTorque = Mathf.Max(tileBrakeTorque, vehicleCapBrakeTorque, brakeInput * rearMaxBrakeTorque, regenTorque);
+        float frontBrakeTorque = Mathf.Max(tileBrakeTorque, vehicleCapBrakeTorque,
+            Mathf.Max(brakeInput, signedPedalBrakeFraction) * frontMaxBrakeTorque, regenTorque);
+        float rearBrakeTorque = Mathf.Max(tileBrakeTorque, vehicleCapBrakeTorque,
+            Mathf.Max(brakeInput, signedPedalBrakeFraction) * rearMaxBrakeTorque, regenTorque);
 
         ApplyToWheel(wheel1, sidewaysStiffness, forwardStiffness, frontMotor, frontBrakeTorque);
         ApplyToWheel(wheel2, sidewaysStiffness, forwardStiffness, frontMotor, frontBrakeTorque);

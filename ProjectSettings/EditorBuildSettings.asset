@@ -17,12 +17,42 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/TrafficTraining.unity
     guid: 8b4986cd109c7b641906bd10c50065e7
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TrafficTrainingVehicle.unity
     guid: 5c2bec551b7fc124a92acac83e027d9c
   - enabled: 0
     path: Assets/Scenes/TrafficAllValidationVehicle.unity
     guid: a442e81863ebfd34ba92656e499154ce
+  - enabled: 0
+    path: Assets/Scenes/TrafficTrainingVehicleArcade.unity
+    guid: f5933364e77b7784da88fcc59faea428
+  - enabled: 0
+    path: Assets/Scenes/TrafficAllValidationVehicleArcade.unity
+    guid: 8d7df75317db94a46a5b83ced432f520
+  - enabled: 0
+    path: Assets/Scenes/TrafficAllValidationVehicleSignedArcade.unity
+    guid: d59c3a482a5e3f046b82eef70aa058cc
+  - enabled: 0
+    path: Assets/Scenes/TrafficTrainingVehicleSignedArcade.unity
+    guid: 85faea598a0cbd7459f4f39a8330551f
+  - enabled: 1
+    path: Assets/Scenes/TrafficAllValidationVehicleSignedArcadeTimeRemaining.unity
+    guid: d950545202861ac47800424df7a9875c
+  - enabled: 0
+    path: Assets/Scenes/TrafficTrainingVehicleSignedArcadeTimeRemaining.unity
+    guid: 0b4dae9e68a29c74d845c9b781f16bd3
+  - enabled: 0
+    path: Assets/Scenes/TrafficTrainingVehicleSignedArcadeTimeFine330DenseLidar.unity
+    guid: 651842c696ddc8548afa9cbf0de0d891
+  - enabled: 0
+    path: Assets/Scenes/TrafficAllValidationVehicleSignedArcadeTimeFine330DenseLidar.unity
+    guid: 953a1a4cb527cd847bd1c082e56d675c
+  - enabled: 0
+    path: Assets/Scenes/TrafficTrainingVehicleSignedArcadeTimeDenseLidar.unity
+    guid: 42c52f1540f66d94c8fac44e461f74b0
+  - enabled: 0
+    path: Assets/Scenes/TrafficAllValidationVehicleSignedArcadeTimeDenseLidar.unity
+    guid: aa17e0ee4d0629944938af4e6001da61
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

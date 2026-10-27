@@ -267,14 +267,14 @@ public class ManualDrivingView : MonoBehaviour
             sb.AppendLine(laser.includeVehicleDistanceObservations
                 ? "Lasers — floor type | floor distance | road boundary | vehicle distance:"
                 : "Lasers — special type one-hot | special distance | road boundary:");
-            for (int i = 0; i < LaserTileSensor.DirectionCount; i++)
+            for (int i = 0; i < laser.DirectionCount; i++)
             {
                 laser.TraceWithVehicle(laser.transform.position,
-                    laser.transform.TransformDirection(LaserTileSensor.GetLocalDirection(i)),
+                    laser.transform.TransformDirection(laser.GetLocalDirection(i)),
                     out TileType special, out float specialDistance, out float roadDistance,
                     out float vehicleDistance);
                 sb.AppendFormat(" {0,-2}: {1,-12} {2}  {3,5:F1} m  {4,5:F1} m",
-                    DirectionName(i), special, SpecialOneHotText(special), specialDistance, roadDistance);
+                    DirectionName(laser.GetLocalDirection(i)), special, SpecialOneHotText(special), specialDistance, roadDistance);
                 if (laser.includeVehicleDistanceObservations)
                     sb.AppendFormat("  vehicle: {0}\n",
                         vehicleDistance < laser.gridManager.GridDiagonal - 0.001f
@@ -314,9 +314,9 @@ public class ManualDrivingView : MonoBehaviour
         };
     }
 
-    static string DirectionName(int index)
+    static string DirectionName(Vector3 localDirection)
     {
-        string[] names = { "F", "FR", "R", "BR", "B", "BL", "L", "FL" };
-        return names[index];
+        float degrees = Mathf.Atan2(localDirection.x, localDirection.z) * Mathf.Rad2Deg;
+        return degrees.ToString("+0;-0;0") + "°";
     }
 }

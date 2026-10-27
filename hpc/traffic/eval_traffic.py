@@ -155,6 +155,17 @@ def run_case(args, scenario: int, rollout: int,
                                float(placement_seed_for_case(args, scenario, rollout)))
     params.set_float_parameter("bootstrap_curriculum_enabled", 0.0)
     params.set_float_parameter("voronoi_near_goal_enabled", 0.0)
+    # A training configuration may contain a car-count, route-length, or
+    # recovery curriculum. Evaluation must honour its explicit --num-cars
+    # condition and use ordinary held-out random placements. In particular,
+    # recovery lessons deliberately switch the active pool to 1/2/4 cars;
+    # carrying that flag into evaluation makes the recorded count disagree
+    # with --num-cars even though the player received -traffic-car-count.
+    params.set_float_parameter("traffic_smooth_car_count_curriculum_enabled", 0.0)
+    params.set_float_parameter("traffic_smooth_route_length_curriculum_enabled", 0.0)
+    params.set_float_parameter("traffic_recovery_curriculum_enabled", 0.0)
+    if args.shared_max_steps is not None:
+        params.set_float_parameter("traffic_shared_max_steps", float(args.shared_max_steps))
     if args.trajectories_out is not None:
         params.set_float_parameter("traffic_record_trajectories", 1.0)
         params.set_float_parameter("traffic_trajectory_stride_steps",
@@ -382,8 +393,10 @@ def main() -> None:
                         help="Seed for assigning trained model seeds to maps")
     parser.add_argument("--num-cars", type=int, default=2,
                         help="Active cars (2..pool size embedded in the Unity build)")
-    parser.add_argument("--expected-observations", type=int, choices=(77, 89), default=77,
-                        help="Laser observation size: legacy car-as-Terminal=77, separate vehicle distance=89")
+    parser.add_argument("--expected-observations", type=int, choices=(77, 89, 90, 162), default=77,
+                        help="Laser observation size: legacy car-as-Terminal=77, separate vehicle distance=89, "
+                             "vehicle distance plus remaining shared-step fraction=90, or 24 full-circle "
+                             "15-degree rays plus vehicle distance and remaining shared-step fraction=162")
     parser.add_argument("--config", type=Path, help="Saved YAML; defaults to model0's run directory")
     parser.add_argument("--manifest", type=Path,
                         help="Scenario JSON; if omitted, use the original ten-case pilot")
@@ -413,6 +426,9 @@ def main() -> None:
     parser.add_argument("--worker-id-base", type=int, default=100)
     parser.add_argument("--unity-job-worker-count", type=int, default=1)
     parser.add_argument("--max-engine-steps", type=int, default=5020)
+    parser.add_argument("--shared-max-steps", type=int,
+                        help="Override TrafficScenarioManager's shared episode budget; "
+                             "use only for controlled longer-limit evaluation.")
     parser.add_argument("--no-graphics", action="store_true")
     parser.add_argument("--require-tile-metrics", action="store_true",
                         help="Fail if the traffic build lacks per-seat tile-time measurements")
@@ -432,6 +448,10 @@ def main() -> None:
         parser.error("--episodes must be positive")
     if args.trajectory_stride_steps < 1:
         parser.error("--trajectory-stride-steps must be positive")
+    if args.shared_max_steps is not None and args.shared_max_steps < 1:
+        parser.error("--shared-max-steps must be positive")
+    if args.shared_max_steps is not None and args.max_engine_steps < args.shared_max_steps:
+        parser.error("--max-engine-steps must be at least --shared-max-steps")
     if args.rollouts_per_map < 1 or args.placement_seed < 0 or (
         args.placement_seed + 100 * args.rollouts_per_map * 1000 >= 16000000
     ):

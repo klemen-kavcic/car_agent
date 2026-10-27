@@ -3,8 +3,9 @@
 # invoked by traffic_multiagent_train_eval_hpc.sh within the same Slurm task.
 set -euo pipefail
 
-ROOT=${ROOT:?ROOT must be set}
-SIF=${SIF:?SIF must be set}
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+ROOT=${ROOT:-$SCRIPT_DIR}
+SIF=${SIF:-"$ROOT/mlagents.sif"}
 RUN_ID=${1:?run ID required}
 MODEL=${2:?ONNX model required}
 CONFIG=${3:?configuration required}

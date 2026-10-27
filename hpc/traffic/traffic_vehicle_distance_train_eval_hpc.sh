@@ -79,5 +79,5 @@ apptainer exec \
         --env-args -job-worker-count 1 -traffic-car-count "$TRAIN_CARS"
 test -s "$RUN_DIR/CarAgent.onnx"
 python3 "$SELECTOR" --run-dir "$RUN_DIR" --max-steps "$STEPS" --validate-all
-bash "$POST_EVAL" "$RUN_ID" "$RUN_DIR/CarAgent.onnx" "$CONFIG"
+ROOT="$ROOT" SIF="$SIF" PORT_BASE="$PORT_BASE" bash "$POST_EVAL" "$RUN_ID" "$RUN_DIR/CarAgent.onnx" "$CONFIG"
 echo "Done: $RUN_ID"

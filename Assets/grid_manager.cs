@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.Rendering;
 
 public enum MapSource { Perlin, Voronoi }
 
@@ -7,6 +9,19 @@ public class GridManager : MonoBehaviour
     public int gridSize = 20;
     public float cellSize = 5f;
     public GameObject tilePrefab;
+
+    [Header("Refined Voronoi map mode")]
+    [Tooltip("Integer factor used only when loading the fixed Voronoi .txt maps. A value of 5 lets a 66x66 source map drive a 330x330 logical grid while retaining the same world dimensions. Leave at 1 for the existing behaviour.")]
+    [Min(1)] public int voronoiMapRefinement = 1;
+
+    [Tooltip("At refinement > 1, interpolate categorical source-map corners before choosing each fine logical cell. This rounds diagonal/corner boundaries instead of merely repeating square source cells.")]
+    public bool smoothRefinedVoronoiBoundaries = true;
+
+    [Tooltip("Render refined grids as five combined meshes instead of one GameObject per cell. Logical tile queries, sensors, rewards, and terminal checks still use every fine cell.")]
+    public bool useCombinedMeshForRefinedGrid = true;
+
+    [Tooltip("Normally refined tile visuals are omitted in headless/batch players because they do not affect training. Enable only when a batch build genuinely needs rendered terrain.")]
+    public bool renderRefinedMeshInBatchMode = false;
 
     [Tooltip("Perlin = existing procedural noise terrain. Voronoi = prebaked road-network maps " +
         "loaded at random from Resources/Maps/Voronoi (see Map Gen/voronoi_curved.py's --gridsize " +
@@ -46,6 +61,10 @@ public class GridManager : MonoBehaviour
 
     [HideInInspector] public TileType[,] tileTypes;
     private GridTile[,] tiles;
+    private Renderer[] refinedMeshRenderers;
+    // Reused while turning a categorical source map into fine cells; allocating
+    // a new small array for each of 108,900 cells would create avoidable GC work.
+    private readonly float[] refinedSampleScores = new float[5];
     private Vector3 gridOrigin;
     // Rendering can be suppressed for the manual observation-only view without changing the
     // colliders, tileTypes array, or any physics/reward logic.
@@ -61,6 +80,11 @@ public class GridManager : MonoBehaviour
         "generalisation against instead of memorisation of the training pool. GridManager has no " +
         "ML-Agents dependency and doesn't know why - same pattern as forceAllNormal above.")]
     public bool useValidationMaps = false;
+
+    [Tooltip("Use the small, hand-authored Maps/TrafficRecovery lessons. This is set only by " +
+        "TrafficScenarioManager's optional recovery curriculum and is separate from both normal " +
+        "training and held-out validation maps.")]
+    public bool useRecoveryMaps = false;
 
     [Tooltip("When >= 0 (set by CarAgent from the fixed_map_index environment parameter, only " +
         "while fixed_eval_enabled is set), forces BuildVoronoiPlan() to load this exact index " +
@@ -80,6 +104,7 @@ public class GridManager : MonoBehaviour
     // that's already cached.
     private TextAsset[] voronoiTrainMapAssets;
     private TextAsset[] voronoiValMapAssets;
+    private TextAsset[] recoveryMapAssets;
 
     // Index = the integer code voronoi_curved.py's classify_grid()/export_unity_grid() writes
     // per cell: 0=gravel(BG), 1=asphalt(road), 2=grass(green blob), 3=ice(blue blob),
@@ -98,7 +123,7 @@ public class GridManager : MonoBehaviour
     {
         gridOrigin = new Vector3(-(gridSize * cellSize) / 2f, 0f, -(gridSize * cellSize) / 2f);
         tileTypes = new TileType[gridSize, gridSize];
-        tiles = new GridTile[gridSize, gridSize];
+        tiles = null;
         RandomiseNoiseOffset();
         GenerateGrid();
     }
@@ -111,7 +136,8 @@ public class GridManager : MonoBehaviour
         foreach (Transform child in transform)
             Destroy(child.gameObject);
         tileTypes = new TileType[gridSize, gridSize];
-        tiles = new GridTile[gridSize, gridSize];
+        tiles = null;
+        refinedMeshRenderers = null;
         RandomiseNoiseOffset();
         GenerateGrid();
     }
@@ -127,6 +153,26 @@ public class GridManager : MonoBehaviour
     void GenerateGrid()
     {
         TileType[,] plan = mapSource == MapSource.Voronoi ? BuildVoronoiPlan() : BuildPerlinPlan();
+
+        bool combinedRefinedMesh = mapSource == MapSource.Voronoi &&
+                                   voronoiMapRefinement > 1 &&
+                                   useCombinedMeshForRefinedGrid;
+
+        // The high-resolution data remains fully real even when its visuals are
+        // suppressed in a headless training player. This avoids spawning 108,900
+        // visual GameObjects for a 330x330 grid in every parallel environment.
+        if (combinedRefinedMesh)
+        {
+            for (int x = 0; x < gridSize; x++)
+                for (int z = 0; z < gridSize; z++)
+                    tileTypes[x, z] = forceAllNormal ? SpawnableTileType : plan[x, z];
+
+            if (!Application.isBatchMode || renderRefinedMeshInBatchMode)
+                BuildCombinedRefinedMeshes();
+            return;
+        }
+
+        tiles = new GridTile[gridSize, gridSize];
 
         for (int x = 0; x < gridSize; x++)
         {
@@ -210,11 +256,29 @@ public class GridManager : MonoBehaviour
     // Sorting by asset name here makes forcedMapIndex mean something stable and predictable
     // (matching whatever sorted-filename order eval_trajectories.py's candidate generator used),
     // instead of relying on LoadAll's incidental order happening to match.
-    static TextAsset[] SortedMapAssets(string resourceFolder)
+    static TextAsset[] SortedMapAssets(string resourceFolder, string requiredNamePrefix = null)
     {
         var assets = Resources.LoadAll<TextAsset>(resourceFolder);
+        if (!string.IsNullOrEmpty(requiredNamePrefix))
+            assets = System.Array.FindAll(assets, asset =>
+                asset.name.StartsWith(requiredNamePrefix) &&
+                asset.name.Length > requiredNamePrefix.Length &&
+                char.IsDigit(asset.name[requiredNamePrefix.Length]));
         System.Array.Sort(assets, (a, b) => string.CompareOrdinal(a.name, b.name));
         return assets;
+    }
+
+    // Recovery contains a human-readable JSON catalogue next to the .txt maps.
+    // Filter by the map filename prefix so that metadata can never become a
+    // selectable grid or shift an otherwise stable forced-map index.
+    public int RecoveryMapIndex(string mapName)
+    {
+        if (recoveryMapAssets == null)
+            recoveryMapAssets = SortedMapAssets("Maps/TrafficRecovery", "recovery_");
+        string bareName = System.IO.Path.GetFileNameWithoutExtension(mapName);
+        for (int i = 0; i < recoveryMapAssets.Length; i++)
+            if (recoveryMapAssets[i].name == bareName) return i;
+        return -1;
     }
 
     // Loads a random prebaked map exported by Map Gen/voronoi_curved.py or voronoi_highways.py
@@ -229,18 +293,29 @@ public class GridManager : MonoBehaviour
         LastLoadedVoronoiMapName = "";
         var plan = new TileType[gridSize, gridSize];
 
-        string resourceFolder = useValidationMaps ? "Maps/VoronoiVal" : "Maps/VoronoiTrain";
-        if (useValidationMaps)
+        string resourceFolder;
+        TextAsset[] mapAssets;
+        if (useRecoveryMaps)
         {
+            resourceFolder = "Maps/TrafficRecovery";
+            if (recoveryMapAssets == null)
+                recoveryMapAssets = SortedMapAssets(resourceFolder, "recovery_");
+            mapAssets = recoveryMapAssets;
+        }
+        else if (useValidationMaps)
+        {
+            resourceFolder = "Maps/VoronoiVal";
             if (voronoiValMapAssets == null)
                 voronoiValMapAssets = SortedMapAssets(resourceFolder);
+            mapAssets = voronoiValMapAssets;
         }
         else
         {
+            resourceFolder = "Maps/VoronoiTrain";
             if (voronoiTrainMapAssets == null)
                 voronoiTrainMapAssets = SortedMapAssets(resourceFolder);
+            mapAssets = voronoiTrainMapAssets;
         }
-        TextAsset[] mapAssets = useValidationMaps ? voronoiValMapAssets : voronoiTrainMapAssets;
 
         if (mapAssets == null || mapAssets.Length == 0)
         {
@@ -273,28 +348,32 @@ public class GridManager : MonoBehaviour
             Debug.Log($"[GridManager] forcedMapIndex={forcedMapIndex} resolved to map '{asset.name}'.");
         }
         string[] rows = asset.text.Trim().Split('\n');
-        if (rows.Length != gridSize)
+        int sourceSize = rows.Length;
+        bool refined = voronoiMapRefinement > 1;
+        int expectedGridSize = refined ? sourceSize * voronoiMapRefinement : sourceSize;
+        if (sourceSize == 0 || gridSize != expectedGridSize)
         {
-            Debug.LogWarning($"[GridManager] Voronoi map '{asset.name}' has {rows.Length} rows, " +
-                $"expected gridSize={gridSize} - falling back to an all-Asphalt grid. Was it " +
-                "exported with a matching --gridsize?");
+            Debug.LogWarning($"[GridManager] Voronoi map '{asset.name}' has {sourceSize} rows, " +
+                $"but this scene needs gridSize={expectedGridSize} " +
+                $"(source x refinement {voronoiMapRefinement}) and has {gridSize}; falling back to all Asphalt.");
             FillAllAsphalt(plan);
             return plan;
         }
 
-        for (int z = 0; z < gridSize; z++)
+        var sourcePlan = new TileType[sourceSize, sourceSize];
+        for (int z = 0; z < sourceSize; z++)
         {
-            string[] cols = rows[z].Trim().Split(' ');
-            if (cols.Length != gridSize)
+            string[] cols = rows[z].Trim().Split((char[])null, System.StringSplitOptions.RemoveEmptyEntries);
+            if (cols.Length != sourceSize)
             {
                 Debug.LogWarning($"[GridManager] Voronoi map '{asset.name}' row {z} has " +
-                    $"{cols.Length} cells, expected gridSize={gridSize} - falling back to an " +
+                    $"{cols.Length} cells, expected source size {sourceSize} - falling back to an " +
                     "all-Asphalt grid.");
                 FillAllAsphalt(plan);
                 return plan;
             }
 
-            for (int x = 0; x < gridSize; x++)
+            for (int x = 0; x < sourceSize; x++)
             {
                 if (!int.TryParse(cols[x], out int code) || code < 0 || code >= VoronoiCodeToType.Length)
                 {
@@ -302,12 +381,111 @@ public class GridManager : MonoBehaviour
                         $"cell code '{cols[x]}' at ({x},{z}) - treating as Gravel.");
                     code = 0;
                 }
-                plan[x, z] = VoronoiCodeToType[code];
+                sourcePlan[x, z] = VoronoiCodeToType[code];
             }
+        }
+
+        if (!refined)
+        {
+            plan = sourcePlan;
+        }
+        else
+        {
+            for (int x = 0; x < gridSize; x++)
+                for (int z = 0; z < gridSize; z++)
+                    plan[x, z] = SampleRefinedSourceMap(sourcePlan, x, z, voronoiMapRefinement);
         }
         LastLoadedVoronoiMapIndex = mapIndex;
         LastLoadedVoronoiMapName = asset.name;
         return plan;
+    }
+
+    // The original map remains the source of truth. Fine-cell centres are
+    // sampled from its categorical field. Bilinear scores turn a coarse corner
+    // transition into a diagonal/rounded high-resolution boundary rather than
+    // a block of repeated 1.5m squares.
+    TileType SampleRefinedSourceMap(TileType[,] source, int fineX, int fineZ, int refinement)
+    {
+        if (!smoothRefinedVoronoiBoundaries)
+            return source[Mathf.Clamp(fineX / refinement, 0, source.GetLength(0) - 1),
+                          Mathf.Clamp(fineZ / refinement, 0, source.GetLength(1) - 1)];
+
+        float sx = (fineX + 0.5f) / refinement - 0.5f;
+        float sz = (fineZ + 0.5f) / refinement - 0.5f;
+        int x0 = Mathf.FloorToInt(sx), z0 = Mathf.FloorToInt(sz);
+        float tx = sx - x0, tz = sz - z0;
+        int x1 = x0 + 1, z1 = z0 + 1;
+        x0 = Mathf.Clamp(x0, 0, source.GetLength(0) - 1);
+        x1 = Mathf.Clamp(x1, 0, source.GetLength(0) - 1);
+        z0 = Mathf.Clamp(z0, 0, source.GetLength(1) - 1);
+        z1 = Mathf.Clamp(z1, 0, source.GetLength(1) - 1);
+
+        System.Array.Clear(refinedSampleScores, 0, refinedSampleScores.Length);
+        AddScore(refinedSampleScores, source[x0, z0], (1f - tx) * (1f - tz));
+        AddScore(refinedSampleScores, source[x1, z0], tx * (1f - tz));
+        AddScore(refinedSampleScores, source[x0, z1], (1f - tx) * tz);
+        AddScore(refinedSampleScores, source[x1, z1], tx * tz);
+
+        int winner = 0;
+        for (int i = 1; i < refinedSampleScores.Length; i++)
+            if (refinedSampleScores[i] > refinedSampleScores[winner]) winner = i;
+        return (TileType)winner;
+    }
+
+    static void AddScore(float[] scores, TileType type, float weight)
+    {
+        int index = (int)type;
+        if (index >= 0 && index < scores.Length) scores[index] += weight;
+    }
+
+    void BuildCombinedRefinedMeshes()
+    {
+        var renderers = new List<Renderer>();
+        for (int typeIndex = 0; typeIndex < 5; typeIndex++)
+        {
+            TileType type = (TileType)typeIndex;
+            var vertices = new List<Vector3>();
+            var triangles = new List<int>();
+            var uvs = new List<Vector2>();
+            for (int x = 0; x < gridSize; x++)
+            {
+                for (int z = 0; z < gridSize; z++)
+                {
+                    if (tileTypes[x, z] != type) continue;
+                    int start = vertices.Count;
+                    float x0 = gridOrigin.x + x * cellSize;
+                    float z0 = gridOrigin.z + z * cellSize;
+                    vertices.Add(new Vector3(x0, 0f, z0));
+                    vertices.Add(new Vector3(x0 + cellSize, 0f, z0));
+                    vertices.Add(new Vector3(x0 + cellSize, 0f, z0 + cellSize));
+                    vertices.Add(new Vector3(x0, 0f, z0 + cellSize));
+                    uvs.Add(Vector2.zero); uvs.Add(Vector2.right); uvs.Add(Vector2.one); uvs.Add(Vector2.up);
+                    triangles.Add(start); triangles.Add(start + 2); triangles.Add(start + 1);
+                    triangles.Add(start); triangles.Add(start + 3); triangles.Add(start + 2);
+                }
+            }
+            if (vertices.Count == 0) continue;
+            var meshObject = new GameObject("Refined " + type + " tiles");
+            meshObject.transform.SetParent(transform, false);
+            var filter = meshObject.AddComponent<MeshFilter>();
+            var renderer = meshObject.AddComponent<MeshRenderer>();
+            var mesh = new Mesh { name = "Refined " + type + " grid" };
+            mesh.indexFormat = IndexFormat.UInt32;
+            mesh.SetVertices(vertices);
+            mesh.SetUVs(0, uvs);
+            mesh.SetTriangles(triangles, 0, true);
+            mesh.RecalculateBounds();
+            filter.sharedMesh = mesh;
+            // The old per-tile prefab supplied the ground collision surface.
+            // A combined visual mesh needs its own static collider so cars and
+            // wheel colliders do not fall through the refined environment.
+            var collider = meshObject.AddComponent<MeshCollider>();
+            collider.sharedMesh = mesh;
+            renderer.sharedMaterial = MaterialForType(type);
+            renderer.enabled = tileVisualsVisible;
+            renderers.Add(renderer);
+        }
+        refinedMeshRenderers = renderers.ToArray();
     }
 
     void FillAllAsphalt(TileType[,] plan)
@@ -369,6 +547,9 @@ public class GridManager : MonoBehaviour
     public void SetTileVisualsVisible(bool visible)
     {
         tileVisualsVisible = visible;
+        if (refinedMeshRenderers != null)
+            foreach (Renderer renderer in refinedMeshRenderers)
+                if (renderer != null) renderer.enabled = visible;
         if (tiles == null) return;
         for (int x = 0; x < tiles.GetLength(0); x++)
         {
@@ -392,6 +573,13 @@ public class GridManager : MonoBehaviour
         if (c.x < 0 || c.x >= gridSize || c.y < 0 || c.y >= gridSize) return;
 
         tileTypes[c.x, c.y] = type;
+        if (refinedMeshRenderers != null)
+        {
+            // Refined traffic scenes do not use dynamic bootstrap tiles. Keep
+            // the logical world authoritative here; rebuilding 330x330 meshes
+            // for a one-cell lesson edit would be needlessly expensive.
+            return;
+        }
         var tile = tiles[c.x, c.y];
         if (tile == null) return;
         tile.type = type;

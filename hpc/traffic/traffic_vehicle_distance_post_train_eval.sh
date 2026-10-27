@@ -4,16 +4,21 @@
 # submit this file by itself.
 set -euo pipefail
 
-ROOT=${ROOT:?ROOT must be set by the training script}
-SIF=${SIF:?SIF must be set by the training script}
+# Prefer values supplied by a parent job, but remain runnable if a future
+# parent forgets to export them. On HPC this helper is stored beside mlagents.sif.
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+ROOT=${ROOT:-$SCRIPT_DIR}
+SIF=${SIF:-"$ROOT/mlagents.sif"}
 RUN_ID=${1:?run ID required}
 MODEL=${2:?ONNX model path required}
 CONFIG=${3:?configuration path required}
 JOB_ID=${SLURM_ARRAY_JOB_ID:?must run inside a Slurm array task}
 TASK_ID=${SLURM_ARRAY_TASK_ID:?must run inside a Slurm array task}
 
-BUILD="$ROOT/Linux_traffic_all_validation_vehicle/car.x86_64"
-BUILD_INFO="$ROOT/Linux_traffic_all_validation_vehicle/build_info.txt"
+# Arcade policies have one discrete [drive/brake] branch, so their parent
+# training job supplies the matching arcade validation player explicitly.
+BUILD=${TRAFFIC_EVAL_BUILD:-"$ROOT/Linux_traffic_all_validation_vehicle/car.x86_64"}
+BUILD_INFO=${TRAFFIC_EVAL_BUILD_INFO:-"$(dirname "$BUILD")/build_info.txt"}
 MANIFEST="$ROOT/traffic_validation_maps.json"
 EVALUATOR="$ROOT/eval_traffic.py"
 PLOTTER="$ROOT/plot_multiagent_trajectories.py"

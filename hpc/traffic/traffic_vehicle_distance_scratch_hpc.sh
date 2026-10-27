@@ -46,5 +46,5 @@ cleanup(){ rmdir "$PORT_LOCK" 2>/dev/null || true; }; trap cleanup EXIT; trap 'c
 echo "Training $RUN_ID: scratch cars=$CARS envs=$NUM_ENVS steps=40000000 obs=89 port=$PORT_BASE"
 apptainer exec "$SIF" xvfb-run -a mlagents-learn "$CONFIG" --env="$BUILD" --run-id="$RUN_ID" --results-dir="$ROOT/results" --no-graphics --torch-device=cpu --num-envs="$NUM_ENVS" --base-port="$PORT_BASE" --seed="$SEED" --env-args -job-worker-count 1 -traffic-car-count "$CARS"
 test -s "$RESULTS/CarAgent.onnx"
-bash "$POST_EVAL" "$RUN_ID" "$RESULTS/CarAgent.onnx" "$CONFIG"
+ROOT="$ROOT" SIF="$SIF" PORT_BASE="$PORT_BASE" bash "$POST_EVAL" "$RUN_ID" "$RESULTS/CarAgent.onnx" "$CONFIG"
 echo "Done: $RESULTS/CarAgent.onnx"

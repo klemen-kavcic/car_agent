@@ -464,6 +464,14 @@ class TrainerController:
         # "Step:" counter) - used only to gate Lagrangian/step-budget until bootstrap finishes (see
         # _bootstrap_total_steps). Falls back to 0 if there are no trainers yet.
         current_global_step = max(curr_step.values()) if curr_step else 0
+        # The multi-car TrafficRecovery curriculum must use this trainer-side
+        # count, rather than reconstructing it from a Unity worker's local
+        # Academy.TotalStepCount. The reconstruction drifts when a lesson
+        # changes the active-car count. Unity consumes this on the next
+        # episode reset as traffic_recovery_global_step.
+        env.set_env_parameters(
+            {"traffic_recovery_global_step": ConstantSettings(value=float(current_global_step))}
+        )
         self._update_lagrangian_penalties(env, current_global_step)
         self._update_adaptive_step_budget(env, current_global_step)
 

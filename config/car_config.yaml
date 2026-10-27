@@ -76,6 +76,12 @@ environment_parameters:
   lagrangian_lambda_lr: 10.0
   lagrangian_lambda_max: 30.0
 
+  # Used only by the patched constrained-PPO trainer. When enabled, a traffic
+  # VehicleCollision is marked in the terminal-only remaining-steps observation
+  # so Python can train a separate binary collision-cost critic. It does not
+  # change task rewards or add an observation dimension.
+  constrained_ppo_cost_signal_enabled: 0
+
   lagrangian_maxstep_enabled: 0
   lagrangian_target_maxstep_rate: 0.15
   lagrangian_maxstep_lambda_init: 0.002

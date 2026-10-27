@@ -236,6 +236,23 @@ class ConsoleWriter(StatsWriter):
                 log_info.append(f"Terminated: {int(values['Custom/Terminated'].sum)}")
             if "Custom/MaxStepReached" in values:
                 log_info.append(f"MaxStep: {int(values['Custom/MaxStepReached'].sum)}")
+            # Signed-pedal diagnostics are episode-level sums emitted by
+            # carAgent.cs. A single intentional reverse is not an oscillation:
+            # the Unity-side detector requires three rapid pedal reversals.
+            if "Custom/SignedPedalOscillationEpisodes" in values:
+                oscillating = int(values["Custom/SignedPedalOscillationEpisodes"].sum)
+                rapid_reversals = int(values["Custom/RapidSignedPedalReversals"].sum) \
+                    if "Custom/RapidSignedPedalReversals" in values else 0
+                direction_changes = int(values["Custom/SignedPedalDirectionChanges"].sum) \
+                    if "Custom/SignedPedalDirectionChanges" in values else 0
+                log_info.append(
+                    f"PedalOsc: {oscillating} episodes, rapid flips: {rapid_reversals}, "
+                    f"direction changes: {direction_changes}"
+                )
+            if "Custom/RapidSteeringDirectionChanges" in values:
+                log_info.append(
+                    f"Rapid steer reversals: {int(values['Custom/RapidSteeringDirectionChanges'].sum)}"
+                )
             # Cache this window's crash/maxstep rates for trainer_controller_patched.py's two
             # independent Lagrangian dual-ascent penalty updates - see LATEST_CRASH_RATE/
             # LATEST_MAXSTEP_RATE above. Computed from the same three outcome stats just parsed

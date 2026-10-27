@@ -1,0 +1,603 @@
+Wrote /d/hpc/home/kk42117/mag/car1/configs/traffic89_recovery_20155935_s0.yaml; init=scratch, steps=40000000, environments=6
+Training traffic89_recovery_20155935_s0: 9M recovery + normal 10-car traffic to 40000000 steps; 89 obs; 6 envs; port 34640
+
+            ┐  ╖
+        ╓╖╬│╡  ││╬╖╖
+    ╓╖╬│││││┘  ╬│││││╬╖
+ ╖╬│││││╬╜        ╙╬│││││╖╖                               ╗╗╗
+ ╬╬╬╬╖││╦╖        ╖╬││╗╣╣╣╬      ╟╣╣╬    ╟╣╣╣             ╜╜╜  ╟╣╣
+ ╬╬╬╬╬╬╬╬╖│╬╖╖╓╬╪│╓╣╣╣╣╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╒╣╣╖╗╣╣╣╗   ╣╣╣ ╣╣╣╣╣╣ ╟╣╣╖   ╣╣╣
+ ╬╬╬╬┐  ╙╬╬╬╬│╓╣╣╣╝╜  ╫╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╟╣╣╣╙ ╙╣╣╣  ╣╣╣ ╙╟╣╣╜╙  ╫╣╣  ╟╣╣
+ ╬╬╬╬┐     ╙╬╬╣╣      ╫╣╣╣╬      ╟╣╣╬    ╟╣╣╣ ╟╣╣╬   ╣╣╣  ╣╣╣  ╟╣╣     ╣╣╣┌╣╣╜
+ ╬╬╬╜       ╬╬╣╣      ╙╝╣╣╬      ╙╣╣╣╗╖╓╗╣╣╣╜ ╟╣╣╬   ╣╣╣  ╣╣╣  ╟╣╣╦╓    ╣╣╣╣╣
+ ╙   ╓╦╖    ╬╬╣╣   ╓╗╗╖            ╙╝╣╣╣╣╝╜   ╘╝╝╜   ╝╝╝  ╝╝╝   ╙╣╣╣    ╟╣╣╣
+   ╩╬╬╬╬╬╬╦╦╬╬╣╣╗╣╣╣╣╣╣╣╝                                             ╫╣╣╣╣
+      ╙╬╬╬╬╬╬╬╣╣╣╣╣╣╝╜
+          ╙╬╬╬╣╣╣╜
+             ╙
+        
+ Version information:
+  ml-agents: 1.1.0,
+  ml-agents-envs: 1.1.0,
+  Communicator API: 1.5.0,
+  PyTorch: 2.1.2+cu121
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected to Unity environment with package version 4.0.3 and communication version 1.5.0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Connected new brain: CarAgent?team=0
+[INFO] Hyperparameters for behavior name CarAgent: 
+	trainer_type:	ppo
+	hyperparameters:	
+	  batch_size:	1024
+	  buffer_size:	16384
+	  learning_rate:	0.0003
+	  beta:	0.005
+	  epsilon:	0.2
+	  lambd:	0.95
+	  num_epoch:	3
+	  shared_critic:	False
+	  learning_rate_schedule:	linear
+	  beta_schedule:	linear
+	  epsilon_schedule:	linear
+	checkpoint_interval:	1000000
+	network_settings:	
+	  normalize:	True
+	  hidden_units:	128
+	  num_layers:	2
+	  vis_encode_type:	simple
+	  memory:	None
+	  goal_conditioning_type:	hyper
+	  deterministic:	False
+	reward_signals:	
+	  extrinsic:	
+	    gamma:	0.99
+	    strength:	1.0
+	    network_settings:	
+	      normalize:	False
+	      hidden_units:	128
+	      num_layers:	2
+	      vis_encode_type:	simple
+	      memory:	None
+	      goal_conditioning_type:	hyper
+	      deterministic:	False
+	init_path:	None
+	keep_checkpoints:	42
+	even_checkpoints:	False
+	max_steps:	40000000
+	time_horizon:	128
+	summary_freq:	100000
+	threaded:	False
+	self_play:	None
+	behavioral_cloning:	None
+[INFO] Parameter 'vehicle_speed_cap_enabled' is in lesson 'vehicle_speed_cap_enabled' and has value 'Float: value=1.0'.
+[INFO] Parameter 'vehicle_speed_cap_ms' is in lesson 'vehicle_speed_cap_ms' and has value 'Float: value=3.0'.
+[INFO] Parameter 'vehicle_speed_cap_governor_start_fraction' is in lesson 'vehicle_speed_cap_governor_start_fraction' and has value 'Float: value=0.9'.
+[INFO] Parameter 'vehicle_speed_cap_overspeed_margin_ms' is in lesson 'vehicle_speed_cap_overspeed_margin_ms' and has value 'Float: value=0.5'.
+[INFO] Parameter 'vehicle_speed_cap_brake_torque' is in lesson 'vehicle_speed_cap_brake_torque' and has value 'Float: value=900.0'.
+[INFO] Parameter 'regen_brake_torque' is in lesson 'regen_brake_torque' and has value 'Float: value=450.0'.
+[INFO] Parameter 'sensor_observations_enabled' is in lesson 'sensor_observations_enabled' and has value 'Float: value=1.0'.
+[INFO] Parameter 'laser_special_distance_scale_m' is in lesson 'laser_special_distance_scale_m' and has value 'Float: value=10.0'.
+[INFO] Parameter 'laser_road_boundary_distance_scale_m' is in lesson 'laser_road_boundary_distance_scale_m' and has value 'Float: value=3.0'.
+[INFO] Parameter 'reward_goal' is in lesson 'reward_goal' and has value 'Float: value=8.0'.
+[INFO] Parameter 'reward_approach_bonus' is in lesson 'reward_approach_bonus' and has value 'Float: value=0.0'.
+[INFO] Parameter 'reward_terminal_penalty' is in lesson 'reward_terminal_penalty' and has value 'Float: value=-10.0'.
+[INFO] Parameter 'reward_time_penalty' is in lesson 'reward_time_penalty' and has value 'Float: value=-0.002'.
+[INFO] Parameter 'reward_time_penalty_growth' is in lesson 'reward_time_penalty_growth' and has value 'Float: value=0.0'.
+[INFO] Parameter 'reward_checkpoint' is in lesson 'reward_checkpoint' and has value 'Float: value=0.02'.
+[INFO] Parameter 'total_training_steps' is in lesson 'total_training_steps' and has value 'Float: value=40000000.0'.
+[INFO] Parameter 'training_num_envs' is in lesson 'training_num_envs' and has value 'Float: value=6.0'.
+[INFO] Parameter 'terminal_penalty_escalation_enabled' is in lesson 'terminal_penalty_escalation_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'terminal_penalty_escalation_step' is in lesson 'terminal_penalty_escalation_step' and has value 'Float: value=10000000.0'.
+[INFO] Parameter 'terminal_penalty_escalated_value' is in lesson 'terminal_penalty_escalated_value' and has value 'Float: value=-15.0'.
+[INFO] Parameter 'goal_reward_escalation_enabled' is in lesson 'goal_reward_escalation_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'goal_reward_escalation_step' is in lesson 'goal_reward_escalation_step' and has value 'Float: value=15000000.0'.
+[INFO] Parameter 'goal_reward_escalated_value' is in lesson 'goal_reward_escalated_value' and has value 'Float: value=16.0'.
+[INFO] Parameter 'idle_penalty_enabled' is in lesson 'idle_penalty_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'idle_speed_threshold' is in lesson 'idle_speed_threshold' and has value 'Float: value=0.001'.
+[INFO] Parameter 'idle_grace_steps' is in lesson 'idle_grace_steps' and has value 'Float: value=20.0'.
+[INFO] Parameter 'idle_penalty_base' is in lesson 'idle_penalty_base' and has value 'Float: value=-0.02'.
+[INFO] Parameter 'idle_penalty_growth' is in lesson 'idle_penalty_growth' and has value 'Float: value=0.05'.
+[INFO] Parameter 'lagrangian_penalty_enabled' is in lesson 'lagrangian_penalty_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'lagrangian_target_crash_rate' is in lesson 'lagrangian_target_crash_rate' and has value 'Float: value=0.15'.
+[INFO] Parameter 'lagrangian_lambda_init' is in lesson 'lagrangian_lambda_init' and has value 'Float: value=5.0'.
+[INFO] Parameter 'lagrangian_lambda_lr' is in lesson 'lagrangian_lambda_lr' and has value 'Float: value=10.0'.
+[INFO] Parameter 'lagrangian_lambda_max' is in lesson 'lagrangian_lambda_max' and has value 'Float: value=30.0'.
+[INFO] Parameter 'lagrangian_maxstep_enabled' is in lesson 'lagrangian_maxstep_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'lagrangian_target_maxstep_rate' is in lesson 'lagrangian_target_maxstep_rate' and has value 'Float: value=0.15'.
+[INFO] Parameter 'lagrangian_maxstep_lambda_init' is in lesson 'lagrangian_maxstep_lambda_init' and has value 'Float: value=0.002'.
+[INFO] Parameter 'lagrangian_maxstep_lambda_lr' is in lesson 'lagrangian_maxstep_lambda_lr' and has value 'Float: value=0.01'.
+[INFO] Parameter 'lagrangian_maxstep_lambda_max' is in lesson 'lagrangian_maxstep_lambda_max' and has value 'Float: value=0.01'.
+[INFO] Parameter 'sensor_terminal_lagrangian_enabled' is in lesson 'sensor_terminal_lagrangian_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'sensor_terminal_target_exposure' is in lesson 'sensor_terminal_target_exposure' and has value 'Float: value=0.15'.
+[INFO] Parameter 'sensor_terminal_lambda_init' is in lesson 'sensor_terminal_lambda_init' and has value 'Float: value=1.0'.
+[INFO] Parameter 'sensor_terminal_lambda_lr' is in lesson 'sensor_terminal_lambda_lr' and has value 'Float: value=10.0'.
+[INFO] Parameter 'sensor_terminal_lambda_max' is in lesson 'sensor_terminal_lambda_max' and has value 'Float: value=30.0'.
+[INFO] Parameter 'sensor_terminal_penalty_lambda' is in lesson 'sensor_terminal_penalty_lambda' and has value 'Float: value=0.0'.
+[INFO] Parameter 'sensor_severity_exponent' is in lesson 'sensor_severity_exponent' and has value 'Float: value=1.0'.
+[INFO] Parameter 'adaptive_step_budget_enabled' is in lesson 'adaptive_step_budget_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'max_step_budget' is in lesson 'max_step_budget' and has value 'Float: value=5000.0'.
+[INFO] Parameter 'adaptive_step_budget_lr' is in lesson 'adaptive_step_budget_lr' and has value 'Float: value=2000.0'.
+[INFO] Parameter 'adaptive_step_budget_min' is in lesson 'adaptive_step_budget_min' and has value 'Float: value=2500.0'.
+[INFO] Parameter 'adaptive_step_budget_max' is in lesson 'adaptive_step_budget_max' and has value 'Float: value=8000.0'.
+[INFO] Parameter 'reward_maxstep_penalty' is in lesson 'reward_maxstep_penalty' and has value 'Float: value=0.0'.
+[INFO] Parameter 'bootstrap_curriculum_enabled' is in lesson 'bootstrap_curriculum_enabled' and has value 'Float: value=0.0'.
+[INFO] Parameter 'bootstrap_approach_bonus' is in lesson 'bootstrap_approach_bonus' and has value 'Float: value=5.0'.
+[INFO] Parameter 'bootstrap_stage_front_steps' is in lesson 'bootstrap_stage_front_steps' and has value 'Float: value=200000.0'.
+[INFO] Parameter 'bootstrap_front_distance' is in lesson 'bootstrap_front_distance' and has value 'Float: value=9.0'.
+[INFO] Parameter 'bootstrap_stage_behind_steps' is in lesson 'bootstrap_stage_behind_steps' and has value 'Float: value=500000.0'.
+[INFO] Parameter 'bootstrap_behind_distance' is in lesson 'bootstrap_behind_distance' and has value 'Float: value=3.0'.
+[INFO] Parameter 'bootstrap_behind_spawn_reverse_prob_start' is in lesson 'bootstrap_behind_spawn_reverse_prob_start' and has value 'Float: value=1.0'.
+[INFO] Parameter 'bootstrap_behind_spawn_reverse_prob_end' is in lesson 'bootstrap_behind_spawn_reverse_prob_end' and has value 'Float: value=0.3'.
+[INFO] Parameter 'bootstrap_behind_terminal_distance' is in lesson 'bootstrap_behind_terminal_distance' and has value 'Float: value=4.0'.
+[INFO] Parameter 'bootstrap_stage_deadend_steps' is in lesson 'bootstrap_stage_deadend_steps' and has value 'Float: value=500000.0'.
+[INFO] Parameter 'bootstrap_deadend_depth_cells' is in lesson 'bootstrap_deadend_depth_cells' and has value 'Float: value=3.0'.
+[INFO] Parameter 'bootstrap_deadend_goal_distance_min' is in lesson 'bootstrap_deadend_goal_distance_min' and has value 'Float: value=10.0'.
+[INFO] Parameter 'bootstrap_deadend_goal_distance_max' is in lesson 'bootstrap_deadend_goal_distance_max' and has value 'Float: value=18.0'.
+[INFO] Parameter 'bootstrap_deadend_goal_angle_spread_deg' is in lesson 'bootstrap_deadend_goal_angle_spread_deg' and has value 'Float: value=60.0'.
+[INFO] Parameter 'bootstrap_deadend_spawn_reverse_prob_start' is in lesson 'bootstrap_deadend_spawn_reverse_prob_start' and has value 'Float: value=1.0'.
+[INFO] Parameter 'bootstrap_deadend_spawn_reverse_prob_end' is in lesson 'bootstrap_deadend_spawn_reverse_prob_end' and has value 'Float: value=0.0'.
+[INFO] Parameter 'bootstrap_stage_side_steps' is in lesson 'bootstrap_stage_side_steps' and has value 'Float: value=300000.0'.
+[INFO] Parameter 'bootstrap_side_distance_min' is in lesson 'bootstrap_side_distance_min' and has value 'Float: value=8.0'.
+[INFO] Parameter 'bootstrap_side_distance_max' is in lesson 'bootstrap_side_distance_max' and has value 'Float: value=15.0'.
+[INFO] Parameter 'bootstrap_side_angle_min_deg' is in lesson 'bootstrap_side_angle_min_deg' and has value 'Float: value=30.0'.
+[INFO] Parameter 'bootstrap_side_angle_max_deg' is in lesson 'bootstrap_side_angle_max_deg' and has value 'Float: value=150.0'.
+[INFO] Parameter 'voronoi_near_goal_enabled' is in lesson 'voronoi_near_goal_enabled' and has value 'Float: value=1.0'.
+[INFO] Parameter 'voronoi_near_goal_steps' is in lesson 'voronoi_near_goal_steps' and has value 'Float: value=10000000.0'.
+[INFO] Parameter 'voronoi_near_goal_distance_start' is in lesson 'voronoi_near_goal_distance_start' and has value 'Float: value=15.0'.
+[INFO] Parameter 'voronoi_near_goal_distance_end' is in lesson 'voronoi_near_goal_distance_end' and has value 'Float: value=100.0'.
+[INFO] Parameter 'use_validation_maps' is in lesson 'use_validation_maps' and has value 'Float: value=0.0'.
+[INFO] Parameter 'laser_vehicle_distance_observation_enabled' is in lesson 'laser_vehicle_distance_observation_enabled' and has value 'Float: value=1'.
+[INFO] Parameter 'laser_vehicle_distance_scale_m' is in lesson 'laser_vehicle_distance_scale_m' and has value 'Float: value=10.0'.
+[INFO] Parameter 'traffic_recovery_curriculum_enabled' is in lesson 'traffic_recovery_curriculum_enabled' and has value 'Float: value=1'.
+[INFO] Parameter 'traffic_recovery_curriculum_end_steps' is in lesson 'traffic_recovery_curriculum_end_steps' and has value 'Float: value=9000000'.
+[INFO] CarAgent. Step: 100000. Time Elapsed: 114.823 s. Episodes: 422. Mean Reward: 1.966. Std of Reward: 8.603. Mean Episode Length: 231.872. Std of Episode Length: 265.519. Goals: 242. Terminated: 149. MaxStep: 31. FwdTerminalExposure: 0.470. Training.
+[INFO] CarAgent. Step: 200000. Time Elapsed: 226.926 s. Episodes: 234. Mean Reward: 6.285. Std of Reward: 4.690. Mean Episode Length: 422.885. Std of Episode Length: 406.960. Goals: 156. Terminated: 1. MaxStep: 77. FwdTerminalExposure: 0.370. Training.
+[INFO] CarAgent. Step: 300000. Time Elapsed: 338.447 s. Episodes: 436. Mean Reward: 8.040. Std of Reward: 3.529. Mean Episode Length: 232.970. Std of Episode Length: 325.421. Goals: 372. Terminated: 1. MaxStep: 63. FwdTerminalExposure: 0.236. Training.
+[INFO] CarAgent. Step: 400000. Time Elapsed: 453.075 s. Episodes: 481. Mean Reward: 9.406. Std of Reward: 0.797. Mean Episode Length: 207.131. Std of Episode Length: 83.581. Goals: 478. MaxStep: 3. FwdTerminalExposure: 0.184. Training.
+[INFO] CarAgent. Step: 500000. Time Elapsed: 565.788 s. Episodes: 283. Mean Reward: 9.080. Std of Reward: 1.426. Mean Episode Length: 348.922. Std of Episode Length: 114.097. Goals: 280. Terminated: 1. MaxStep: 2. FwdTerminalExposure: 0.158. Training.
+[INFO] CarAgent. Step: 600000. Time Elapsed: 681.129 s. Episodes: 1729. Mean Reward: 9.542. Std of Reward: 0.100. Mean Episode Length: 57.627. Std of Episode Length: 38.965. Goals: 1730. FwdTerminalExposure: 0.002. Training.
+[INFO] CarAgent. Step: 700000. Time Elapsed: 792.643 s. Episodes: 640. Mean Reward: 9.353. Std of Reward: 1.513. Mean Episode Length: 155.114. Std of Episode Length: 137.094. Goals: 623. MaxStep: 16. FwdTerminalExposure: 0.422. Training.
+[INFO] CarAgent. Step: 800000. Time Elapsed: 904.889 s. Episodes: 425. Mean Reward: 9.331. Std of Reward: 1.030. Mean Episode Length: 232.711. Std of Episode Length: 89.864. Goals: 421. MaxStep: 5. FwdTerminalExposure: 0.073. Training.
+[INFO] CarAgent. Step: 900000. Time Elapsed: 1018.230 s. Episodes: 329. Mean Reward: -2.229. Std of Reward: 8.555. Mean Episode Length: 301.498. Std of Episode Length: 378.924. Goals: 105. Terminated: 165. MaxStep: 59. FwdTerminalExposure: 0.597. Training.
+[INFO] CarAgent. Step: 1000000. Time Elapsed: 1130.455 s. Episodes: 275. Mean Reward: -1.901. Std of Reward: 8.227. Mean Episode Length: 359.416. Std of Episode Length: 412.265. Goals: 85. Terminated: 123. MaxStep: 66. FwdTerminalExposure: 0.617. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-999934.onnx
+[INFO] CarAgent. Step: 1100000. Time Elapsed: 1244.287 s. Episodes: 300. Mean Reward: -1.710. Std of Reward: 8.330. Mean Episode Length: 331.530. Std of Episode Length: 402.282. Goals: 95. Terminated: 134. MaxStep: 71. FwdTerminalExposure: 0.557. Training.
+[INFO] CarAgent. Step: 1200000. Time Elapsed: 1356.965 s. Episodes: 292. Mean Reward: -1.341. Std of Reward: 8.401. Mean Episode Length: 336.259. Std of Episode Length: 394.088. Goals: 100. Terminated: 125. MaxStep: 68. FwdTerminalExposure: 0.567. Training.
+[INFO] CarAgent. Step: 1300000. Time Elapsed: 1472.705 s. Episodes: 295. Mean Reward: -1.445. Std of Reward: 8.376. Mean Episode Length: 343.677. Std of Episode Length: 399.396. Goals: 97. Terminated: 127. MaxStep: 70. FwdTerminalExposure: 0.620. Training.
+[INFO] CarAgent. Step: 1400000. Time Elapsed: 1586.861 s. Episodes: 339. Mean Reward: -2.668. Std of Reward: 8.341. Mean Episode Length: 295.894. Std of Episode Length: 383.564. Goals: 97. Terminated: 175. MaxStep: 67. FwdTerminalExposure: 0.685. Training.
+[INFO] CarAgent. Step: 1500000. Time Elapsed: 1700.582 s. Episodes: 328. Mean Reward: -1.850. Std of Reward: 8.518. Mean Episode Length: 300.483. Std of Episode Length: 380.596. Goals: 109. Terminated: 155. MaxStep: 65. FwdTerminalExposure: 0.667. Training.
+[INFO] CarAgent. Step: 1600000. Time Elapsed: 1812.144 s. Episodes: 307. Mean Reward: -2.065. Std of Reward: 8.301. Mean Episode Length: 330.634. Std of Episode Length: 400.891. Goals: 92. Terminated: 143. MaxStep: 71. FwdTerminalExposure: 0.694. Training.
+[INFO] CarAgent. Step: 1700000. Time Elapsed: 1924.372 s. Episodes: 340. Mean Reward: -2.069. Std of Reward: 8.568. Mean Episode Length: 290.188. Std of Episode Length: 377.906. Goals: 109. Terminated: 167. MaxStep: 64. FwdTerminalExposure: 0.682. Training.
+[INFO] CarAgent. Step: 1800000. Time Elapsed: 2035.487 s. Episodes: 369. Mean Reward: -2.671. Std of Reward: 8.420. Mean Episode Length: 268.707. Std of Episode Length: 374.406. Goals: 108. Terminated: 193. MaxStep: 68. FwdTerminalExposure: 0.701. Training.
+[INFO] CarAgent. Step: 1900000. Time Elapsed: 2147.938 s. Episodes: 314. Mean Reward: -1.229. Std of Reward: 8.588. Mean Episode Length: 316.828. Std of Episode Length: 379.040. Goals: 112. Terminated: 138. MaxStep: 64. FwdTerminalExposure: 0.665. Training.
+[INFO] CarAgent. Step: 2000000. Time Elapsed: 2260.209 s. Episodes: 294. Mean Reward: -1.932. Std of Reward: 8.252. Mean Episode Length: 340.844. Std of Episode Length: 404.576. Goals: 89. Terminated: 133. MaxStep: 72. FwdTerminalExposure: 0.721. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-1999986.onnx
+[INFO] CarAgent. Step: 2100000. Time Elapsed: 2373.811 s. Episodes: 299. Mean Reward: 8.685. Std of Reward: 2.489. Mean Episode Length: 339.585. Std of Episode Length: 175.366. Goals: 281. Terminated: 1. MaxStep: 17. FwdTerminalExposure: 0.062. Training.
+[INFO] CarAgent. Step: 2200000. Time Elapsed: 2489.534 s. Episodes: 378. Mean Reward: 9.364. Std of Reward: 0.063. Mean Episode Length: 264.106. Std of Episode Length: 35.246. Goals: 378. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 2300000. Time Elapsed: 2605.131 s. Episodes: 384. Mean Reward: 9.379. Std of Reward: 0.055. Mean Episode Length: 258.969. Std of Episode Length: 31.755. Goals: 384. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 2400000. Time Elapsed: 2719.907 s. Episodes: 391. Mean Reward: 9.390. Std of Reward: 0.049. Mean Episode Length: 253.946. Std of Episode Length: 28.818. Goals: 391. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 2500000. Time Elapsed: 2836.423 s. Episodes: 402. Mean Reward: 9.400. Std of Reward: 0.044. Mean Episode Length: 248.336. Std of Episode Length: 26.471. Goals: 402. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 2600000. Time Elapsed: 2952.429 s. Episodes: 404. Mean Reward: 9.405. Std of Reward: 0.042. Mean Episode Length: 246.220. Std of Episode Length: 25.247. Goals: 405. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 2700000. Time Elapsed: 3064.665 s. Episodes: 406. Mean Reward: 9.408. Std of Reward: 0.042. Mean Episode Length: 245.044. Std of Episode Length: 25.571. Goals: 406. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 2800000. Time Elapsed: 3177.204 s. Episodes: 405. Mean Reward: 9.407. Std of Reward: 0.042. Mean Episode Length: 245.862. Std of Episode Length: 25.168. Goals: 405. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 2900000. Time Elapsed: 3289.785 s. Episodes: 410. Mean Reward: 9.412. Std of Reward: 0.042. Mean Episode Length: 243.080. Std of Episode Length: 25.163. Goals: 410. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 3000000. Time Elapsed: 3405.833 s. Episodes: 410. Mean Reward: 9.410. Std of Reward: 0.043. Mean Episode Length: 243.775. Std of Episode Length: 25.835. Goals: 409. FwdTerminalExposure: 0.000. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-2999911.onnx
+[INFO] CarAgent. Step: 3100000. Time Elapsed: 3523.725 s. Episodes: 1004. Mean Reward: 9.495. Std of Reward: 0.599. Mean Episode Length: 98.902. Std of Episode Length: 26.027. Goals: 1004. Terminated: 1. FwdTerminalExposure: 0.001. Training.
+[INFO] CarAgent. Step: 3200000. Time Elapsed: 3638.024 s. Episodes: 1082. Mean Reward: 9.525. Std of Reward: 0.020. Mean Episode Length: 91.435. Std of Episode Length: 11.060. Goals: 1082. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 3300000. Time Elapsed: 3751.041 s. Episodes: 1109. Mean Reward: 9.530. Std of Reward: 0.019. Mean Episode Length: 89.125. Std of Episode Length: 10.298. Goals: 1111. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 3400000. Time Elapsed: 3862.852 s. Episodes: 1140. Mean Reward: 9.514. Std of Reward: 0.581. Mean Episode Length: 86.709. Std of Episode Length: 9.961. Goals: 1137. Terminated: 1. FwdTerminalExposure: 0.001. Training.
+[INFO] CarAgent. Step: 3500000. Time Elapsed: 3975.430 s. Episodes: 1153. Mean Reward: 9.534. Std of Reward: 0.020. Mean Episode Length: 85.755. Std of Episode Length: 9.852. Goals: 1153. FwdTerminalExposure: 0.000. Training.
+[INFO] CarAgent. Step: 3600000. Time Elapsed: 4086.509 s. Episodes: 606. Mean Reward: -9.541. Std of Reward: 2.870. Mean Episode Length: 158.417. Std of Episode Length: 210.212. Goals: 7. Terminated: 627. MaxStep: 10. FwdTerminalExposure: 0.056. Training.
+[INFO] CarAgent. Step: 3700000. Time Elapsed: 4197.922 s. Episodes: 110. Mean Reward: -3.074. Std of Reward: 3.140. Mean Episode Length: 916.564. Std of Episode Length: 234.440. Terminated: 24. MaxStep: 93. FwdTerminalExposure: 0.020. Training.
+[INFO] CarAgent. Step: 3800000. Time Elapsed: 4315.607 s. Episodes: 108. Mean Reward: -3.555. Std of Reward: 3.562. Mean Episode Length: 923.183. Std of Episode Length: 215.552. Terminated: 27. MaxStep: 89. FwdTerminalExposure: 0.017. Training.
+[INFO] CarAgent. Step: 3900000. Time Elapsed: 4423.793 s. Episodes: 112. Mean Reward: -3.263. Std of Reward: 3.247. Mean Episode Length: 896.198. Std of Episode Length: 254.396. Terminated: 25. MaxStep: 92. FwdTerminalExposure: 0.017. Training.
+[INFO] CarAgent. Step: 4000000. Time Elapsed: 4531.382 s. Episodes: 105. Mean Reward: -3.272. Std of Reward: 3.378. Mean Episode Length: 942.887. Std of Episode Length: 181.480. Terminated: 24. MaxStep: 89. FwdTerminalExposure: 0.009. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-3999994.onnx
+[INFO] CarAgent. Step: 4100000. Time Elapsed: 4640.376 s. Episodes: 112. Mean Reward: -3.635. Std of Reward: 3.627. Mean Episode Length: 904.351. Std of Episode Length: 226.275. Terminated: 30. MaxStep: 88. FwdTerminalExposure: 0.008. Training.
+[INFO] CarAgent. Step: 4200000. Time Elapsed: 4748.568 s. Episodes: 104. Mean Reward: -2.753. Std of Reward: 2.718. Mean Episode Length: 961.452. Std of Episode Length: 146.742. Terminated: 19. MaxStep: 94. FwdTerminalExposure: 0.009. Training.
+[INFO] CarAgent. Step: 4300000. Time Elapsed: 4857.076 s. Episodes: 108. Mean Reward: -3.092. Std of Reward: 3.035. Mean Episode Length: 914.477. Std of Episode Length: 248.221. Terminated: 24. MaxStep: 94. FwdTerminalExposure: 0.017. Training.
+[INFO] CarAgent. Step: 4400000. Time Elapsed: 4968.432 s. Episodes: 132. Mean Reward: -1.757. Std of Reward: 6.060. Mean Episode Length: 765.786. Std of Episode Length: 364.569. Goals: 21. Terminated: 34. MaxStep: 84. FwdTerminalExposure: 0.089. Training.
+[INFO] CarAgent. Step: 4500000. Time Elapsed: 5079.841 s. Episodes: 138. Mean Reward: 0.217. Std of Reward: 6.213. Mean Episode Length: 716.920. Std of Episode Length: 394.933. Goals: 36. Terminated: 27. MaxStep: 87. FwdTerminalExposure: 0.143. Training.
+[INFO] CarAgent. Step: 4600000. Time Elapsed: 5149.008 s. Episodes: 718. Mean Reward: -9.133. Std of Reward: 1.381. Mean Episode Length: 138.942. Std of Episode Length: 132.723. Goals: 2. Terminated: 705. MaxStep: 12. FwdTerminalExposure: 0.014. Untracked: 12. Training.
+[INFO] CarAgent. Step: 4700000. Time Elapsed: 5215.178 s. Episodes: 232. Mean Reward: -7.655. Std of Reward: 3.846. Mean Episode Length: 417.810. Std of Episode Length: 365.617. Goals: 2. Terminated: 181. MaxStep: 48. FwdTerminalExposure: 0.034. Training.
+[INFO] CarAgent. Step: 4800000. Time Elapsed: 5280.643 s. Episodes: 118. Mean Reward: -3.531. Std of Reward: 4.371. Mean Episode Length: 832.576. Std of Episode Length: 303.180. Goals: 2. Terminated: 36. MaxStep: 81. FwdTerminalExposure: 0.042. Training.
+[INFO] CarAgent. Step: 4900000. Time Elapsed: 5347.019 s. Episodes: 120. Mean Reward: -2.820. Std of Reward: 4.875. Mean Episode Length: 853.750. Std of Episode Length: 269.441. Goals: 7. Terminated: 31. MaxStep: 81. FwdTerminalExposure: 0.126. Training.
+[INFO] CarAgent. Step: 5000000. Time Elapsed: 5413.062 s. Episodes: 124. Mean Reward: -0.642. Std of Reward: 6.853. Mean Episode Length: 799.000. Std of Episode Length: 245.218. Goals: 37. Terminated: 32. MaxStep: 59. FwdTerminalExposure: 0.280. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-4999946.onnx
+[INFO] CarAgent. Step: 5100000. Time Elapsed: 5480.707 s. Episodes: 167. Mean Reward: 4.955. Std of Reward: 6.786. Mean Episode Length: 617.262. Std of Episode Length: 289.638. Goals: 113. Terminated: 22. MaxStep: 29. FwdTerminalExposure: 0.486. Training.
+[INFO] CarAgent. Step: 5200000. Time Elapsed: 5546.712 s. Episodes: 179. Mean Reward: 7.257. Std of Reward: 4.615. Mean Episode Length: 554.483. Std of Episode Length: 320.169. Goals: 147. Terminated: 6. MaxStep: 27. FwdTerminalExposure: 0.582. Training.
+[INFO] CarAgent. Step: 5300000. Time Elapsed: 5615.663 s. Episodes: 212. Mean Reward: 7.485. Std of Reward: 4.874. Mean Episode Length: 461.311. Std of Episode Length: 299.044. Goals: 182. Terminated: 11. MaxStep: 21. FwdTerminalExposure: 0.567. Training.
+[INFO] CarAgent. Step: 5400000. Time Elapsed: 5682.506 s. Episodes: 224. Mean Reward: 7.694. Std of Reward: 4.337. Mean Episode Length: 457.509. Std of Episode Length: 319.186. Goals: 187. Terminated: 7. MaxStep: 27. FwdTerminalExposure: 0.548. Training.
+[INFO] CarAgent. Step: 5500000. Time Elapsed: 5749.342 s. Episodes: 204. Mean Reward: 7.993. Std of Reward: 3.415. Mean Episode Length: 475.931. Std of Episode Length: 345.954. Goals: 175. MaxStep: 31. FwdTerminalExposure: 0.551. Training.
+[INFO] CarAgent. Step: 5600000. Time Elapsed: 5817.003 s. Episodes: 392. Mean Reward: 8.740. Std of Reward: 3.378. Mean Episode Length: 261.551. Std of Episode Length: 121.808. Goals: 373. Terminated: 12. MaxStep: 5. FwdTerminalExposure: 0.423. Training.
+[INFO] CarAgent. Step: 5700000. Time Elapsed: 5884.941 s. Episodes: 422. Mean Reward: 9.452. Std of Reward: 0.034. Mean Episode Length: 236.436. Std of Episode Length: 16.601. Goals: 421. FwdTerminalExposure: 0.415. Training.
+[INFO] CarAgent. Step: 5800000. Time Elapsed: 5952.132 s. Episodes: 442. Mean Reward: 9.475. Std of Reward: 0.028. Mean Episode Length: 225.401. Std of Episode Length: 14.020. Goals: 444. FwdTerminalExposure: 0.421. Training.
+[INFO] CarAgent. Step: 5900000. Time Elapsed: 6019.772 s. Episodes: 444. Mean Reward: 9.478. Std of Reward: 0.026. Mean Episode Length: 223.656. Std of Episode Length: 12.681. Goals: 442. FwdTerminalExposure: 0.430. Training.
+[INFO] CarAgent. Step: 6000000. Time Elapsed: 6087.444 s. Episodes: 454. Mean Reward: 9.486. Std of Reward: 0.025. Mean Episode Length: 219.925. Std of Episode Length: 13.291. Goals: 457. FwdTerminalExposure: 0.420. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-5999990.onnx
+[INFO] CarAgent. Step: 6100000. Time Elapsed: 6152.269 s. Episodes: 454. Mean Reward: 9.490. Std of Reward: 0.026. Mean Episode Length: 218.779. Std of Episode Length: 13.076. Goals: 452. FwdTerminalExposure: 0.416. Training.
+[INFO] CarAgent. Step: 6200000. Time Elapsed: 6217.779 s. Episodes: 462. Mean Reward: 9.494. Std of Reward: 0.024. Mean Episode Length: 215.459. Std of Episode Length: 12.345. Goals: 463. FwdTerminalExposure: 0.412. Training.
+[INFO] CarAgent. Step: 6300000. Time Elapsed: 6282.698 s. Episodes: 470. Mean Reward: 9.499. Std of Reward: 0.024. Mean Episode Length: 212.297. Std of Episode Length: 12.198. Goals: 470. FwdTerminalExposure: 0.403. Training.
+[INFO] CarAgent. Step: 6400000. Time Elapsed: 6347.664 s. Episodes: 472. Mean Reward: 9.502. Std of Reward: 0.023. Mean Episode Length: 210.822. Std of Episode Length: 12.312. Goals: 472. FwdTerminalExposure: 0.415. Training.
+[INFO] CarAgent. Step: 6500000. Time Elapsed: 6414.598 s. Episodes: 478. Mean Reward: 9.509. Std of Reward: 0.025. Mean Episode Length: 207.950. Std of Episode Length: 12.691. Goals: 477. FwdTerminalExposure: 0.404. Training.
+[INFO] CarAgent. Step: 6600000. Time Elapsed: 6456.496 s. Episodes: 228. Mean Reward: -0.288. Std of Reward: 9.416. Mean Episode Length: 400.579. Std of Episode Length: 267.112. Goals: 111. Terminated: 119. MaxStep: 10. FwdTerminalExposure: 0.227. Untracked: 12. Training.
+[INFO] CarAgent. Step: 6700000. Time Elapsed: 6496.456 s. Episodes: 180. Mean Reward: 1.896. Std of Reward: 8.381. Mean Episode Length: 529.667. Std of Episode Length: 353.445. Goals: 89. Terminated: 42. MaxStep: 36. FwdTerminalExposure: 0.268. Training.
+[INFO] CarAgent. Step: 6800000. Time Elapsed: 6536.786 s. Episodes: 168. Mean Reward: 2.475. Std of Reward: 7.250. Mean Episode Length: 609.786. Std of Episode Length: 371.269. Goals: 83. Terminated: 31. MaxStep: 59. FwdTerminalExposure: 0.255. Training.
+[INFO] CarAgent. Step: 6900000. Time Elapsed: 6579.247 s. Episodes: 204. Mean Reward: 4.389. Std of Reward: 7.196. Mean Episode Length: 517.627. Std of Episode Length: 355.752. Goals: 127. Terminated: 27. MaxStep: 45. FwdTerminalExposure: 0.305. Training.
+[INFO] CarAgent. Step: 7000000. Time Elapsed: 6620.913 s. Episodes: 168. Mean Reward: 5.169. Std of Reward: 5.774. Mean Episode Length: 534.953. Std of Episode Length: 357.357. Goals: 109. Terminated: 6. MaxStep: 57. FwdTerminalExposure: 0.337. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-6999888.onnx
+[INFO] CarAgent. Step: 7100000. Time Elapsed: 6662.990 s. Episodes: 199. Mean Reward: 3.034. Std of Reward: 7.208. Mean Episode Length: 559.796. Std of Episode Length: 356.232. Goals: 102. Terminated: 32. MaxStep: 65. FwdTerminalExposure: 0.272. Training.
+[INFO] CarAgent. Step: 7200000. Time Elapsed: 6705.606 s. Episodes: 245. Mean Reward: 5.512. Std of Reward: 7.035. Mean Episode Length: 406.656. Std of Episode Length: 295.318. Goals: 183. Terminated: 32. MaxStep: 31. FwdTerminalExposure: 0.368. Training.
+[INFO] CarAgent. Step: 7300000. Time Elapsed: 6747.813 s. Episodes: 192. Mean Reward: 3.834. Std of Reward: 8.051. Mean Episode Length: 485.938. Std of Episode Length: 325.668. Goals: 121. Terminated: 43. MaxStep: 28. FwdTerminalExposure: 0.310. Training.
+[INFO] CarAgent. Step: 7400000. Time Elapsed: 6789.598 s. Episodes: 187. Mean Reward: 4.344. Std of Reward: 6.511. Mean Episode Length: 538.851. Std of Episode Length: 349.556. Goals: 112. Terminated: 14. MaxStep: 60. FwdTerminalExposure: 0.309. Training.
+[INFO] CarAgent. Step: 7500000. Time Elapsed: 6832.186 s. Episodes: 237. Mean Reward: 6.553. Std of Reward: 5.412. Mean Episode Length: 428.339. Std of Episode Length: 304.495. Goals: 177. Terminated: 13. MaxStep: 47. FwdTerminalExposure: 0.377. Training.
+[INFO] CarAgent. Step: 7600000. Time Elapsed: 6875.095 s. Episodes: 144. Mean Reward: -5.143. Std of Reward: 5.867. Mean Episode Length: 672.389. Std of Episode Length: 403.866. Goals: 11. Terminated: 82. MaxStep: 53. FwdTerminalExposure: 0.059. Training.
+[INFO] CarAgent. Step: 7700000. Time Elapsed: 6917.136 s. Episodes: 108. Mean Reward: -5.634. Std of Reward: 4.318. Mean Episode Length: 905.370. Std of Episode Length: 239.619. Terminated: 55. MaxStep: 57. FwdTerminalExposure: 0.022. Training.
+[INFO] CarAgent. Step: 7800000. Time Elapsed: 6958.761 s. Episodes: 108. Mean Reward: -6.031. Std of Reward: 4.326. Mean Episode Length: 942.000. Std of Episode Length: 167.958. Terminated: 50. MaxStep: 52. FwdTerminalExposure: 0.030. Training.
+[INFO] CarAgent. Step: 7900000. Time Elapsed: 7001.249 s. Episodes: 98. Mean Reward: -3.977. Std of Reward: 3.884. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 30. MaxStep: 72. FwdTerminalExposure: 0.017. Training.
+[INFO] CarAgent. Step: 8000000. Time Elapsed: 7044.156 s. Episodes: 102. Mean Reward: -5.148. Std of Reward: 4.354. Mean Episode Length: 988.600. Std of Episode Length: 50.949. Terminated: 39. MaxStep: 59. FwdTerminalExposure: 0.023. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-7999908.onnx
+[INFO] CarAgent. Step: 8100000. Time Elapsed: 7083.669 s. Episodes: 100. Mean Reward: -5.681. Std of Reward: 4.441. Mean Episode Length: 990.320. Std of Episode Length: 42.523. Terminated: 51. MaxStep: 53. FwdTerminalExposure: 0.039. Training.
+[INFO] CarAgent. Step: 8200000. Time Elapsed: 7122.875 s. Episodes: 104. Mean Reward: -4.677. Std of Reward: 4.233. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 33. MaxStep: 67. FwdTerminalExposure: 0.036. Training.
+[INFO] CarAgent. Step: 8300000. Time Elapsed: 7163.895 s. Episodes: 96. Mean Reward: -5.544. Std of Reward: 4.552. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 43. MaxStep: 53. FwdTerminalExposure: 0.027. Training.
+[INFO] CarAgent. Step: 8400000. Time Elapsed: 7206.073 s. Episodes: 104. Mean Reward: -5.078. Std of Reward: 4.510. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 38. MaxStep: 64. FwdTerminalExposure: 0.029. Training.
+[INFO] CarAgent. Step: 8500000. Time Elapsed: 7248.371 s. Episodes: 96. Mean Reward: -3.922. Std of Reward: 4.034. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 23. MaxStep: 71. FwdTerminalExposure: 0.030. Training.
+[INFO] CarAgent. Step: 8600000. Time Elapsed: 7290.730 s. Episodes: 104. Mean Reward: -3.085. Std of Reward: 3.400. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 18. MaxStep: 86. FwdTerminalExposure: 0.008. Training.
+[INFO] CarAgent. Step: 8700000. Time Elapsed: 7332.918 s. Episodes: 96. Mean Reward: -3.186. Std of Reward: 3.467. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 21. MaxStep: 79. FwdTerminalExposure: 0.001. Training.
+[INFO] CarAgent. Step: 8800000. Time Elapsed: 7375.361 s. Episodes: 100. Mean Reward: -4.328. Std of Reward: 4.169. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 29. MaxStep: 73. FwdTerminalExposure: 0.008. Training.
+[INFO] CarAgent. Step: 8900000. Time Elapsed: 7417.733 s. Episodes: 100. Mean Reward: -3.974. Std of Reward: 4.060. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 24. MaxStep: 70. FwdTerminalExposure: 0.010. Training.
+[INFO] CarAgent. Step: 9000000. Time Elapsed: 7459.774 s. Episodes: 108. Mean Reward: -3.890. Std of Reward: 3.945. Mean Episode Length: 992.926. Std of Episode Length: 30.972. Terminated: 28. MaxStep: 80. FwdTerminalExposure: 0.019. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-8999984.onnx
+[INFO] CarAgent. Step: 9100000. Time Elapsed: 7490.470 s. Episodes: 84. Mean Reward: -2.933. Std of Reward: 2.918. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 12. MaxStep: 73. FwdTerminalExposure: 0.112. Untracked: 36. Training.
+[INFO] CarAgent. Step: 9200000. Time Elapsed: 7520.260 s. Episodes: 93. Mean Reward: -2.010. Std of Reward: 0.868. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 1. MaxStep: 99. FwdTerminalExposure: 0.110. Training.
+[INFO] CarAgent. Step: 9300000. Time Elapsed: 7549.871 s. Episodes: 97. Mean Reward: -2.135. Std of Reward: 1.160. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 7. MaxStep: 88. FwdTerminalExposure: 0.168. Training.
+[INFO] CarAgent. Step: 9400000. Time Elapsed: 7580.041 s. Episodes: 110. Mean Reward: -2.568. Std of Reward: 2.282. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 4. MaxStep: 102. FwdTerminalExposure: 0.148. Training.
+[INFO] CarAgent. Step: 9500000. Time Elapsed: 7606.723 s. Episodes: 93. Mean Reward: -2.492. Std of Reward: 2.128. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 6. MaxStep: 94. FwdTerminalExposure: 0.174. Training.
+[INFO] CarAgent. Step: 9600000. Time Elapsed: 7635.995 s. Episodes: 97. Mean Reward: -2.448. Std of Reward: 2.057. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 6. MaxStep: 84. FwdTerminalExposure: 0.160. Training.
+[INFO] CarAgent. Step: 9700000. Time Elapsed: 7664.396 s. Episodes: 116. Mean Reward: -2.118. Std of Reward: 1.442. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 1. MaxStep: 117. FwdTerminalExposure: 0.143. Training.
+[INFO] CarAgent. Step: 9800000. Time Elapsed: 7693.648 s. Episodes: 84. Mean Reward: -2.230. Std of Reward: 1.816. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 5. MaxStep: 77. FwdTerminalExposure: 0.098. Training.
+[INFO] CarAgent. Step: 9900000. Time Elapsed: 7722.050 s. Episodes: 100. Mean Reward: -2.410. Std of Reward: 2.105. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 7. MaxStep: 94. FwdTerminalExposure: 0.226. Training.
+[INFO] CarAgent. Step: 10000000. Time Elapsed: 7750.387 s. Episodes: 120. Mean Reward: -2.577. Std of Reward: 2.473. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 7. MaxStep: 110. FwdTerminalExposure: 0.146. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-9999872.onnx
+[INFO] CarAgent. Step: 10100000. Time Elapsed: 7778.609 s. Episodes: 70. Mean Reward: -2.724. Std of Reward: 2.762. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 14. MaxStep: 63. FwdTerminalExposure: 0.180. Training.
+[INFO] CarAgent. Step: 10200000. Time Elapsed: 7806.936 s. Episodes: 110. Mean Reward: -3.138. Std of Reward: 3.197. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 17. MaxStep: 93. FwdTerminalExposure: 0.186. Training.
+[INFO] CarAgent. Step: 10300000. Time Elapsed: 7833.467 s. Episodes: 120. Mean Reward: -3.435. Std of Reward: 3.483. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 16. MaxStep: 97. FwdTerminalExposure: 0.193. Training.
+[INFO] CarAgent. Step: 10400000. Time Elapsed: 7860.427 s. Episodes: 70. Mean Reward: -1.982. Std of Reward: 1.516. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 5. MaxStep: 68. FwdTerminalExposure: 0.249. Training.
+[INFO] CarAgent. Step: 10500000. Time Elapsed: 7887.124 s. Episodes: 110. Mean Reward: -2.920. Std of Reward: 3.070. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 17. MaxStep: 95. FwdTerminalExposure: 0.205. Training.
+[INFO] CarAgent. Step: 10600000. Time Elapsed: 7913.835 s. Episodes: 120. Mean Reward: -3.544. Std of Reward: 3.886. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 1. Terminated: 20. MaxStep: 94. FwdTerminalExposure: 0.289. Training.
+[INFO] CarAgent. Step: 10700000. Time Elapsed: 7940.761 s. Episodes: 70. Mean Reward: -2.176. Std of Reward: 2.750. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 1. Terminated: 11. MaxStep: 64. FwdTerminalExposure: 0.218. Training.
+[INFO] CarAgent. Step: 10800000. Time Elapsed: 7967.349 s. Episodes: 110. Mean Reward: -2.805. Std of Reward: 2.971. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 14. MaxStep: 95. FwdTerminalExposure: 0.170. Training.
+[INFO] CarAgent. Step: 10900000. Time Elapsed: 7993.580 s. Episodes: 116. Mean Reward: -3.014. Std of Reward: 3.485. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 1. Terminated: 16. MaxStep: 100. FwdTerminalExposure: 0.262. Training.
+[INFO] CarAgent. Step: 11000000. Time Elapsed: 8020.785 s. Episodes: 87. Mean Reward: -2.886. Std of Reward: 3.373. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 1. Terminated: 15. MaxStep: 77. FwdTerminalExposure: 0.240. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-10999896.onnx
+[INFO] CarAgent. Step: 11100000. Time Elapsed: 8047.468 s. Episodes: 97. Mean Reward: -2.761. Std of Reward: 3.562. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 2. Terminated: 11. MaxStep: 74. FwdTerminalExposure: 0.227. Training.
+[INFO] CarAgent. Step: 11200000. Time Elapsed: 8074.214 s. Episodes: 116. Mean Reward: -2.364. Std of Reward: 3.143. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 2. Terminated: 13. MaxStep: 105. FwdTerminalExposure: 0.300. Training.
+[INFO] CarAgent. Step: 11300000. Time Elapsed: 8100.943 s. Episodes: 84. Mean Reward: -3.226. Std of Reward: 3.358. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 14. MaxStep: 67. FwdTerminalExposure: 0.280. Training.
+[INFO] CarAgent. Step: 11400000. Time Elapsed: 8125.685 s. Episodes: 100. Mean Reward: -3.175. Std of Reward: 3.302. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 1. Terminated: 18. MaxStep: 84. FwdTerminalExposure: 0.256. Training.
+[INFO] CarAgent. Step: 11500000. Time Elapsed: 8152.611 s. Episodes: 100. Mean Reward: -3.357. Std of Reward: 3.972. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Terminated: 19. MaxStep: 78. FwdTerminalExposure: 0.279. Training.
+[INFO] CarAgent. Step: 11600000. Time Elapsed: 8179.703 s. Episodes: 110. Mean Reward: -2.219. Std of Reward: 2.811. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 1. Terminated: 7. MaxStep: 99. FwdTerminalExposure: 0.297. Training.
+[INFO] CarAgent. Step: 11700000. Time Elapsed: 8206.504 s. Episodes: 93. Mean Reward: -1.945. Std of Reward: 2.495. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 1. Terminated: 11. MaxStep: 93. FwdTerminalExposure: 0.344. Training.
+[INFO] CarAgent. Step: 11800000. Time Elapsed: 8233.629 s. Episodes: 97. Mean Reward: -2.401. Std of Reward: 2.972. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 1. Terminated: 9. MaxStep: 79. FwdTerminalExposure: 0.292. Training.
+[INFO] CarAgent. Step: 11900000. Time Elapsed: 8260.123 s. Episodes: 110. Mean Reward: -2.396. Std of Reward: 3.362. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 3. Terminated: 16. MaxStep: 95. FwdTerminalExposure: 0.271. Training.
+[INFO] CarAgent. Step: 12000000. Time Elapsed: 8287.391 s. Episodes: 100. Mean Reward: -2.673. Std of Reward: 3.855. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 2. Terminated: 15. MaxStep: 80. FwdTerminalExposure: 0.283. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-11999984.onnx
+[INFO] CarAgent. Step: 12100000. Time Elapsed: 8312.562 s. Episodes: 90. Mean Reward: -3.048. Std of Reward: 3.679. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 3. Terminated: 16. MaxStep: 72. FwdTerminalExposure: 0.322. Training.
+[INFO] CarAgent. Step: 12200000. Time Elapsed: 8340.016 s. Episodes: 110. Mean Reward: -2.526. Std of Reward: 4.469. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 4. Terminated: 20. MaxStep: 84. FwdTerminalExposure: 0.253. Training.
+[INFO] CarAgent. Step: 12300000. Time Elapsed: 8367.694 s. Episodes: 100. Mean Reward: -2.190. Std of Reward: 4.123. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 5. Terminated: 14. MaxStep: 81. FwdTerminalExposure: 0.249. Training.
+[INFO] CarAgent. Step: 12400000. Time Elapsed: 8396.083 s. Episodes: 90. Mean Reward: -2.782. Std of Reward: 3.914. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 9. Terminated: 15. MaxStep: 72. FwdTerminalExposure: 0.317. Training.
+[INFO] CarAgent. Step: 12500000. Time Elapsed: 8423.823 s. Episodes: 110. Mean Reward: -1.993. Std of Reward: 4.951. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 4. Terminated: 18. MaxStep: 80. FwdTerminalExposure: 0.294. Training.
+[INFO] CarAgent. Step: 12600000. Time Elapsed: 8451.235 s. Episodes: 81. Mean Reward: -1.876. Std of Reward: 2.301. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 3. Terminated: 9. MaxStep: 85. FwdTerminalExposure: 0.341. Training.
+[INFO] CarAgent. Step: 12700000. Time Elapsed: 8478.525 s. Episodes: 109. Mean Reward: -2.578. Std of Reward: 4.079. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 3. Terminated: 16. MaxStep: 79. FwdTerminalExposure: 0.214. Training.
+[INFO] CarAgent. Step: 12800000. Time Elapsed: 8505.650 s. Episodes: 110. Mean Reward: -2.269. Std of Reward: 3.919. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 5. Terminated: 13. MaxStep: 89. FwdTerminalExposure: 0.239. Training.
+[INFO] CarAgent. Step: 12900000. Time Elapsed: 8532.724 s. Episodes: 90. Mean Reward: -1.498. Std of Reward: 3.053. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 3. Terminated: 9. MaxStep: 81. FwdTerminalExposure: 0.284. Training.
+[INFO] CarAgent. Step: 13000000. Time Elapsed: 8560.230 s. Episodes: 100. Mean Reward: -2.488. Std of Reward: 3.184. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 5. Terminated: 5. MaxStep: 87. FwdTerminalExposure: 0.223. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-12999968.onnx
+[INFO] CarAgent. Step: 13100000. Time Elapsed: 8587.531 s. Episodes: 110. Mean Reward: -1.325. Std of Reward: 4.125. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 6. Terminated: 10. MaxStep: 91. FwdTerminalExposure: 0.203. Training.
+[INFO] CarAgent. Step: 13200000. Time Elapsed: 8614.535 s. Episodes: 90. Mean Reward: -0.999. Std of Reward: 3.451. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 12. Terminated: 6. MaxStep: 79. FwdTerminalExposure: 0.205. Training.
+[INFO] CarAgent. Step: 13300000. Time Elapsed: 8641.698 s. Episodes: 103. Mean Reward: -1.921. Std of Reward: 4.575. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 7. Terminated: 14. MaxStep: 83. FwdTerminalExposure: 0.317. Training.
+[INFO] CarAgent. Step: 13400000. Time Elapsed: 8669.058 s. Episodes: 107. Mean Reward: -0.865. Std of Reward: 3.952. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 9. Terminated: 6. MaxStep: 86. FwdTerminalExposure: 0.284. Training.
+[INFO] CarAgent. Step: 13500000. Time Elapsed: 8696.163 s. Episodes: 90. Mean Reward: -1.555. Std of Reward: 3.291. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 8. Terminated: 7. MaxStep: 79. FwdTerminalExposure: 0.316. Training.
+[INFO] CarAgent. Step: 13600000. Time Elapsed: 8721.135 s. Episodes: 110. Mean Reward: -1.443. Std of Reward: 4.283. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 9. Terminated: 13. MaxStep: 88. FwdTerminalExposure: 0.288. Training.
+[INFO] CarAgent. Step: 13700000. Time Elapsed: 8747.889 s. Episodes: 93. Mean Reward: -1.094. Std of Reward: 4.320. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 10. Terminated: 7. MaxStep: 81. FwdTerminalExposure: 0.370. Training.
+[INFO] CarAgent. Step: 13800000. Time Elapsed: 8774.859 s. Episodes: 97. Mean Reward: -1.768. Std of Reward: 3.960. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 6. Terminated: 14. MaxStep: 74. FwdTerminalExposure: 0.237. Training.
+[INFO] CarAgent. Step: 13900000. Time Elapsed: 8801.108 s. Episodes: 110. Mean Reward: -2.386. Std of Reward: 4.447. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 5. Terminated: 17. MaxStep: 83. FwdTerminalExposure: 0.300. Training.
+[INFO] CarAgent. Step: 14000000. Time Elapsed: 8830.333 s. Episodes: 90. Mean Reward: -1.814. Std of Reward: 4.101. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 7. Terminated: 13. MaxStep: 72. FwdTerminalExposure: 0.254. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-13999968.onnx
+[INFO] CarAgent. Step: 14100000. Time Elapsed: 8860.230 s. Episodes: 110. Mean Reward: -1.364. Std of Reward: 3.479. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 6. Terminated: 5. MaxStep: 96. FwdTerminalExposure: 0.265. Training.
+[INFO] CarAgent. Step: 14200000. Time Elapsed: 8889.280 s. Episodes: 110. Mean Reward: -2.083. Std of Reward: 3.305. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 2. Terminated: 10. MaxStep: 95. FwdTerminalExposure: 0.249. Training.
+[INFO] CarAgent. Step: 14300000. Time Elapsed: 8917.441 s. Episodes: 70. Mean Reward: -1.793. Std of Reward: 3.381. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 7. Terminated: 13. MaxStep: 62. FwdTerminalExposure: 0.235. Training.
+[INFO] CarAgent. Step: 14400000. Time Elapsed: 8946.350 s. Episodes: 120. Mean Reward: -1.369. Std of Reward: 4.340. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 10. Terminated: 9. MaxStep: 96. FwdTerminalExposure: 0.274. Training.
+[INFO] CarAgent. Step: 14500000. Time Elapsed: 8975.572 s. Episodes: 100. Mean Reward: -2.021. Std of Reward: 4.602. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 8. Terminated: 14. MaxStep: 76. FwdTerminalExposure: 0.279. Training.
+[INFO] CarAgent. Step: 14600000. Time Elapsed: 9004.877 s. Episodes: 80. Mean Reward: -1.274. Std of Reward: 4.286. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 9. Terminated: 8. MaxStep: 64. FwdTerminalExposure: 0.305. Training.
+[INFO] CarAgent. Step: 14700000. Time Elapsed: 9034.241 s. Episodes: 120. Mean Reward: -1.511. Std of Reward: 4.339. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 9. Terminated: 12. MaxStep: 95. FwdTerminalExposure: 0.275. Training.
+[INFO] CarAgent. Step: 14800000. Time Elapsed: 9061.499 s. Episodes: 100. Mean Reward: -0.978. Std of Reward: 3.342. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 6. Terminated: 6. MaxStep: 89. FwdTerminalExposure: 0.283. Training.
+[INFO] CarAgent. Step: 14900000. Time Elapsed: 9089.086 s. Episodes: 81. Mean Reward: -1.304. Std of Reward: 3.683. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 10. Terminated: 14. MaxStep: 72. FwdTerminalExposure: 0.260. Training.
+[INFO] CarAgent. Step: 15000000. Time Elapsed: 9117.958 s. Episodes: 109. Mean Reward: -1.721. Std of Reward: 4.756. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 10. Terminated: 10. MaxStep: 80. FwdTerminalExposure: 0.300. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-14999968.onnx
+[INFO] CarAgent. Step: 15100000. Time Elapsed: 9147.215 s. Episodes: 110. Mean Reward: -1.835. Std of Reward: 4.923. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 10. Terminated: 15. MaxStep: 81. FwdTerminalExposure: 0.310. Training.
+[INFO] CarAgent. Step: 15200000. Time Elapsed: 9176.576 s. Episodes: 100. Mean Reward: -1.169. Std of Reward: 3.900. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 8. Terminated: 5. MaxStep: 84. FwdTerminalExposure: 0.247. Training.
+[INFO] CarAgent. Step: 15300000. Time Elapsed: 9205.079 s. Episodes: 90. Mean Reward: -1.711. Std of Reward: 3.744. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 8. Terminated: 11. MaxStep: 76. FwdTerminalExposure: 0.332. Training.
+[INFO] CarAgent. Step: 15400000. Time Elapsed: 9233.587 s. Episodes: 110. Mean Reward: -0.265. Std of Reward: 3.630. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 9. Terminated: 5. MaxStep: 95. FwdTerminalExposure: 0.269. Training.
+[INFO] CarAgent. Step: 15500000. Time Elapsed: 9261.851 s. Episodes: 90. Mean Reward: -1.162. Std of Reward: 5.274. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 21. Terminated: 13. MaxStep: 62. FwdTerminalExposure: 0.265. Training.
+[INFO] CarAgent. Step: 15600000. Time Elapsed: 9290.323 s. Episodes: 100. Mean Reward: -0.581. Std of Reward: 4.425. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 8. Terminated: 4. MaxStep: 81. FwdTerminalExposure: 0.273. Training.
+[INFO] CarAgent. Step: 15700000. Time Elapsed: 9315.272 s. Episodes: 103. Mean Reward: -1.201. Std of Reward: 4.017. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 10. Terminated: 6. MaxStep: 93. FwdTerminalExposure: 0.277. Training.
+[INFO] CarAgent. Step: 15800000. Time Elapsed: 9342.958 s. Episodes: 97. Mean Reward: -1.112. Std of Reward: 4.310. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 8. Terminated: 18. MaxStep: 72. FwdTerminalExposure: 0.232. Training.
+[INFO] CarAgent. Step: 15900000. Time Elapsed: 9370.213 s. Episodes: 103. Mean Reward: -1.943. Std of Reward: 4.076. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 8. Terminated: 10. MaxStep: 88. FwdTerminalExposure: 0.295. Training.
+[INFO] CarAgent. Step: 16000000. Time Elapsed: 9397.247 s. Episodes: 88. Mean Reward: -1.218. Std of Reward: 4.653. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 10. Terminated: 8. MaxStep: 72. FwdTerminalExposure: 0.333. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-15999928.onnx
+[INFO] CarAgent. Step: 16100000. Time Elapsed: 9425.043 s. Episodes: 119. Mean Reward: -1.152. Std of Reward: 4.745. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 17. Terminated: 9. MaxStep: 82. FwdTerminalExposure: 0.209. Training.
+[INFO] CarAgent. Step: 16200000. Time Elapsed: 9451.512 s. Episodes: 110. Mean Reward: -0.149. Std of Reward: 4.642. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 14. Terminated: 6. MaxStep: 85. FwdTerminalExposure: 0.338. Training.
+[INFO] CarAgent. Step: 16300000. Time Elapsed: 9479.200 s. Episodes: 80. Mean Reward: -1.101. Std of Reward: 4.667. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 18. Terminated: 13. MaxStep: 61. FwdTerminalExposure: 0.230. Training.
+[INFO] CarAgent. Step: 16400000. Time Elapsed: 9506.083 s. Episodes: 110. Mean Reward: 0.093. Std of Reward: 5.799. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 20. Terminated: 12. MaxStep: 71. FwdTerminalExposure: 0.325. Training.
+[INFO] CarAgent. Step: 16500000. Time Elapsed: 9532.842 s. Episodes: 100. Mean Reward: -0.666. Std of Reward: 5.031. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 17. Terminated: 8. MaxStep: 73. FwdTerminalExposure: 0.363. Training.
+[INFO] CarAgent. Step: 16600000. Time Elapsed: 9561.519 s. Episodes: 90. Mean Reward: -0.375. Std of Reward: 4.096. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 12. Terminated: 8. MaxStep: 75. FwdTerminalExposure: 0.297. Training.
+[INFO] CarAgent. Step: 16700000. Time Elapsed: 9590.799 s. Episodes: 100. Mean Reward: -0.687. Std of Reward: 4.955. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 14. Terminated: 9. MaxStep: 74. FwdTerminalExposure: 0.234. Training.
+[INFO] CarAgent. Step: 16800000. Time Elapsed: 9620.407 s. Episodes: 110. Mean Reward: -0.071. Std of Reward: 4.436. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 19. Terminated: 6. MaxStep: 87. FwdTerminalExposure: 0.343. Training.
+[INFO] CarAgent. Step: 16900000. Time Elapsed: 9646.747 s. Episodes: 90. Mean Reward: -1.159. Std of Reward: 5.560. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 13. Terminated: 13. MaxStep: 61. FwdTerminalExposure: 0.262. Training.
+[INFO] CarAgent. Step: 17000000. Time Elapsed: 9674.862 s. Episodes: 100. Mean Reward: -0.851. Std of Reward: 4.248. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 16. Terminated: 11. MaxStep: 81. FwdTerminalExposure: 0.346. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-16999968.onnx
+[INFO] CarAgent. Step: 17100000. Time Elapsed: 9702.673 s. Episodes: 110. Mean Reward: -0.825. Std of Reward: 5.110. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 19. Terminated: 12. MaxStep: 78. FwdTerminalExposure: 0.286. Training.
+[INFO] CarAgent. Step: 17200000. Time Elapsed: 9730.111 s. Episodes: 110. Mean Reward: 0.611. Std of Reward: 5.735. Mean Episode Length: 986.909. Std of Episode Length: 38.235. Goals: 28. Terminated: 5. MaxStep: 69. FwdTerminalExposure: 0.234. Training.
+[INFO] CarAgent. Step: 17300000. Time Elapsed: 9756.755 s. Episodes: 80. Mean Reward: 0.098. Std of Reward: 5.069. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 18. Terminated: 8. MaxStep: 57. FwdTerminalExposure: 0.346. Training.
+[INFO] CarAgent. Step: 17400000. Time Elapsed: 9784.762 s. Episodes: 110. Mean Reward: -0.511. Std of Reward: 4.542. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 19. Terminated: 5. MaxStep: 87. FwdTerminalExposure: 0.343. Training.
+[INFO] CarAgent. Step: 17500000. Time Elapsed: 9813.399 s. Episodes: 100. Mean Reward: 0.518. Std of Reward: 5.931. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 26. Terminated: 13. MaxStep: 61. FwdTerminalExposure: 0.324. Training.
+[INFO] CarAgent. Step: 17600000. Time Elapsed: 9840.593 s. Episodes: 90. Mean Reward: -0.180. Std of Reward: 5.023. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 16. Terminated: 8. MaxStep: 66. FwdTerminalExposure: 0.241. Training.
+[INFO] CarAgent. Step: 17700000. Time Elapsed: 9869.195 s. Episodes: 110. Mean Reward: -0.361. Std of Reward: 5.234. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 26. Terminated: 10. MaxStep: 78. FwdTerminalExposure: 0.327. Training.
+[INFO] CarAgent. Step: 17800000. Time Elapsed: 9897.558 s. Episodes: 100. Mean Reward: 0.659. Std of Reward: 5.917. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 22. Terminated: 12. MaxStep: 62. FwdTerminalExposure: 0.326. Training.
+[INFO] CarAgent. Step: 17900000. Time Elapsed: 9925.795 s. Episodes: 90. Mean Reward: 0.890. Std of Reward: 5.621. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 27. Terminated: 6. MaxStep: 57. FwdTerminalExposure: 0.337. Training.
+[INFO] CarAgent. Step: 18000000. Time Elapsed: 9954.359 s. Episodes: 110. Mean Reward: -0.486. Std of Reward: 5.318. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 21. Terminated: 9. MaxStep: 77. FwdTerminalExposure: 0.379. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-17999934.onnx
+[INFO] CarAgent. Step: 18100000. Time Elapsed: 9982.895 s. Episodes: 100. Mean Reward: 0.778. Std of Reward: 5.222. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 26. Terminated: 5. MaxStep: 69. FwdTerminalExposure: 0.291. Training.
+[INFO] CarAgent. Step: 18200000. Time Elapsed: 10011.418 s. Episodes: 90. Mean Reward: -0.025. Std of Reward: 6.031. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 30. Terminated: 16. MaxStep: 55. FwdTerminalExposure: 0.327. Training.
+[INFO] CarAgent. Step: 18300000. Time Elapsed: 10040.160 s. Episodes: 100. Mean Reward: -1.174. Std of Reward: 5.891. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 11. Terminated: 19. MaxStep: 61. FwdTerminalExposure: 0.254. Training.
+[INFO] CarAgent. Step: 18400000. Time Elapsed: 10069.186 s. Episodes: 110. Mean Reward: -0.603. Std of Reward: 4.720. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 19. Terminated: 9. MaxStep: 84. FwdTerminalExposure: 0.394. Training.
+[INFO] CarAgent. Step: 18500000. Time Elapsed: 10095.320 s. Episodes: 106. Mean Reward: -0.516. Std of Reward: 5.493. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 18. Terminated: 10. MaxStep: 75. FwdTerminalExposure: 0.284. Training.
+[INFO] CarAgent. Step: 18600000. Time Elapsed: 10123.412 s. Episodes: 76. Mean Reward: 0.321. Std of Reward: 4.541. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 20. Terminated: 6. MaxStep: 62. FwdTerminalExposure: 0.264. Training.
+[INFO] CarAgent. Step: 18700000. Time Elapsed: 10151.570 s. Episodes: 118. Mean Reward: -0.476. Std of Reward: 5.787. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 22. Terminated: 14. MaxStep: 71. FwdTerminalExposure: 0.356. Training.
+[INFO] CarAgent. Step: 18800000. Time Elapsed: 10179.704 s. Episodes: 106. Mean Reward: 0.063. Std of Reward: 5.445. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 25. Terminated: 10. MaxStep: 73. FwdTerminalExposure: 0.223. Training.
+[INFO] CarAgent. Step: 18900000. Time Elapsed: 10208.319 s. Episodes: 74. Mean Reward: -0.186. Std of Reward: 5.069. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 16. Terminated: 11. MaxStep: 52. FwdTerminalExposure: 0.302. Training.
+[INFO] CarAgent. Step: 19000000. Time Elapsed: 10236.532 s. Episodes: 120. Mean Reward: -0.209. Std of Reward: 5.158. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 24. Terminated: 10. MaxStep: 85. FwdTerminalExposure: 0.298. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-18999934.onnx
+[INFO] CarAgent. Step: 19100000. Time Elapsed: 10264.298 s. Episodes: 110. Mean Reward: 0.880. Std of Reward: 5.461. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 26. Terminated: 2. MaxStep: 72. FwdTerminalExposure: 0.377. Training.
+[INFO] CarAgent. Step: 19200000. Time Elapsed: 10290.934 s. Episodes: 70. Mean Reward: 1.269. Std of Reward: 4.960. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 31. Terminated: 7. MaxStep: 50. FwdTerminalExposure: 0.220. Training.
+[INFO] CarAgent. Step: 19300000. Time Elapsed: 10317.586 s. Episodes: 120. Mean Reward: 0.652. Std of Reward: 5.712. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 28. Terminated: 4. MaxStep: 76. FwdTerminalExposure: 0.275. Training.
+[INFO] CarAgent. Step: 19400000. Time Elapsed: 10344.912 s. Episodes: 100. Mean Reward: 1.261. Std of Reward: 5.994. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 31. Terminated: 10. MaxStep: 59. FwdTerminalExposure: 0.314. Training.
+[INFO] CarAgent. Step: 19500000. Time Elapsed: 10371.339 s. Episodes: 90. Mean Reward: 2.163. Std of Reward: 5.686. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 46. Terminated: 7. MaxStep: 51. FwdTerminalExposure: 0.310. Training.
+[INFO] CarAgent. Step: 19600000. Time Elapsed: 10398.229 s. Episodes: 104. Mean Reward: 1.143. Std of Reward: 6.287. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 25. Terminated: 13. MaxStep: 62. FwdTerminalExposure: 0.277. Training.
+[INFO] CarAgent. Step: 19700000. Time Elapsed: 10425.238 s. Episodes: 106. Mean Reward: 0.468. Std of Reward: 6.250. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 29. Terminated: 13. MaxStep: 55. FwdTerminalExposure: 0.317. Training.
+[INFO] CarAgent. Step: 19800000. Time Elapsed: 10453.143 s. Episodes: 94. Mean Reward: 1.532. Std of Reward: 5.655. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 4. MaxStep: 60. FwdTerminalExposure: 0.283. Training.
+[INFO] CarAgent. Step: 19900000. Time Elapsed: 10479.242 s. Episodes: 96. Mean Reward: 2.118. Std of Reward: 6.300. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 45. Terminated: 11. MaxStep: 44. FwdTerminalExposure: 0.238. Training.
+[INFO] CarAgent. Step: 20000000. Time Elapsed: 10507.216 s. Episodes: 110. Mean Reward: 1.221. Std of Reward: 6.508. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 33. Terminated: 15. MaxStep: 56. FwdTerminalExposure: 0.278. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-19999934.onnx
+[INFO] CarAgent. Step: 20100000. Time Elapsed: 10535.201 s. Episodes: 100. Mean Reward: 1.520. Std of Reward: 6.629. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 37. Terminated: 11. MaxStep: 47. FwdTerminalExposure: 0.249. Training.
+[INFO] CarAgent. Step: 20200000. Time Elapsed: 10563.002 s. Episodes: 90. Mean Reward: 0.608. Std of Reward: 6.155. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 25. Terminated: 15. MaxStep: 52. FwdTerminalExposure: 0.337. Training.
+[INFO] CarAgent. Step: 20300000. Time Elapsed: 10590.601 s. Episodes: 110. Mean Reward: 0.684. Std of Reward: 6.093. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 33. Terminated: 11. MaxStep: 63. FwdTerminalExposure: 0.330. Training.
+[INFO] CarAgent. Step: 20400000. Time Elapsed: 10618.647 s. Episodes: 100. Mean Reward: 0.164. Std of Reward: 5.874. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 24. Terminated: 12. MaxStep: 63. FwdTerminalExposure: 0.236. Training.
+[INFO] CarAgent. Step: 20500000. Time Elapsed: 10647.196 s. Episodes: 90. Mean Reward: 1.288. Std of Reward: 6.042. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 41. Terminated: 5. MaxStep: 52. FwdTerminalExposure: 0.279. Training.
+[INFO] CarAgent. Step: 20600000. Time Elapsed: 10672.365 s. Episodes: 110. Mean Reward: 1.657. Std of Reward: 5.923. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 31. Terminated: 11. MaxStep: 63. FwdTerminalExposure: 0.294. Training.
+[INFO] CarAgent. Step: 20700000. Time Elapsed: 10699.761 s. Episodes: 90. Mean Reward: 2.184. Std of Reward: 5.791. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 12. MaxStep: 50. FwdTerminalExposure: 0.403. Training.
+[INFO] CarAgent. Step: 20800000. Time Elapsed: 10728.622 s. Episodes: 104. Mean Reward: 1.263. Std of Reward: 7.054. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 43. Terminated: 9. MaxStep: 47. FwdTerminalExposure: 0.327. Training.
+[INFO] CarAgent. Step: 20900000. Time Elapsed: 10756.879 s. Episodes: 96. Mean Reward: 2.352. Std of Reward: 6.467. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 38. Terminated: 11. MaxStep: 41. FwdTerminalExposure: 0.329. Training.
+[INFO] CarAgent. Step: 21000000. Time Elapsed: 10785.925 s. Episodes: 100. Mean Reward: 0.917. Std of Reward: 5.944. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 29. Terminated: 14. MaxStep: 61. FwdTerminalExposure: 0.253. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-20999918.onnx
+[INFO] CarAgent. Step: 21100000. Time Elapsed: 10814.269 s. Episodes: 110. Mean Reward: 0.881. Std of Reward: 6.316. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 29. Terminated: 7. MaxStep: 61. FwdTerminalExposure: 0.332. Training.
+[INFO] CarAgent. Step: 21200000. Time Elapsed: 10843.303 s. Episodes: 82. Mean Reward: 0.989. Std of Reward: 5.727. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 11. MaxStep: 53. FwdTerminalExposure: 0.327. Training.
+[INFO] CarAgent. Step: 21300000. Time Elapsed: 10872.073 s. Episodes: 112. Mean Reward: 0.800. Std of Reward: 6.545. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 37. Terminated: 12. MaxStep: 59. FwdTerminalExposure: 0.265. Training.
+[INFO] CarAgent. Step: 21400000. Time Elapsed: 10901.109 s. Episodes: 106. Mean Reward: 1.981. Std of Reward: 6.619. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 33. Terminated: 13. MaxStep: 45. FwdTerminalExposure: 0.351. Training.
+[INFO] CarAgent. Step: 21500000. Time Elapsed: 10929.848 s. Episodes: 82. Mean Reward: -1.039. Std of Reward: 5.279. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 28. Terminated: 13. MaxStep: 60. FwdTerminalExposure: 0.267. Training.
+[INFO] CarAgent. Step: 21600000. Time Elapsed: 10957.632 s. Episodes: 118. Mean Reward: 1.896. Std of Reward: 6.036. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 33. Terminated: 7. MaxStep: 61. FwdTerminalExposure: 0.309. Training.
+[INFO] CarAgent. Step: 21700000. Time Elapsed: 10986.134 s. Episodes: 110. Mean Reward: 1.340. Std of Reward: 5.727. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 33. Terminated: 6. MaxStep: 67. FwdTerminalExposure: 0.325. Training.
+[INFO] CarAgent. Step: 21800000. Time Elapsed: 11014.033 s. Episodes: 80. Mean Reward: 1.741. Std of Reward: 6.246. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 39. Terminated: 12. MaxStep: 43. FwdTerminalExposure: 0.404. Training.
+[INFO] CarAgent. Step: 21900000. Time Elapsed: 11039.814 s. Episodes: 110. Mean Reward: 1.163. Std of Reward: 6.460. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 43. Terminated: 11. MaxStep: 56. FwdTerminalExposure: 0.294. Training.
+[INFO] CarAgent. Step: 22000000. Time Elapsed: 11068.123 s. Episodes: 100. Mean Reward: 2.149. Std of Reward: 6.760. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 37. Terminated: 11. MaxStep: 43. FwdTerminalExposure: 0.294. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-21999934.onnx
+[INFO] CarAgent. Step: 22100000. Time Elapsed: 11096.286 s. Episodes: 94. Mean Reward: 1.987. Std of Reward: 6.033. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 42. Terminated: 8. MaxStep: 53. FwdTerminalExposure: 0.383. Training.
+[INFO] CarAgent. Step: 22200000. Time Elapsed: 11124.865 s. Episodes: 106. Mean Reward: 1.671. Std of Reward: 6.868. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 13. MaxStep: 42. FwdTerminalExposure: 0.289. Training.
+[INFO] CarAgent. Step: 22300000. Time Elapsed: 11153.442 s. Episodes: 100. Mean Reward: 0.697. Std of Reward: 5.922. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 27. Terminated: 14. MaxStep: 61. FwdTerminalExposure: 0.397. Training.
+[INFO] CarAgent. Step: 22400000. Time Elapsed: 11182.994 s. Episodes: 94. Mean Reward: 1.441. Std of Reward: 6.237. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 12. MaxStep: 52. FwdTerminalExposure: 0.419. Training.
+[INFO] CarAgent. Step: 22500000. Time Elapsed: 11211.716 s. Episodes: 106. Mean Reward: 0.442. Std of Reward: 7.474. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 17. MaxStep: 41. FwdTerminalExposure: 0.350. Training.
+[INFO] CarAgent. Step: 22600000. Time Elapsed: 11237.636 s. Episodes: 100. Mean Reward: 1.522. Std of Reward: 6.445. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 33. Terminated: 12. MaxStep: 50. FwdTerminalExposure: 0.310. Training.
+[INFO] CarAgent. Step: 22700000. Time Elapsed: 11264.977 s. Episodes: 94. Mean Reward: 0.866. Std of Reward: 5.476. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 28. Terminated: 10. MaxStep: 67. FwdTerminalExposure: 0.240. Training.
+[INFO] CarAgent. Step: 22800000. Time Elapsed: 11293.393 s. Episodes: 96. Mean Reward: 1.121. Std of Reward: 5.600. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 34. Terminated: 4. MaxStep: 56. FwdTerminalExposure: 0.325. Training.
+[INFO] CarAgent. Step: 22900000. Time Elapsed: 11322.180 s. Episodes: 110. Mean Reward: 2.471. Std of Reward: 5.856. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 37. Terminated: 4. MaxStep: 58. FwdTerminalExposure: 0.305. Training.
+[INFO] CarAgent. Step: 23000000. Time Elapsed: 11351.541 s. Episodes: 100. Mean Reward: 3.356. Std of Reward: 5.579. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 51. Terminated: 5. MaxStep: 49. FwdTerminalExposure: 0.300. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-22999934.onnx
+[INFO] CarAgent. Step: 23100000. Time Elapsed: 11380.506 s. Episodes: 90. Mean Reward: 1.606. Std of Reward: 6.235. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 38. Terminated: 15. MaxStep: 46. FwdTerminalExposure: 0.324. Training.
+[INFO] CarAgent. Step: 23200000. Time Elapsed: 11407.918 s. Episodes: 110. Mean Reward: 1.750. Std of Reward: 6.025. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 36. Terminated: 4. MaxStep: 60. FwdTerminalExposure: 0.342. Training.
+[INFO] CarAgent. Step: 23300000. Time Elapsed: 11436.337 s. Episodes: 100. Mean Reward: 1.478. Std of Reward: 6.030. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 34. Terminated: 7. MaxStep: 57. FwdTerminalExposure: 0.341. Training.
+[INFO] CarAgent. Step: 23400000. Time Elapsed: 11466.403 s. Episodes: 94. Mean Reward: 2.441. Std of Reward: 6.074. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 42. Terminated: 11. MaxStep: 50. FwdTerminalExposure: 0.277. Training.
+[INFO] CarAgent. Step: 23500000. Time Elapsed: 11493.252 s. Episodes: 96. Mean Reward: 0.907. Std of Reward: 6.055. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 30. Terminated: 8. MaxStep: 52. FwdTerminalExposure: 0.337. Training.
+[INFO] CarAgent. Step: 23600000. Time Elapsed: 11519.727 s. Episodes: 110. Mean Reward: 2.054. Std of Reward: 5.597. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 45. Terminated: 3. MaxStep: 65. FwdTerminalExposure: 0.394. Training.
+[INFO] CarAgent. Step: 23700000. Time Elapsed: 11546.166 s. Episodes: 100. Mean Reward: 1.211. Std of Reward: 6.221. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 29. Terminated: 12. MaxStep: 54. FwdTerminalExposure: 0.326. Training.
+[INFO] CarAgent. Step: 23800000. Time Elapsed: 11573.307 s. Episodes: 90. Mean Reward: 1.685. Std of Reward: 5.813. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 37. Terminated: 3. MaxStep: 52. FwdTerminalExposure: 0.352. Training.
+[INFO] CarAgent. Step: 23900000. Time Elapsed: 11600.281 s. Episodes: 110. Mean Reward: 1.916. Std of Reward: 5.670. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 43. Terminated: 7. MaxStep: 65. FwdTerminalExposure: 0.321. Training.
+[INFO] CarAgent. Step: 24000000. Time Elapsed: 11627.471 s. Episodes: 100. Mean Reward: 2.361. Std of Reward: 5.814. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 37. Terminated: 4. MaxStep: 54. FwdTerminalExposure: 0.364. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-23999934.onnx
+[INFO] CarAgent. Step: 24100000. Time Elapsed: 11655.015 s. Episodes: 82. Mean Reward: 2.385. Std of Reward: 5.749. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 43. Terminated: 9. MaxStep: 49. FwdTerminalExposure: 0.276. Training.
+[INFO] CarAgent. Step: 24200000. Time Elapsed: 11682.459 s. Episodes: 118. Mean Reward: 2.611. Std of Reward: 6.313. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 53. Terminated: 4. MaxStep: 50. FwdTerminalExposure: 0.279. Training.
+[INFO] CarAgent. Step: 24300000. Time Elapsed: 11709.462 s. Episodes: 100. Mean Reward: 2.757. Std of Reward: 5.943. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 34. Terminated: 8. MaxStep: 49. FwdTerminalExposure: 0.263. Training.
+[INFO] CarAgent. Step: 24400000. Time Elapsed: 11735.297 s. Episodes: 90. Mean Reward: 1.582. Std of Reward: 6.314. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 41. Terminated: 16. MaxStep: 46. FwdTerminalExposure: 0.238. Training.
+[INFO] CarAgent. Step: 24500000. Time Elapsed: 11763.352 s. Episodes: 110. Mean Reward: 1.872. Std of Reward: 6.693. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 42. Terminated: 11. MaxStep: 49. FwdTerminalExposure: 0.300. Training.
+[INFO] CarAgent. Step: 24600000. Time Elapsed: 11791.942 s. Episodes: 90. Mean Reward: 1.425. Std of Reward: 6.531. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 10. MaxStep: 44. FwdTerminalExposure: 0.237. Training.
+[INFO] CarAgent. Step: 24700000. Time Elapsed: 11819.521 s. Episodes: 100. Mean Reward: 2.357. Std of Reward: 6.442. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 13. MaxStep: 45. FwdTerminalExposure: 0.410. Training.
+[INFO] CarAgent. Step: 24800000. Time Elapsed: 11847.054 s. Episodes: 110. Mean Reward: 2.764. Std of Reward: 6.370. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 42. Terminated: 5. MaxStep: 49. FwdTerminalExposure: 0.286. Training.
+[INFO] CarAgent. Step: 24900000. Time Elapsed: 11873.611 s. Episodes: 100. Mean Reward: 2.651. Std of Reward: 5.991. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 10. MaxStep: 50. FwdTerminalExposure: 0.280. Training.
+[INFO] CarAgent. Step: 25000000. Time Elapsed: 11900.017 s. Episodes: 100. Mean Reward: 2.619. Std of Reward: 6.066. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 45. Terminated: 7. MaxStep: 49. FwdTerminalExposure: 0.321. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-24999934.onnx
+[INFO] CarAgent. Step: 25100000. Time Elapsed: 11923.929 s. Episodes: 100. Mean Reward: 2.888. Std of Reward: 6.529. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 45. Terminated: 8. MaxStep: 41. FwdTerminalExposure: 0.343. Training.
+[INFO] CarAgent. Step: 25200000. Time Elapsed: 11950.096 s. Episodes: 100. Mean Reward: 2.696. Std of Reward: 6.104. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 48. Terminated: 4. MaxStep: 48. FwdTerminalExposure: 0.247. Training.
+[INFO] CarAgent. Step: 25300000. Time Elapsed: 11976.145 s. Episodes: 100. Mean Reward: 3.442. Std of Reward: 6.312. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 51. Terminated: 7. MaxStep: 39. FwdTerminalExposure: 0.304. Training.
+[INFO] CarAgent. Step: 25400000. Time Elapsed: 12003.027 s. Episodes: 90. Mean Reward: 3.950. Std of Reward: 5.977. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 51. Terminated: 10. MaxStep: 36. FwdTerminalExposure: 0.305. Training.
+[INFO] CarAgent. Step: 25500000. Time Elapsed: 12029.297 s. Episodes: 110. Mean Reward: 1.937. Std of Reward: 5.902. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 6. MaxStep: 60. FwdTerminalExposure: 0.286. Training.
+[INFO] CarAgent. Step: 25600000. Time Elapsed: 12055.259 s. Episodes: 100. Mean Reward: 1.738. Std of Reward: 6.339. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 37. Terminated: 6. MaxStep: 51. FwdTerminalExposure: 0.336. Training.
+[INFO] CarAgent. Step: 25700000. Time Elapsed: 12081.196 s. Episodes: 90. Mean Reward: 3.215. Std of Reward: 5.652. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 2. MaxStep: 46. FwdTerminalExposure: 0.340. Training.
+[INFO] CarAgent. Step: 25800000. Time Elapsed: 12107.044 s. Episodes: 104. Mean Reward: 2.542. Std of Reward: 6.736. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 50. Terminated: 13. MaxStep: 44. FwdTerminalExposure: 0.295. Training.
+[INFO] CarAgent. Step: 25900000. Time Elapsed: 12131.800 s. Episodes: 106. Mean Reward: 1.922. Std of Reward: 6.617. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 38. Terminated: 19. MaxStep: 47. FwdTerminalExposure: 0.314. Training.
+[INFO] CarAgent. Step: 26000000. Time Elapsed: 12158.911 s. Episodes: 90. Mean Reward: 1.704. Std of Reward: 6.909. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 45. Terminated: 6. MaxStep: 37. FwdTerminalExposure: 0.302. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-25999918.onnx
+[INFO] CarAgent. Step: 26100000. Time Elapsed: 12184.776 s. Episodes: 100. Mean Reward: 2.877. Std of Reward: 5.754. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 44. Terminated: 8. MaxStep: 51. FwdTerminalExposure: 0.316. Training.
+[INFO] CarAgent. Step: 26200000. Time Elapsed: 12211.245 s. Episodes: 100. Mean Reward: 2.674. Std of Reward: 6.133. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 7. MaxStep: 47. FwdTerminalExposure: 0.284. Training.
+[INFO] CarAgent. Step: 26300000. Time Elapsed: 12237.227 s. Episodes: 110. Mean Reward: 2.505. Std of Reward: 6.513. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 43. Terminated: 12. MaxStep: 47. FwdTerminalExposure: 0.248. Training.
+[INFO] CarAgent. Step: 26400000. Time Elapsed: 12263.204 s. Episodes: 90. Mean Reward: 2.515. Std of Reward: 6.230. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 45. Terminated: 6. MaxStep: 42. FwdTerminalExposure: 0.321. Training.
+[INFO] CarAgent. Step: 26500000. Time Elapsed: 12289.393 s. Episodes: 104. Mean Reward: 2.383. Std of Reward: 6.297. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 47. Terminated: 13. MaxStep: 50. FwdTerminalExposure: 0.379. Training.
+[INFO] CarAgent. Step: 26600000. Time Elapsed: 12315.744 s. Episodes: 106. Mean Reward: 2.448. Std of Reward: 6.602. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 44. Terminated: 5. MaxStep: 45. FwdTerminalExposure: 0.274. Training.
+[INFO] CarAgent. Step: 26700000. Time Elapsed: 12343.704 s. Episodes: 80. Mean Reward: 3.019. Std of Reward: 6.219. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 48. Terminated: 10. MaxStep: 36. FwdTerminalExposure: 0.321. Training.
+[INFO] CarAgent. Step: 26800000. Time Elapsed: 12369.481 s. Episodes: 120. Mean Reward: 1.627. Std of Reward: 6.884. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 46. Terminated: 15. MaxStep: 51. FwdTerminalExposure: 0.268. Training.
+[INFO] CarAgent. Step: 26900000. Time Elapsed: 12397.012 s. Episodes: 106. Mean Reward: 3.476. Std of Reward: 6.224. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 50. Terminated: 6. MaxStep: 43. FwdTerminalExposure: 0.270. Training.
+[INFO] CarAgent. Step: 27000000. Time Elapsed: 12423.607 s. Episodes: 74. Mean Reward: 3.463. Std of Reward: 5.858. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 45. Terminated: 6. MaxStep: 34. FwdTerminalExposure: 0.251. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-26999902.onnx
+[INFO] CarAgent. Step: 27100000. Time Elapsed: 12450.671 s. Episodes: 120. Mean Reward: 2.145. Std of Reward: 6.314. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 42. Terminated: 10. MaxStep: 60. FwdTerminalExposure: 0.290. Training.
+[INFO] CarAgent. Step: 27200000. Time Elapsed: 12476.985 s. Episodes: 100. Mean Reward: 1.920. Std of Reward: 6.377. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 9. MaxStep: 49. FwdTerminalExposure: 0.319. Training.
+[INFO] CarAgent. Step: 27300000. Time Elapsed: 12503.575 s. Episodes: 90. Mean Reward: 2.782. Std of Reward: 6.034. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 50. Terminated: 8. MaxStep: 43. FwdTerminalExposure: 0.319. Training.
+[INFO] CarAgent. Step: 27400000. Time Elapsed: 12530.785 s. Episodes: 110. Mean Reward: 2.347. Std of Reward: 6.811. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 9. MaxStep: 45. FwdTerminalExposure: 0.301. Training.
+[INFO] CarAgent. Step: 27500000. Time Elapsed: 12559.406 s. Episodes: 100. Mean Reward: 1.734. Std of Reward: 6.567. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 37. Terminated: 15. MaxStep: 49. FwdTerminalExposure: 0.324. Training.
+[INFO] CarAgent. Step: 27600000. Time Elapsed: 12586.409 s. Episodes: 100. Mean Reward: 3.337. Std of Reward: 6.333. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 51. Terminated: 6. MaxStep: 40. FwdTerminalExposure: 0.293. Training.
+[INFO] CarAgent. Step: 27700000. Time Elapsed: 12612.217 s. Episodes: 100. Mean Reward: 3.773. Std of Reward: 5.552. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 57. Terminated: 1. MaxStep: 46. FwdTerminalExposure: 0.349. Training.
+[INFO] CarAgent. Step: 27800000. Time Elapsed: 12638.926 s. Episodes: 100. Mean Reward: 3.219. Std of Reward: 5.932. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 42. Terminated: 6. MaxStep: 46. FwdTerminalExposure: 0.301. Training.
+[INFO] CarAgent. Step: 27900000. Time Elapsed: 12666.442 s. Episodes: 100. Mean Reward: 2.710. Std of Reward: 6.560. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 51. Terminated: 14. MaxStep: 41. FwdTerminalExposure: 0.351. Training.
+[INFO] CarAgent. Step: 28000000. Time Elapsed: 12694.640 s. Episodes: 90. Mean Reward: 2.282. Std of Reward: 6.493. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 42. Terminated: 9. MaxStep: 40. FwdTerminalExposure: 0.413. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-27999918.onnx
+[INFO] CarAgent. Step: 28100000. Time Elapsed: 12722.598 s. Episodes: 110. Mean Reward: 3.114. Std of Reward: 6.287. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 54. Terminated: 8. MaxStep: 45. FwdTerminalExposure: 0.369. Training.
+[INFO] CarAgent. Step: 28200000. Time Elapsed: 12750.344 s. Episodes: 100. Mean Reward: 3.160. Std of Reward: 6.154. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 48. Terminated: 11. MaxStep: 42. FwdTerminalExposure: 0.273. Training.
+[INFO] CarAgent. Step: 28300000. Time Elapsed: 12777.844 s. Episodes: 90. Mean Reward: 1.201. Std of Reward: 6.891. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 39. Terminated: 12. MaxStep: 40. FwdTerminalExposure: 0.414. Training.
+[INFO] CarAgent. Step: 28400000. Time Elapsed: 12803.109 s. Episodes: 120. Mean Reward: 2.106. Std of Reward: 6.231. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 8. MaxStep: 60. FwdTerminalExposure: 0.263. Training.
+[INFO] CarAgent. Step: 28500000. Time Elapsed: 12830.482 s. Episodes: 90. Mean Reward: 4.360. Std of Reward: 5.954. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 63. Terminated: 7. MaxStep: 31. FwdTerminalExposure: 0.317. Training.
+[INFO] CarAgent. Step: 28600000. Time Elapsed: 12857.460 s. Episodes: 90. Mean Reward: 3.098. Std of Reward: 6.110. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 52. Terminated: 14. MaxStep: 40. FwdTerminalExposure: 0.305. Training.
+[INFO] CarAgent. Step: 28700000. Time Elapsed: 12884.626 s. Episodes: 120. Mean Reward: 1.669. Std of Reward: 6.512. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 31. Terminated: 4. MaxStep: 59. FwdTerminalExposure: 0.393. Training.
+[INFO] CarAgent. Step: 28800000. Time Elapsed: 12911.614 s. Episodes: 80. Mean Reward: 2.662. Std of Reward: 6.023. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 41. Terminated: 9. MaxStep: 39. FwdTerminalExposure: 0.343. Training.
+[INFO] CarAgent. Step: 28900000. Time Elapsed: 12938.982 s. Episodes: 100. Mean Reward: 1.801. Std of Reward: 6.514. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 51. Terminated: 11. MaxStep: 48. FwdTerminalExposure: 0.346. Training.
+[INFO] CarAgent. Step: 29000000. Time Elapsed: 12966.451 s. Episodes: 120. Mean Reward: 2.259. Std of Reward: 6.566. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 35. Terminated: 13. MaxStep: 54. FwdTerminalExposure: 0.318. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-28999950.onnx
+[INFO] CarAgent. Step: 29100000. Time Elapsed: 12993.790 s. Episodes: 80. Mean Reward: 2.820. Std of Reward: 6.133. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 52. Terminated: 7. MaxStep: 37. FwdTerminalExposure: 0.259. Training.
+[INFO] CarAgent. Step: 29200000. Time Elapsed: 13020.821 s. Episodes: 110. Mean Reward: 1.720. Std of Reward: 6.982. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 36. Terminated: 18. MaxStep: 46. FwdTerminalExposure: 0.299. Training.
+[INFO] CarAgent. Step: 29300000. Time Elapsed: 13047.779 s. Episodes: 100. Mean Reward: 1.680. Std of Reward: 6.714. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 50. Terminated: 8. MaxStep: 45. FwdTerminalExposure: 0.301. Training.
+[INFO] CarAgent. Step: 29400000. Time Elapsed: 13074.753 s. Episodes: 90. Mean Reward: 2.866. Std of Reward: 6.552. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 51. Terminated: 16. MaxStep: 36. FwdTerminalExposure: 0.217. Training.
+[INFO] CarAgent. Step: 29500000. Time Elapsed: 13099.995 s. Episodes: 110. Mean Reward: 2.456. Std of Reward: 7.108. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 45. Terminated: 13. MaxStep: 38. FwdTerminalExposure: 0.342. Training.
+[INFO] CarAgent. Step: 29600000. Time Elapsed: 13127.356 s. Episodes: 90. Mean Reward: 2.820. Std of Reward: 6.659. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 48. Terminated: 7. MaxStep: 35. FwdTerminalExposure: 0.330. Training.
+[INFO] CarAgent. Step: 29700000. Time Elapsed: 13154.687 s. Episodes: 100. Mean Reward: 3.306. Std of Reward: 6.080. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 54. Terminated: 9. MaxStep: 44. FwdTerminalExposure: 0.321. Training.
+[INFO] CarAgent. Step: 29800000. Time Elapsed: 13183.113 s. Episodes: 110. Mean Reward: 3.425. Std of Reward: 5.698. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 46. Terminated: 7. MaxStep: 52. FwdTerminalExposure: 0.287. Training.
+[INFO] CarAgent. Step: 29900000. Time Elapsed: 13211.163 s. Episodes: 90. Mean Reward: 0.653. Std of Reward: 6.313. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 31. Terminated: 14. MaxStep: 50. FwdTerminalExposure: 0.311. Training.
+[INFO] CarAgent. Step: 30000000. Time Elapsed: 13238.825 s. Episodes: 100. Mean Reward: 0.965. Std of Reward: 6.586. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 35. Terminated: 13. MaxStep: 49. FwdTerminalExposure: 0.269. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-29999918.onnx
+[INFO] CarAgent. Step: 30100000. Time Elapsed: 13266.756 s. Episodes: 100. Mean Reward: 2.472. Std of Reward: 6.096. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 42. Terminated: 6. MaxStep: 50. FwdTerminalExposure: 0.259. Training.
+[INFO] CarAgent. Step: 30200000. Time Elapsed: 13294.071 s. Episodes: 104. Mean Reward: 2.914. Std of Reward: 6.044. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 50. Terminated: 5. MaxStep: 51. FwdTerminalExposure: 0.360. Training.
+[INFO] CarAgent. Step: 30300000. Time Elapsed: 13319.412 s. Episodes: 106. Mean Reward: 3.095. Std of Reward: 5.981. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 9. MaxStep: 47. FwdTerminalExposure: 0.253. Training.
+[INFO] CarAgent. Step: 30400000. Time Elapsed: 13346.467 s. Episodes: 90. Mean Reward: 1.855. Std of Reward: 6.803. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 56. Terminated: 11. MaxStep: 40. FwdTerminalExposure: 0.230. Training.
+[INFO] CarAgent. Step: 30500000. Time Elapsed: 13373.289 s. Episodes: 110. Mean Reward: 2.482. Std of Reward: 6.341. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 38. Terminated: 5. MaxStep: 52. FwdTerminalExposure: 0.353. Training.
+[INFO] CarAgent. Step: 30600000. Time Elapsed: 13400.440 s. Episodes: 90. Mean Reward: 2.104. Std of Reward: 6.411. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 46. Terminated: 11. MaxStep: 43. FwdTerminalExposure: 0.265. Training.
+[INFO] CarAgent. Step: 30700000. Time Elapsed: 13427.545 s. Episodes: 100. Mean Reward: 2.755. Std of Reward: 5.975. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 3. MaxStep: 50. FwdTerminalExposure: 0.297. Training.
+[INFO] CarAgent. Step: 30800000. Time Elapsed: 13454.058 s. Episodes: 110. Mean Reward: 2.613. Std of Reward: 6.260. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 36. Terminated: 12. MaxStep: 51. FwdTerminalExposure: 0.278. Training.
+[INFO] CarAgent. Step: 30900000. Time Elapsed: 13481.074 s. Episodes: 94. Mean Reward: 1.426. Std of Reward: 6.830. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 15. MaxStep: 48. FwdTerminalExposure: 0.366. Training.
+[INFO] CarAgent. Step: 31000000. Time Elapsed: 13508.893 s. Episodes: 96. Mean Reward: 3.126. Std of Reward: 6.156. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 59. Terminated: 2. MaxStep: 36. FwdTerminalExposure: 0.316. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-30999918.onnx
+[INFO] CarAgent. Step: 31100000. Time Elapsed: 13533.956 s. Episodes: 110. Mean Reward: 2.956. Std of Reward: 6.027. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 10. MaxStep: 53. FwdTerminalExposure: 0.269. Training.
+[INFO] CarAgent. Step: 31200000. Time Elapsed: 13561.095 s. Episodes: 100. Mean Reward: 2.530. Std of Reward: 6.629. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 50. Terminated: 9. MaxStep: 42. FwdTerminalExposure: 0.266. Training.
+[INFO] CarAgent. Step: 31300000. Time Elapsed: 13588.576 s. Episodes: 90. Mean Reward: 2.587. Std of Reward: 6.113. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 42. Terminated: 10. MaxStep: 43. FwdTerminalExposure: 0.311. Training.
+[INFO] CarAgent. Step: 31400000. Time Elapsed: 13616.020 s. Episodes: 100. Mean Reward: 1.954. Std of Reward: 6.446. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 12. MaxStep: 47. FwdTerminalExposure: 0.230. Training.
+[INFO] CarAgent. Step: 31500000. Time Elapsed: 13643.457 s. Episodes: 110. Mean Reward: 2.467. Std of Reward: 6.475. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 9. MaxStep: 48. FwdTerminalExposure: 0.317. Training.
+[INFO] CarAgent. Step: 31600000. Time Elapsed: 13670.642 s. Episodes: 94. Mean Reward: 2.151. Std of Reward: 6.262. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 43. Terminated: 8. MaxStep: 48. FwdTerminalExposure: 0.263. Training.
+[INFO] CarAgent. Step: 31700000. Time Elapsed: 13698.554 s. Episodes: 96. Mean Reward: 2.628. Std of Reward: 5.666. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 41. Terminated: 6. MaxStep: 51. FwdTerminalExposure: 0.246. Training.
+[INFO] CarAgent. Step: 31800000. Time Elapsed: 13724.356 s. Episodes: 120. Mean Reward: 2.533. Std of Reward: 6.374. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 41. Terminated: 9. MaxStep: 55. FwdTerminalExposure: 0.323. Training.
+[INFO] CarAgent. Step: 31900000. Time Elapsed: 13751.625 s. Episodes: 90. Mean Reward: 3.110. Std of Reward: 5.734. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 46. Terminated: 1. MaxStep: 45. FwdTerminalExposure: 0.268. Training.
+[INFO] CarAgent. Step: 32000000. Time Elapsed: 13778.540 s. Episodes: 90. Mean Reward: 3.084. Std of Reward: 5.606. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 59. Terminated: 9. MaxStep: 47. FwdTerminalExposure: 0.408. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-31999918.onnx
+[INFO] CarAgent. Step: 32100000. Time Elapsed: 13805.288 s. Episodes: 120. Mean Reward: 3.161. Std of Reward: 6.536. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 36. Terminated: 6. MaxStep: 47. FwdTerminalExposure: 0.370. Training.
+[INFO] CarAgent. Step: 32200000. Time Elapsed: 13833.009 s. Episodes: 80. Mean Reward: 2.136. Std of Reward: 6.037. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 50. Terminated: 4. MaxStep: 42. FwdTerminalExposure: 0.366. Training.
+[INFO] CarAgent. Step: 32300000. Time Elapsed: 13860.382 s. Episodes: 100. Mean Reward: 2.636. Std of Reward: 6.539. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 57. Terminated: 12. MaxStep: 43. FwdTerminalExposure: 0.291. Training.
+[INFO] CarAgent. Step: 32400000. Time Elapsed: 13887.914 s. Episodes: 120. Mean Reward: 3.347. Std of Reward: 6.143. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 38. Terminated: 8. MaxStep: 51. FwdTerminalExposure: 0.277. Training.
+[INFO] CarAgent. Step: 32500000. Time Elapsed: 13915.653 s. Episodes: 70. Mean Reward: 3.590. Std of Reward: 6.309. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 57. Terminated: 7. MaxStep: 27. FwdTerminalExposure: 0.343. Training.
+[INFO] CarAgent. Step: 32600000. Time Elapsed: 13943.044 s. Episodes: 110. Mean Reward: 2.681. Std of Reward: 6.312. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 10. MaxStep: 49. FwdTerminalExposure: 0.316. Training.
+[INFO] CarAgent. Step: 32700000. Time Elapsed: 13970.231 s. Episodes: 120. Mean Reward: 2.721. Std of Reward: 7.032. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 41. Terminated: 15. MaxStep: 43. FwdTerminalExposure: 0.258. Training.
+[INFO] CarAgent. Step: 32800000. Time Elapsed: 13997.671 s. Episodes: 72. Mean Reward: 3.504. Std of Reward: 6.120. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 50. Terminated: 5. MaxStep: 34. FwdTerminalExposure: 0.405. Training.
+[INFO] CarAgent. Step: 32900000. Time Elapsed: 14025.341 s. Episodes: 108. Mean Reward: 1.767. Std of Reward: 6.144. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 50. Terminated: 11. MaxStep: 52. FwdTerminalExposure: 0.234. Training.
+[INFO] CarAgent. Step: 33000000. Time Elapsed: 14053.125 s. Episodes: 110. Mean Reward: 2.762. Std of Reward: 6.561. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 33. Terminated: 14. MaxStep: 47. FwdTerminalExposure: 0.361. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-32999934.onnx
+[INFO] CarAgent. Step: 33100000. Time Elapsed: 14081.685 s. Episodes: 94. Mean Reward: 2.536. Std of Reward: 6.434. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 53. Terminated: 4. MaxStep: 44. FwdTerminalExposure: 0.379. Training.
+[INFO] CarAgent. Step: 33200000. Time Elapsed: 14109.032 s. Episodes: 96. Mean Reward: 2.534. Std of Reward: 6.263. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 11. MaxStep: 44. FwdTerminalExposure: 0.305. Training.
+[INFO] CarAgent. Step: 33300000. Time Elapsed: 14134.333 s. Episodes: 110. Mean Reward: 3.012. Std of Reward: 6.610. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 6. MaxStep: 43. FwdTerminalExposure: 0.286. Training.
+[INFO] CarAgent. Step: 33400000. Time Elapsed: 14161.210 s. Episodes: 100. Mean Reward: 3.001. Std of Reward: 5.882. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 41. Terminated: 5. MaxStep: 50. FwdTerminalExposure: 0.331. Training.
+[INFO] CarAgent. Step: 33500000. Time Elapsed: 14190.029 s. Episodes: 90. Mean Reward: 3.155. Std of Reward: 6.251. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 53. Terminated: 8. MaxStep: 37. FwdTerminalExposure: 0.298. Training.
+[INFO] CarAgent. Step: 33600000. Time Elapsed: 14219.220 s. Episodes: 110. Mean Reward: 2.142. Std of Reward: 6.740. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 46. Terminated: 14. MaxStep: 47. FwdTerminalExposure: 0.179. Training.
+[INFO] CarAgent. Step: 33700000. Time Elapsed: 14248.152 s. Episodes: 100. Mean Reward: 2.272. Std of Reward: 6.806. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 43. Terminated: 14. MaxStep: 42. FwdTerminalExposure: 0.379. Training.
+[INFO] CarAgent. Step: 33800000. Time Elapsed: 14277.341 s. Episodes: 90. Mean Reward: 1.656. Std of Reward: 6.303. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 43. Terminated: 10. MaxStep: 45. FwdTerminalExposure: 0.324. Training.
+[INFO] CarAgent. Step: 33900000. Time Elapsed: 14305.946 s. Episodes: 110. Mean Reward: 2.137. Std of Reward: 6.922. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 46. Terminated: 15. MaxStep: 44. FwdTerminalExposure: 0.281. Training.
+[INFO] CarAgent. Step: 34000000. Time Elapsed: 14335.480 s. Episodes: 100. Mean Reward: 1.937. Std of Reward: 6.452. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 11. MaxStep: 46. FwdTerminalExposure: 0.251. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-33999934.onnx
+[INFO] CarAgent. Step: 34100000. Time Elapsed: 14364.616 s. Episodes: 100. Mean Reward: 3.185. Std of Reward: 6.218. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 55. Terminated: 3. MaxStep: 43. FwdTerminalExposure: 0.283. Training.
+[INFO] CarAgent. Step: 34200000. Time Elapsed: 14393.594 s. Episodes: 94. Mean Reward: 3.159. Std of Reward: 6.296. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 9. MaxStep: 42. FwdTerminalExposure: 0.330. Training.
+[INFO] CarAgent. Step: 34300000. Time Elapsed: 14420.068 s. Episodes: 106. Mean Reward: 3.008. Std of Reward: 6.304. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 50. Terminated: 7. MaxStep: 43. FwdTerminalExposure: 0.350. Training.
+[INFO] CarAgent. Step: 34400000. Time Elapsed: 14449.897 s. Episodes: 100. Mean Reward: 2.435. Std of Reward: 6.248. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 43. Terminated: 12. MaxStep: 48. FwdTerminalExposure: 0.349. Training.
+[INFO] CarAgent. Step: 34500000. Time Elapsed: 14479.042 s. Episodes: 90. Mean Reward: 3.816. Std of Reward: 6.421. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 53. Terminated: 9. MaxStep: 30. FwdTerminalExposure: 0.329. Training.
+[INFO] CarAgent. Step: 34600000. Time Elapsed: 14508.262 s. Episodes: 110. Mean Reward: 1.365. Std of Reward: 6.800. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 44. Terminated: 15. MaxStep: 50. FwdTerminalExposure: 0.304. Training.
+[INFO] CarAgent. Step: 34700000. Time Elapsed: 14537.469 s. Episodes: 100. Mean Reward: 2.979. Std of Reward: 6.192. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 43. Terminated: 5. MaxStep: 45. FwdTerminalExposure: 0.299. Training.
+[INFO] CarAgent. Step: 34800000. Time Elapsed: 14566.161 s. Episodes: 90. Mean Reward: 4.314. Std of Reward: 5.797. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 58. Terminated: 5. MaxStep: 33. FwdTerminalExposure: 0.311. Training.
+[INFO] CarAgent. Step: 34900000. Time Elapsed: 14595.009 s. Episodes: 110. Mean Reward: 3.051. Std of Reward: 5.811. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 46. Terminated: 4. MaxStep: 53. FwdTerminalExposure: 0.336. Training.
+[INFO] CarAgent. Step: 35000000. Time Elapsed: 14623.410 s. Episodes: 100. Mean Reward: 3.122. Std of Reward: 6.199. Mean Episode Length: 965.400. Std of Episode Length: 100.800. Goals: 49. Terminated: 11. MaxStep: 43. FwdTerminalExposure: 0.310. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-34999902.onnx
+[INFO] CarAgent. Step: 35100000. Time Elapsed: 14652.279 s. Episodes: 100. Mean Reward: 2.746. Std of Reward: 6.568. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 55. Terminated: 8. MaxStep: 41. FwdTerminalExposure: 0.334. Training.
+[INFO] CarAgent. Step: 35200000. Time Elapsed: 14677.666 s. Episodes: 100. Mean Reward: 3.518. Std of Reward: 6.317. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 59. Terminated: 7. MaxStep: 37. FwdTerminalExposure: 0.299. Training.
+[INFO] CarAgent. Step: 35300000. Time Elapsed: 14707.196 s. Episodes: 100. Mean Reward: 4.347. Std of Reward: 5.667. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 57. Terminated: 1. MaxStep: 39. FwdTerminalExposure: 0.431. Training.
+[INFO] CarAgent. Step: 35400000. Time Elapsed: 14735.245 s. Episodes: 100. Mean Reward: 3.536. Std of Reward: 6.403. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 46. Terminated: 11. MaxStep: 38. FwdTerminalExposure: 0.330. Training.
+[INFO] CarAgent. Step: 35500000. Time Elapsed: 14763.502 s. Episodes: 90. Mean Reward: 2.127. Std of Reward: 6.438. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 50. Terminated: 9. MaxStep: 43. FwdTerminalExposure: 0.289. Training.
+[INFO] CarAgent. Step: 35600000. Time Elapsed: 14791.700 s. Episodes: 110. Mean Reward: 2.434. Std of Reward: 6.473. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 37. Terminated: 10. MaxStep: 49. FwdTerminalExposure: 0.339. Training.
+[INFO] CarAgent. Step: 35700000. Time Elapsed: 14819.938 s. Episodes: 100. Mean Reward: 2.996. Std of Reward: 5.457. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 47. Terminated: 4. MaxStep: 54. FwdTerminalExposure: 0.267. Training.
+[INFO] CarAgent. Step: 35800000. Time Elapsed: 14847.780 s. Episodes: 90. Mean Reward: 2.331. Std of Reward: 6.442. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 52. Terminated: 9. MaxStep: 41. FwdTerminalExposure: 0.321. Training.
+[INFO] CarAgent. Step: 35900000. Time Elapsed: 14873.750 s. Episodes: 110. Mean Reward: 3.099. Std of Reward: 6.418. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 8. MaxStep: 46. FwdTerminalExposure: 0.373. Training.
+[INFO] CarAgent. Step: 36000000. Time Elapsed: 14902.003 s. Episodes: 100. Mean Reward: 3.534. Std of Reward: 7.025. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 50. Terminated: 11. MaxStep: 29. FwdTerminalExposure: 0.263. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-35999902.onnx
+[INFO] CarAgent. Step: 36100000. Time Elapsed: 14930.515 s. Episodes: 100. Mean Reward: 1.876. Std of Reward: 5.729. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 41. Terminated: 8. MaxStep: 59. FwdTerminalExposure: 0.384. Training.
+[INFO] CarAgent. Step: 36200000. Time Elapsed: 14959.089 s. Episodes: 100. Mean Reward: 3.346. Std of Reward: 5.819. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 45. Terminated: 2. MaxStep: 47. FwdTerminalExposure: 0.364. Training.
+[INFO] CarAgent. Step: 36300000. Time Elapsed: 14988.232 s. Episodes: 90. Mean Reward: 1.448. Std of Reward: 7.162. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 46. Terminated: 20. MaxStep: 36. FwdTerminalExposure: 0.327. Training.
+[INFO] CarAgent. Step: 36400000. Time Elapsed: 15018.740 s. Episodes: 120. Mean Reward: 2.023. Std of Reward: 6.471. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 48. Terminated: 9. MaxStep: 57. FwdTerminalExposure: 0.268. Training.
+[INFO] CarAgent. Step: 36500000. Time Elapsed: 15046.297 s. Episodes: 94. Mean Reward: 3.889. Std of Reward: 6.177. Mean Episode Length: 971.100. Std of Episode Length: 83.700. Goals: 48. Terminated: 6. MaxStep: 38. FwdTerminalExposure: 0.370. Training.
+[INFO] CarAgent. Step: 36600000. Time Elapsed: 15075.477 s. Episodes: 96. Mean Reward: 2.559. Std of Reward: 6.066. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 57. Terminated: 4. MaxStep: 46. FwdTerminalExposure: 0.338. Training.
+[INFO] CarAgent. Step: 36700000. Time Elapsed: 15104.353 s. Episodes: 110. Mean Reward: 4.234. Std of Reward: 6.042. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 41. Terminated: 10. MaxStep: 39. FwdTerminalExposure: 0.364. Training.
+[INFO] CarAgent. Step: 36800000. Time Elapsed: 15133.536 s. Episodes: 82. Mean Reward: 1.786. Std of Reward: 6.440. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 55. Terminated: 8. MaxStep: 43. FwdTerminalExposure: 0.225. Training.
+[INFO] CarAgent. Step: 36900000. Time Elapsed: 15162.679 s. Episodes: 108. Mean Reward: 3.701. Std of Reward: 5.977. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 43. Terminated: 11. MaxStep: 41. FwdTerminalExposure: 0.281. Training.
+[INFO] CarAgent. Step: 37000000. Time Elapsed: 15190.349 s. Episodes: 110. Mean Reward: 2.026. Std of Reward: 6.855. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 46. Terminated: 10. MaxStep: 46. FwdTerminalExposure: 0.291. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-36999944.onnx
+[INFO] CarAgent. Step: 37100000. Time Elapsed: 15218.366 s. Episodes: 82. Mean Reward: 3.001. Std of Reward: 6.220. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 54. Terminated: 8. MaxStep: 41. FwdTerminalExposure: 0.368. Training.
+[INFO] CarAgent. Step: 37200000. Time Elapsed: 15248.196 s. Episodes: 108. Mean Reward: 3.819. Std of Reward: 6.438. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 54. Terminated: 6. MaxStep: 32. FwdTerminalExposure: 0.300. Training.
+[INFO] CarAgent. Step: 37300000. Time Elapsed: 15276.373 s. Episodes: 110. Mean Reward: 3.033. Std of Reward: 5.442. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 40. Terminated: 6. MaxStep: 59. FwdTerminalExposure: 0.390. Training.
+[INFO] CarAgent. Step: 37400000. Time Elapsed: 15303.756 s. Episodes: 94. Mean Reward: 1.697. Std of Reward: 6.414. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 45. Terminated: 10. MaxStep: 48. FwdTerminalExposure: 0.254. Training.
+[INFO] CarAgent. Step: 37500000. Time Elapsed: 15331.337 s. Episodes: 96. Mean Reward: 2.195. Std of Reward: 7.253. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 15. MaxStep: 33. FwdTerminalExposure: 0.365. Training.
+[INFO] CarAgent. Step: 37600000. Time Elapsed: 15358.438 s. Episodes: 110. Mean Reward: 2.053. Std of Reward: 6.443. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 38. Terminated: 8. MaxStep: 50. FwdTerminalExposure: 0.326. Training.
+[INFO] CarAgent. Step: 37700000. Time Elapsed: 15385.167 s. Episodes: 100. Mean Reward: 2.419. Std of Reward: 6.121. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 46. Terminated: 8. MaxStep: 49. FwdTerminalExposure: 0.236. Training.
+[INFO] CarAgent. Step: 37800000. Time Elapsed: 15414.618 s. Episodes: 82. Mean Reward: 3.380. Std of Reward: 6.148. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 54. Terminated: 7. MaxStep: 39. FwdTerminalExposure: 0.335. Training.
+[INFO] CarAgent. Step: 37900000. Time Elapsed: 15442.223 s. Episodes: 118. Mean Reward: 3.282. Std of Reward: 5.779. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 42. Terminated: 4. MaxStep: 53. FwdTerminalExposure: 0.313. Training.
+[INFO] CarAgent. Step: 38000000. Time Elapsed: 15470.019 s. Episodes: 100. Mean Reward: 2.567. Std of Reward: 6.174. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 47. Terminated: 12. MaxStep: 48. FwdTerminalExposure: 0.330. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-37999944.onnx
+[INFO] CarAgent. Step: 38100000. Time Elapsed: 15498.887 s. Episodes: 90. Mean Reward: 2.370. Std of Reward: 6.387. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 44. Terminated: 5. MaxStep: 41. FwdTerminalExposure: 0.394. Training.
+[INFO] CarAgent. Step: 38200000. Time Elapsed: 15526.546 s. Episodes: 110. Mean Reward: 2.483. Std of Reward: 6.307. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 43. Terminated: 8. MaxStep: 52. FwdTerminalExposure: 0.368. Training.
+[INFO] CarAgent. Step: 38300000. Time Elapsed: 15554.629 s. Episodes: 90. Mean Reward: 1.905. Std of Reward: 6.568. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 44. Terminated: 11. MaxStep: 41. FwdTerminalExposure: 0.313. Training.
+[INFO] CarAgent. Step: 38400000. Time Elapsed: 15581.718 s. Episodes: 100. Mean Reward: 2.691. Std of Reward: 6.142. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 50. Terminated: 6. MaxStep: 48. FwdTerminalExposure: 0.356. Training.
+[INFO] CarAgent. Step: 38500000. Time Elapsed: 15607.869 s. Episodes: 104. Mean Reward: 4.322. Std of Reward: 5.360. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 50. Terminated: 2. MaxStep: 46. FwdTerminalExposure: 0.316. Training.
+[INFO] CarAgent. Step: 38600000. Time Elapsed: 15635.717 s. Episodes: 96. Mean Reward: 3.635. Std of Reward: 5.907. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 52. Terminated: 8. MaxStep: 41. FwdTerminalExposure: 0.341. Training.
+[INFO] CarAgent. Step: 38700000. Time Elapsed: 15663.100 s. Episodes: 100. Mean Reward: 2.695. Std of Reward: 6.902. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 54. Terminated: 12. MaxStep: 36. FwdTerminalExposure: 0.231. Training.
+[INFO] CarAgent. Step: 38800000. Time Elapsed: 15692.234 s. Episodes: 114. Mean Reward: 3.235. Std of Reward: 6.603. Mean Episode Length: 947.250. Std of Episode Length: 119.442. Goals: 58. Terminated: 12. MaxStep: 43. FwdTerminalExposure: 0.300. Training.
+[INFO] CarAgent. Step: 38900000. Time Elapsed: 15720.693 s. Episodes: 96. Mean Reward: 2.258. Std of Reward: 7.026. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 51. Terminated: 15. MaxStep: 33. FwdTerminalExposure: 0.278. Training.
+[INFO] CarAgent. Step: 39000000. Time Elapsed: 15745.375 s. Episodes: 100. Mean Reward: 2.785. Std of Reward: 6.946. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 43. Terminated: 12. MaxStep: 34. FwdTerminalExposure: 0.331. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-38999878.onnx
+[INFO] CarAgent. Step: 39100000. Time Elapsed: 15775.019 s. Episodes: 100. Mean Reward: 2.367. Std of Reward: 6.681. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 11. MaxStep: 43. FwdTerminalExposure: 0.296. Training.
+[INFO] CarAgent. Step: 39200000. Time Elapsed: 15802.228 s. Episodes: 92. Mean Reward: 2.028. Std of Reward: 6.718. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 51. Terminated: 15. MaxStep: 42. FwdTerminalExposure: 0.320. Training.
+[INFO] CarAgent. Step: 39300000. Time Elapsed: 15830.146 s. Episodes: 98. Mean Reward: 3.951. Std of Reward: 6.120. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 49. Terminated: 6. MaxStep: 36. FwdTerminalExposure: 0.321. Training.
+[INFO] CarAgent. Step: 39400000. Time Elapsed: 15859.211 s. Episodes: 110. Mean Reward: 2.293. Std of Reward: 6.891. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 46. Terminated: 17. MaxStep: 44. FwdTerminalExposure: 0.295. Training.
+[INFO] CarAgent. Step: 39500000. Time Elapsed: 15887.053 s. Episodes: 100. Mean Reward: 2.288. Std of Reward: 6.486. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 41. Terminated: 7. MaxStep: 45. FwdTerminalExposure: 0.311. Training.
+[INFO] CarAgent. Step: 39600000. Time Elapsed: 15914.732 s. Episodes: 90. Mean Reward: 0.813. Std of Reward: 6.412. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 41. Terminated: 17. MaxStep: 47. FwdTerminalExposure: 0.240. Training.
+[INFO] CarAgent. Step: 39700000. Time Elapsed: 15944.400 s. Episodes: 110. Mean Reward: 1.753. Std of Reward: 6.890. Mean Episode Length: 988.545. Std of Episode Length: 33.060. Goals: 38. Terminated: 11. MaxStep: 46. FwdTerminalExposure: 0.325. Training.
+[INFO] CarAgent. Step: 39800000. Time Elapsed: 15975.390 s. Episodes: 110. Mean Reward: 2.897. Std of Reward: 5.436. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 43. Terminated: 1. MaxStep: 61. FwdTerminalExposure: 0.305. Training.
+[INFO] CarAgent. Step: 39900000. Time Elapsed: 16007.113 s. Episodes: 90. Mean Reward: 3.628. Std of Reward: 6.424. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 54. Terminated: 12. MaxStep: 33. FwdTerminalExposure: 0.333. Training.
+[INFO] CarAgent. Step: 40000000. Time Elapsed: 16036.588 s. Episodes: 100. Mean Reward: 1.837. Std of Reward: 6.370. Mean Episode Length: 999.000. Std of Episode Length: 0.000. Goals: 38. Terminated: 9. MaxStep: 50. FwdTerminalExposure: 0.364. Training.
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-39999880.onnx
+[INFO] Exported /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-40000904.onnx
+[INFO] Copied /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent/CarAgent-40000904.onnx to /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0/CarAgent.onnx.
+Validated 40 distinct million-step ONNX checkpoints in /d/hpc/home/kk42117/mag/car1/results/traffic89_recovery_20155935_s0

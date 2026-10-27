@@ -108,6 +108,12 @@ public static class BuildInfoWriter
                 $"{(trafficManager.scenarioJson != null ? trafficManager.scenarioJson.name : "(none)")}");
             sb.AppendLine($"Traffic map source: " +
                 (trafficManager.useValidationMaps ? "VoronoiVal" : "VoronoiTrain"));
+            sb.AppendLine($"Traffic recovery curriculum support: " +
+                $"{(trafficManager.recoveryCurriculumEnabled ? "enabled in scene" : "available (YAML/EnvironmentParameters opt-in)")}; " +
+                $"default end {trafficManager.recoveryCurriculumEndSteps:N0} trainer steps; " +
+                "trainer-global-step synchronisation, reverse-use telemetry, optional parked-blocker clearance reward, and close-range deadlock lesson included");
+            sb.AppendLine("Traffic reward-shaping support: escalating idle penalty and optional " +
+                "fixed-budget exponential checkpoint rewards available through EnvironmentParameters");
             sb.AppendLine($"Traffic map selection: " +
                 (trafficManager.randomizeScenarioEachEpisode ? "random-each-episode" :
                  trafficManager.cycleScenarios ? "cycle" : "fixed"));
@@ -139,11 +145,12 @@ public static class BuildInfoWriter
             bool remainingSteps = agent.includeRemainingStepsObservation;
             bool vehicleDistances = agent.laserTileSensor != null &&
                 agent.laserTileSensor.includeVehicleDistanceObservations;
+            int directionCount = agent.laserTileSensor != null ? agent.laserTileSensor.DirectionCount : 0;
             int perDirection = LaserTileSensor.ObservationsPerDirection + (vehicleDistances ? 1 : 0);
-            expectedObsSize = 17 + LaserTileSensor.DirectionCount * perDirection +
+            expectedObsSize = 17 + directionCount * perDirection +
                 (remainingSteps ? 1 : 0);
-            sb.AppendLine($"Tile observation mode: ContinuousLasers, {LaserTileSensor.DirectionCount} directions x " +
-                $"{perDirection} values = {LaserTileSensor.DirectionCount * perDirection}");
+            sb.AppendLine($"Tile observation mode: ContinuousLasers, {directionCount} directions x " +
+                $"{perDirection} values = {directionCount * perDirection}");
             sb.AppendLine($"Laser vehicle distance observation: " +
                 $"{(vehicleDistances ? "ON (cars separate from floor tiles)" : "OFF (cars appear as Terminal tiles)")}");
             if (agent.laserTileSensor != null)
@@ -194,6 +201,18 @@ public static class BuildInfoWriter
 
         if (carController != null)
         {
+            sb.AppendLine("Traffic control mode: " +
+                (carController.signedPedalArcadeControls
+                    ? "signed-torque arcade (2 continuous, no discrete branches)"
+                    : carController.arcadeAutomaticReverse
+                        ? "two-pedal arcade (2 continuous, one drive/brake branch)"
+                        : "explicit gear and brake/drive branches"));
+            if (carController.signedPedalArcadeControls)
+                sb.AppendLine($"Traffic signed-pedal direction handling: neutral hold +/-{carController.signedPedalNeutralDeadzone} " +
+                    $"with regenerative brake; opposite direction uses wheel brake until local speed <= " +
+                    $"{carController.signedPedalDirectionChangeSpeed} m/s, then signed motor torque");
+            if (carController.signedPedalArcadeControls)
+                sb.AppendLine($"Traffic signed-pedal reverse motor-torque fraction: {carController.signedPedalReverseTorqueFraction:P0}");
             sb.AppendLine($"Normal top speed: {carController.normalTopSpeedMS} m/s");
             sb.AppendLine($"Regenerative brake: {carController.regenBrakeTorque} N*m per wheel when accelerator is released");
             sb.AppendLine($"Vehicle-wide speed cap: " +

@@ -1,0 +1,92 @@
+{
+  "maps": [
+    {
+      "file": "recovery_01_straight.txt",
+      "title": "Straight lane",
+      "purpose": "Basic forward/reverse steering with forgiving gravel shoulders and terminal outside.",
+      "grid_size": 66,
+      "tile_legend": {
+        "0": "Gravel",
+        "1": "Asphalt",
+        "4": "Terminal"
+      }
+    },
+    {
+      "file": "recovery_02_turn.txt",
+      "title": "Right-angle turn",
+      "purpose": "Learn to turn into a new corridor rather than continue into the terminal boundary.",
+      "grid_size": 66,
+      "tile_legend": {
+        "0": "Gravel",
+        "1": "Asphalt",
+        "4": "Terminal"
+      }
+    },
+    {
+      "file": "recovery_04_crossroads.txt",
+      "title": "Four-way intersection",
+      "purpose": "Introduce crossing paths with initially generous approach distances.",
+      "grid_size": 66,
+      "tile_legend": {
+        "0": "Gravel",
+        "1": "Asphalt",
+        "4": "Terminal"
+      }
+    },
+    {
+      "file": "recovery_05_passing_bay.txt",
+      "title": "Single lane with passing bay",
+      "purpose": "A yielding/reversing car can retreat into the bay to let another car pass.",
+      "grid_size": 66,
+      "tile_legend": {
+        "0": "Gravel",
+        "1": "Asphalt",
+        "4": "Terminal"
+      }
+    },
+    {
+      "file": "recovery_06_blind_alley.txt",
+      "title": "Blind alley",
+      "purpose": "A 3 m terminal-walled capped branch is too narrow for a U-turn, so the car must reverse to the main road.",
+      "grid_size": 66,
+      "tile_legend": {
+        "0": "Gravel",
+        "1": "Asphalt",
+        "4": "Terminal"
+      }
+    },
+    {
+      "file": "recovery_08_dead_end_detour.txt",
+      "title": "Dead end with detour",
+      "purpose": "The direct branch ends at Terminal; reaching the forward-side goal requires reversing to the main road and taking the lower bypass.",
+      "grid_size": 66,
+      "tile_legend": {
+        "0": "Gravel",
+        "1": "Asphalt",
+        "4": "Terminal"
+      }
+    },
+    {
+      "file": "recovery_07_s_curve.txt",
+      "title": "S-curve",
+      "purpose": "Follow continuous road geometry through alternating bends rather than memorising a single corner.",
+      "grid_size": 66,
+      "tile_legend": {
+        "0": "Gravel",
+        "1": "Asphalt",
+        "4": "Terminal"
+      }
+    },
+    {
+      "file": "recovery_09_circulation_loop.txt",
+      "title": "Close-range traffic plaza",
+      "purpose": "Four nearby cars have forward goals on open asphalt, isolating vehicle negotiation from road-boundary following.",
+      "grid_size": 66,
+      "tile_legend": {
+        "0": "Gravel",
+        "1": "Asphalt",
+        "4": "Terminal"
+      }
+    }
+  ]
+}

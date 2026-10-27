@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
@@ -64,15 +65,25 @@ public class CarAgent : Agent
     private bool fixedEvalEnabled = false;
     private float fixedSpawnHeadingDeg = 0f;
 
-    [Tooltip("Adds one extra observation - fraction of this episode's step budget remaining " +
-        "(1 = just started, 0 = about to hit MaxStep) - so the policy can actually condition on " +
-        "how close it is to a MaxStep timeout (e.g. useful alongside reward_maxstep_penalty, which " +
+    [Tooltip("Adds one extra observation - fraction of the active episode's step budget remaining " +
+        "(1 = just started, 0 = about to hit the limit). In multi-agent traffic this uses the shared " +
+        "TrafficScenarioManager clock; in solo mode it uses this Agent's MaxStep. This lets the policy " +
+        "condition on how close it is to a MaxStep timeout (e.g. useful alongside reward_maxstep_penalty, which " +
         "otherwise has no way to be anticipated). CHANGES THE OBSERVATION VECTOR SIZE, which is " +
         "baked into the trained network's input layer - this cannot be toggled on/off for an " +
         "already-trained model/build, only decided BEFORE training (set here, then bump this " +
         "Agent's BehaviorParameters -> Vector Observation Space Size by +1 to match, then build). " +
         "To compare with/without, build and train two separate binaries, one with each setting.")]
     public bool includeRemainingStepsObservation = false;
+    // A completed VehicleCollision is encoded as -1 in the *terminal* value
+    // of the existing remaining-time slot. It cannot affect an acting policy:
+    // terminal observations are not used to choose the next action and PPO
+    // bootstraps no value across a completed episode. The dedicated CPO
+    // trainer reads this marker as a separate cost; ordinary PPO ignores it.
+    // Keeping this independent of an EnvironmentParameters gate avoids a
+    // startup-order failure where a default gate could silently suppress the
+    // terminal cost marker.
+    private bool trafficCollisionCostForTerminal = false;
     [Tooltip("When disabled, sensor slots remain in the vector but are filled with zeros. This enables a matched no-sensor-input ablation without changing the 137-observation model shape.")]
     public bool includeSensorObservations = true;
     [Tooltip("SampledTileFan = 24 tile points (137 observations). ContinuousLasers = twelve car-relative grid lasers (77 observations, or 89 with vehicle distance enabled on LaserTileSensor). Select before building/training.")]
@@ -81,6 +92,22 @@ public class CarAgent : Agent
     [HideInInspector] public TrafficScenarioManager trafficManager;
     [HideInInspector] public int trafficSeatIndex = -1;
     private bool trafficFinished;
+    // A traffic manager can optionally remove a car visually and physically after a
+    // successful goal arrival.  The Agent object itself remains alive until the
+    // shared episode resets, which preserves ML-Agents' one-terminal-transition
+    // semantics while preventing a completed car from blocking its peers.
+    private bool trafficRemovedFromScene;
+    private Collider[] trafficPresenceColliders;
+    private bool[] trafficPresenceColliderStates;
+    private Renderer[] trafficPresenceRenderers;
+    private bool[] trafficPresenceRendererStates;
+#if UNITY_EDITOR
+    // Editor-only: when a car is removed from the simulation, keep a translucent,
+    // collider-free copy for people watching the scene.  The real car remains
+    // absent from physics and agent observations.
+    private GameObject trafficFinishGhost;
+    private readonly List<Material> trafficFinishGhostMaterials = new List<Material>();
+#endif
 
     [Header("Traffic finish marker")]
     [Tooltip("Show a coloured beacon above a car after the shared traffic episode marks it finished. " +
@@ -88,9 +115,9 @@ public class CarAgent : Agent
         "Disable it for a clean presentation/build if needed.")]
     public bool showTrafficFinishMarker = true;
     [Tooltip("Height of the finish beacon above the car, in metres.")]
-    public float trafficFinishMarkerHeight = 1.6f;
+    public float trafficFinishMarkerHeight = 2.1f;
     [Tooltip("Size of the finish beacon in metres.")]
-    public float trafficFinishMarkerSize = 0.35f;
+    public float trafficFinishMarkerSize = 0.8f;
     public Color trafficGoalMarkerColor = new Color(0.1f, 1f, 0.2f, 1f);
     public Color trafficCollisionMarkerColor = new Color(1f, 0.1f, 0.05f, 1f);
     public Color trafficTerminalMarkerColor = new Color(1f, 0.55f, 0.05f, 1f);
@@ -179,16 +206,52 @@ public class CarAgent : Agent
     // but stays meaningful even when pedalInput is 0, unlike the inputs themselves).
     private bool pedalIsBrake = false;
 
+    // Recovery-curriculum diagnostics. These are independent of the reward so
+    // TensorBoard can distinguish actual reverse use from a forward U-turn.
+    private bool reverseUsedThisEpisode;
+    private int forwardToReverseShiftsThisEpisode;
+    private float reverseDistanceThisEpisodeM;
+    private Vector3 previousReverseTelemetryPosition;
+    private bool hasPreviousReverseTelemetryPosition;
+
+    // Signed-pedal control diagnostics. A single intentional forward-to-reverse
+    // manoeuvre is normal, so it is not labelled oscillation. An oscillation
+    // event requires three rapid, significant pedal-direction reversals in a
+    // row (within one second at the normal 0.1 s decision interval).
+    private const int RapidControlReversalWindowDecisions = 10;
+    private const int OscillationPedalReversalsPerEvent = 3;
+    private const float SignificantSteerActionMagnitude = 0.50f;
+    private int signedPedalDecisionCount;
+    private int previousSignificantPedalSign;
+    private int previousSignificantPedalDecision;
+    private int consecutiveRapidPedalReversals;
+    private int pedalDirectionChangesThisEpisode;
+    private int rapidPedalReversalsThisEpisode;
+    private int pedalOscillationEventsThisEpisode;
+    private bool pedalOscillationThisEpisode;
+    private int previousSignificantSteerSign;
+    private int previousSignificantSteerDecision;
+    private int steeringDirectionChangesThisEpisode;
+    private int rapidSteeringDirectionChangesThisEpisode;
+
     // reward weights — set via environment_parameters in the YAML, defaults used if not provided
     private float rwGoal;
     private float rwApproachBonus;
     private float rwTimePenalty;
     private float rwCheckpoint;
+    private bool exponentialCheckpointRewards;
+    private float[] checkpointRewardPrefix = new float[CheckpointCount + 1];
     private float rwTerminalPenalty;
     private float rwMaxStepPenalty;
     private float rwTimePenaltyGrowth;
     private float rwSensorTerminalPenalty;
     private float sensorSeverityExponent = 1f;
+
+    // Optional dense collision-risk shaping. This is deliberately independent
+    // of constrained PPO's terminal-only binary VehicleCollision cost.
+    private float rwVehicleTtcRiskPenalty;
+    private float vehicleTtcRiskThresholdS;
+    private float vehicleTtcRiskMinClosingSpeedMS;
 
     // Dense forward-sensor terminal-avoidance shaping state (see UpdateRewardWeights/
     // CollectObservations, car_agent.yaml's sensor_terminal_lagrangian_* block) - severity is
@@ -231,14 +294,35 @@ public class CarAgent : Agent
     void UpdateRewardWeights()
     {
         var ep = Academy.Instance.EnvironmentParameters;
-
         // Optional experiment-level vehicle cap. A negative enabled value means "use the
         // Inspector setting", so old YAMLs/builds retain their exact prior behaviour. When
         // configured, the cap also becomes the speed reference for SpeedLimited/Gravel tiles.
         if (carController != null)
         {
+            float arcadeReverse = ep.GetWithDefault("arcade_reverse_controls_enabled", -1f);
+            if (arcadeReverse >= 0f)
+                carController.arcadeAutomaticReverse = arcadeReverse >= 0.5f;
+            float signedPedalArcade = ep.GetWithDefault("signed_pedal_arcade_controls_enabled", -1f);
+            if (signedPedalArcade >= 0f)
+                carController.signedPedalArcadeControls = signedPedalArcade >= 0.5f;
             float regenTorque = ep.GetWithDefault("regen_brake_torque", carController.regenBrakeTorque);
             if (regenTorque >= 0f) carController.regenBrakeTorque = regenTorque;
+            float speedLimitedFraction = ep.GetWithDefault(
+                "speed_limited_speed_fraction", carController.grassSpeedFraction);
+            if (speedLimitedFraction >= 0f && speedLimitedFraction <= 1f)
+                carController.grassSpeedFraction = speedLimitedFraction;
+            float gravelSpeedFraction = ep.GetWithDefault(
+                "gravel_speed_fraction", carController.gravelSpeedFraction);
+            if (gravelSpeedFraction >= 0f && gravelSpeedFraction <= 1f)
+                carController.gravelSpeedFraction = gravelSpeedFraction;
+            float gravelFriction = ep.GetWithDefault(
+                "gravel_friction_multiplier", carController.gravelFrictionMultiplier);
+            if (gravelFriction >= 0f && gravelFriction <= 1f)
+                carController.gravelFrictionMultiplier = gravelFriction;
+            float signedReverseTorqueFraction = ep.GetWithDefault(
+                "signed_pedal_reverse_torque_fraction", carController.signedPedalReverseTorqueFraction);
+            if (signedReverseTorqueFraction >= 0f && signedReverseTorqueFraction <= 1f)
+                carController.signedPedalReverseTorqueFraction = signedReverseTorqueFraction;
 
             float capEnabled = ep.GetWithDefault("vehicle_speed_cap_enabled", -1f);
             if (capEnabled >= 0f)
@@ -367,6 +451,12 @@ public class CarAgent : Agent
         }
         rwTerminalPenalty = terminalPenaltyEscalated ? terminalPenaltyEscalatedValue : terminalPenaltyBase;
 
+        rwVehicleTtcRiskPenalty = ep.GetWithDefault("reward_vehicle_ttc_risk_penalty", 0f);
+        vehicleTtcRiskThresholdS = ep.GetWithDefault("vehicle_ttc_risk_threshold_s", 1.5f);
+        vehicleTtcRiskMinClosingSpeedMS = ep.GetWithDefault("vehicle_ttc_risk_min_closing_speed_ms", 0.25f);
+        if (ep.GetWithDefault("vehicle_ttc_risk_penalty_enabled", 0f) < 0.5f)
+            rwVehicleTtcRiskPenalty = 0f;
+
         // Applied once, the step a MaxStepReached timeout fires (see FixedUpdate) - on top of,
         // not instead of, the flat per-step reward_time_penalty/idle penalty already accumulated
         // over the episode. 0 by default (no behavior change); purely a manual override now - the
@@ -398,6 +488,27 @@ public class CarAgent : Agent
 
         rwTimePenalty = timePenaltyBase;
         rwCheckpoint  = checkpointRewardBase;
+
+        // Optional alternative to the equal reward per route-progress checkpoint.
+        // It preserves a fixed total budget while assigning a larger share to
+        // later checkpoints: w * exp(beta*k) / sum(exp(beta*j)), j,k=1..100.
+        exponentialCheckpointRewards = ep.GetWithDefault(
+            "checkpoint_exponential_rewards_enabled", 0f) >= 0.5f;
+        if (exponentialCheckpointRewards)
+        {
+            float totalReward = ep.GetWithDefault("checkpoint_exponential_total_reward",
+                checkpointRewardBase * CheckpointCount);
+            float beta = ep.GetWithDefault("checkpoint_exponential_beta", 0.04f);
+            totalReward = Mathf.Max(0f, totalReward);
+            beta = Mathf.Max(0f, beta);
+            float denominator = 0f;
+            for (int checkpoint = 1; checkpoint <= CheckpointCount; checkpoint++)
+                denominator += Mathf.Exp(beta * checkpoint);
+            checkpointRewardPrefix[0] = 0f;
+            for (int checkpoint = 1; checkpoint <= CheckpointCount; checkpoint++)
+                checkpointRewardPrefix[checkpoint] = checkpointRewardPrefix[checkpoint - 1] +
+                    totalReward * Mathf.Exp(beta * checkpoint) / denominator;
+        }
 
         // Idle penalty: escalating cost for standing still, layered on top of the flat time
         // penalty above. idle_speed_threshold defaults well below car_component's
@@ -483,6 +594,7 @@ public class CarAgent : Agent
     void RecordOutcomeForTraining(string reason)
     {
         Academy.Instance.StatsRecorder.Add("Custom/CompletedVehicleEpisodes", 1f, StatAggregationMethod.Sum);
+        RecordReverseEpisodeTelemetry();
         switch (reason)
         {
             case "Goal":
@@ -497,6 +609,90 @@ public class CarAgent : Agent
             case "MaxStep":
                 Academy.Instance.StatsRecorder.Add("Custom/OutcomeMaxStep", 1f, StatAggregationMethod.Sum);
                 break;
+        }
+    }
+
+    // Shared traffic episodes are ended by TrafficScenarioManager rather than
+    // EndEpisodeWithLog(), so keep this separate from solo outcome counters
+    // and invoke it from both completion paths.
+    void RecordReverseEpisodeTelemetry()
+    {
+        Academy.Instance.StatsRecorder.Add("Custom/ReverseEpisodes", reverseUsedThisEpisode ? 1f : 0f,
+            StatAggregationMethod.Sum);
+        Academy.Instance.StatsRecorder.Add("Custom/ReverseShiftCount", forwardToReverseShiftsThisEpisode,
+            StatAggregationMethod.Sum);
+        Academy.Instance.StatsRecorder.Add("Custom/ReverseDistanceM", reverseDistanceThisEpisodeM,
+            StatAggregationMethod.Sum);
+        Academy.Instance.StatsRecorder.Add("Custom/SignedPedalDirectionChanges", pedalDirectionChangesThisEpisode,
+            StatAggregationMethod.Sum);
+        Academy.Instance.StatsRecorder.Add("Custom/RapidSignedPedalReversals", rapidPedalReversalsThisEpisode,
+            StatAggregationMethod.Sum);
+        Academy.Instance.StatsRecorder.Add("Custom/SignedPedalOscillationEpisodes", pedalOscillationThisEpisode ? 1f : 0f,
+            StatAggregationMethod.Sum);
+        Academy.Instance.StatsRecorder.Add("Custom/SignedPedalOscillationEvents", pedalOscillationEventsThisEpisode,
+            StatAggregationMethod.Sum);
+        Academy.Instance.StatsRecorder.Add("Custom/SteeringDirectionChanges", steeringDirectionChangesThisEpisode,
+            StatAggregationMethod.Sum);
+        Academy.Instance.StatsRecorder.Add("Custom/RapidSteeringDirectionChanges", rapidSteeringDirectionChangesThisEpisode,
+            StatAggregationMethod.Sum);
+    }
+
+    // Called only for signed-pedal policies. The neutral zone is intentionally
+    // ignored: tiny Gaussian action noise around zero is not a direction switch.
+    // The counters are diagnostics only; they do not modify reward or behaviour.
+    void RecordSignedPedalControlTelemetry(float rawPedal, float steer)
+    {
+        signedPedalDecisionCount++;
+
+        float pedalThreshold = carController != null
+            ? carController.signedPedalNeutralDeadzone
+            : 0.10f;
+        int pedalSign = Mathf.Abs(rawPedal) > pedalThreshold ? (rawPedal > 0f ? 1 : -1) : 0;
+        if (pedalSign != 0)
+        {
+            if (previousSignificantPedalSign != 0 && pedalSign != previousSignificantPedalSign)
+            {
+                pedalDirectionChangesThisEpisode++;
+                int decisionsSincePreviousSign = signedPedalDecisionCount - previousSignificantPedalDecision;
+                if (decisionsSincePreviousSign <= RapidControlReversalWindowDecisions)
+                {
+                    rapidPedalReversalsThisEpisode++;
+                    consecutiveRapidPedalReversals++;
+                    if (consecutiveRapidPedalReversals >= OscillationPedalReversalsPerEvent)
+                    {
+                        pedalOscillationEventsThisEpisode++;
+                        pedalOscillationThisEpisode = true;
+                        // A long alternating sequence is counted in non-overlapping
+                        // groups of three, rather than reporting an event at every
+                        // subsequent decision.
+                        consecutiveRapidPedalReversals = 0;
+                    }
+                }
+                else
+                {
+                    consecutiveRapidPedalReversals = 0;
+                }
+            }
+
+            previousSignificantPedalSign = pedalSign;
+            previousSignificantPedalDecision = signedPedalDecisionCount;
+        }
+
+        int steerSign = Mathf.Abs(steer) >= SignificantSteerActionMagnitude ? (steer > 0f ? 1 : -1) : 0;
+        if (steerSign != 0)
+        {
+            if (previousSignificantSteerSign != 0 && steerSign != previousSignificantSteerSign)
+            {
+                steeringDirectionChangesThisEpisode++;
+                // This is kept separate from pedal oscillation. Zig-zag steering
+                // can be correct on an S-curve, but a high rapid count is useful
+                // context when diagnosing a visibly unstable policy.
+                if (previousSignificantSteerDecision > 0 &&
+                    signedPedalDecisionCount - previousSignificantSteerDecision <= RapidControlReversalWindowDecisions)
+                    rapidSteeringDirectionChangesThisEpisode++;
+            }
+            previousSignificantSteerSign = steerSign;
+            previousSignificantSteerDecision = signedPedalDecisionCount;
         }
     }
 
@@ -580,6 +776,7 @@ public class CarAgent : Agent
     public override void OnEpisodeBegin()
     {
         SetTrafficFinishMarker(null);
+        trafficCollisionCostForTerminal = false;
         // Diagnostic: if the previous episode ended without going through Goal/Terminated/MaxStep,
         // it vanishes from the Episodes vs Goals+Terminated+MaxStep reconciliation (see
         // check_episode_stats.py) with no trace of why. This surfaces it explicitly instead.
@@ -705,6 +902,22 @@ public class CarAgent : Agent
         episodeStepCount = 0;
         idleStepCounter = 0;
         previousTileType = null;
+        reverseUsedThisEpisode = false;
+        forwardToReverseShiftsThisEpisode = 0;
+        reverseDistanceThisEpisodeM = 0f;
+        hasPreviousReverseTelemetryPosition = false;
+        signedPedalDecisionCount = 0;
+        previousSignificantPedalSign = 0;
+        previousSignificantPedalDecision = 0;
+        consecutiveRapidPedalReversals = 0;
+        pedalDirectionChangesThisEpisode = 0;
+        rapidPedalReversalsThisEpisode = 0;
+        pedalOscillationEventsThisEpisode = 0;
+        pedalOscillationThisEpisode = false;
+        previousSignificantSteerSign = 0;
+        previousSignificantSteerDecision = 0;
+        steeringDirectionChangesThisEpisode = 0;
+        rapidSteeringDirectionChangesThisEpisode = 0;
 
         // Neither of these is reset by anything else - car_component has no episode concept of
         // its own, so without this, wheels/gear silently carry over whatever they were at the
@@ -716,6 +929,7 @@ public class CarAgent : Agent
         carController.reverseGear = false;
         carController.accelerationInput = 0f;
         carController.brakeInput = 0f;
+        carController.signedPedalInput = 0f;
         carController.ResetSlipperyDisturbance();
 
         episodeBootstrapStage = trafficManager != null ? BootstrapStage.None : DetermineBootstrapStage();
@@ -925,7 +1139,12 @@ public class CarAgent : Agent
 
     public void PlaceForTraffic(TrafficScenarioManager.Route route)
     {
+#if UNITY_EDITOR
+        ClearTrafficFinishGhost();
+#endif
+        RestoreTrafficPresence();
         trafficFinished = false;
+        trafficCollisionCostForTerminal = false;
         SetTrafficFinishMarker(null);
         if (decisionRequester != null) decisionRequester.enabled = true;
         carController.enabled = true;
@@ -948,6 +1167,7 @@ public class CarAgent : Agent
     {
         if (trafficFinished) return;
         trafficFinished = true;
+        trafficCollisionCostForTerminal = reason == "VehicleCollision";
         SetTrafficFinishMarker(reason);
         // Do not feed the shared policy repeated no-op decisions from parked cars.
         // EndEpisode still runs for every seat when the shared episode finishes.
@@ -956,6 +1176,7 @@ public class CarAgent : Agent
         episodeOutcomeLogged = true;
         carController.accelerationInput = 0f;
         carController.brakeInput = 0f;
+        carController.signedPedalInput = 0f;
         carController.steerDeltaInput = 0f;
         carController.wheel1.motorTorque = 0f;
         carController.wheel2.motorTorque = 0f;
@@ -965,6 +1186,157 @@ public class CarAgent : Agent
         rb.angularVelocity = Vector3.zero;
         rb.isKinematic = true;
         carController.enabled = false;
+    }
+
+    public bool IsRemovedFromTrafficScene => trafficRemovedFromScene;
+
+    // Do not deactivate the GameObject: ML-Agents must retain this Agent until
+    // EndTrafficEpisode() sends its terminal transition at the shared reset.
+    // Instead, remove only its physical body and visual representation.  The
+    // TrafficScenarioManager also excludes this car from analytical laser hits.
+    public void RemoveFromTrafficScene()
+    {
+        if (trafficRemovedFromScene) return;
+        CacheTrafficPresenceComponents();
+#if UNITY_EDITOR
+        CreateTrafficFinishGhost();
+#endif
+        for (int i = 0; i < trafficPresenceColliders.Length; i++)
+            trafficPresenceColliders[i].enabled = false;
+        for (int i = 0; i < trafficPresenceRenderers.Length; i++)
+#if UNITY_EDITOR
+            if (!KeepTrafficViewerRenderer(trafficPresenceRenderers[i]))
+                trafficPresenceRenderers[i].enabled = false;
+#else
+            trafficPresenceRenderers[i].enabled = false;
+#endif
+        trafficRemovedFromScene = true;
+    }
+
+#if UNITY_EDITOR
+    bool KeepTrafficViewerRenderer(Renderer renderer)
+    {
+        if (renderer == null) return false;
+        // Trails and outcome markers have no colliders, Agent, or sensor role;
+        // leaving them visible makes the finished route and reason readable.
+        if (renderer is TrailRenderer) return true;
+        return trafficFinishMarker != null &&
+               (renderer.transform == trafficFinishMarker.transform ||
+                renderer.transform.IsChildOf(trafficFinishMarker.transform));
+    }
+
+    void CreateTrafficFinishGhost()
+    {
+        ClearTrafficFinishGhost();
+        trafficFinishGhost = new GameObject("TrafficFinishGhost_" + name)
+        {
+            hideFlags = HideFlags.DontSave
+        };
+
+        foreach (MeshRenderer sourceRenderer in GetComponentsInChildren<MeshRenderer>(true))
+        {
+            if (sourceRenderer == null ||
+                (goal != null && (sourceRenderer.transform == goal || sourceRenderer.transform.IsChildOf(goal))) ||
+                (trafficFinishMarker != null &&
+                 (sourceRenderer.transform == trafficFinishMarker.transform ||
+                  sourceRenderer.transform.IsChildOf(trafficFinishMarker.transform))))
+                continue;
+
+            MeshFilter sourceMesh = sourceRenderer.GetComponent<MeshFilter>();
+            if (sourceMesh == null || sourceMesh.sharedMesh == null) continue;
+
+            GameObject part = new GameObject(sourceRenderer.name) { hideFlags = HideFlags.DontSave };
+            part.transform.SetParent(trafficFinishGhost.transform, false);
+            part.transform.SetPositionAndRotation(sourceMesh.transform.position, sourceMesh.transform.rotation);
+            part.transform.localScale = sourceMesh.transform.lossyScale;
+
+            MeshFilter meshFilter = part.AddComponent<MeshFilter>();
+            meshFilter.sharedMesh = sourceMesh.sharedMesh;
+            MeshRenderer meshRenderer = part.AddComponent<MeshRenderer>();
+            Material[] sourceMaterials = sourceRenderer.sharedMaterials;
+            Material[] ghostMaterials = new Material[sourceMaterials.Length];
+            for (int i = 0; i < sourceMaterials.Length; i++)
+                ghostMaterials[i] = CreateTrafficGhostMaterial(sourceMaterials[i]);
+            meshRenderer.sharedMaterials = ghostMaterials;
+        }
+    }
+
+    Material CreateTrafficGhostMaterial(Material source)
+    {
+        Material ghost = source != null ? new Material(source) : new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+        ghost.hideFlags = HideFlags.DontSave;
+        const float alpha = 0.28f;
+        if (ghost.HasProperty("_BaseColor"))
+        {
+            Color color = ghost.GetColor("_BaseColor");
+            color.a = alpha;
+            ghost.SetColor("_BaseColor", color);
+        }
+        if (ghost.HasProperty("_Color"))
+        {
+            Color color = ghost.GetColor("_Color");
+            color.a = alpha;
+            ghost.SetColor("_Color", color);
+        }
+        if (ghost.HasProperty("_Surface")) ghost.SetFloat("_Surface", 1f);
+        if (ghost.HasProperty("_ZWrite")) ghost.SetFloat("_ZWrite", 0f);
+        ghost.SetInt("_SrcBlend", (int)BlendMode.SrcAlpha);
+        ghost.SetInt("_DstBlend", (int)BlendMode.OneMinusSrcAlpha);
+        ghost.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+        ghost.DisableKeyword("_SURFACE_TYPE_OPAQUE");
+        ghost.renderQueue = (int)RenderQueue.Transparent;
+        trafficFinishGhostMaterials.Add(ghost);
+        return ghost;
+    }
+
+    void ClearTrafficFinishGhost()
+    {
+        if (trafficFinishGhost != null) Destroy(trafficFinishGhost);
+        trafficFinishGhost = null;
+        foreach (Material material in trafficFinishGhostMaterials)
+            if (material != null) Destroy(material);
+        trafficFinishGhostMaterials.Clear();
+    }
+#endif
+
+    void RestoreTrafficPresence()
+    {
+        if (!trafficRemovedFromScene) return;
+        for (int i = 0; i < trafficPresenceColliders.Length; i++)
+            if (trafficPresenceColliders[i] != null)
+                trafficPresenceColliders[i].enabled = trafficPresenceColliderStates[i];
+        for (int i = 0; i < trafficPresenceRenderers.Length; i++)
+            if (trafficPresenceRenderers[i] != null)
+                trafficPresenceRenderers[i].enabled = trafficPresenceRendererStates[i];
+        trafficRemovedFromScene = false;
+    }
+
+    void CacheTrafficPresenceComponents()
+    {
+        if (trafficPresenceColliders != null) return;
+        var colliders = new List<Collider>();
+        foreach (Collider collider in GetComponentsInChildren<Collider>(true))
+        {
+            // Goals are normally separate scene objects, but never hide or
+            // disable one if a scene happens to parent it under the car.
+            if (goal != null && (collider.transform == goal || collider.transform.IsChildOf(goal))) continue;
+            colliders.Add(collider);
+        }
+        trafficPresenceColliders = colliders.ToArray();
+        trafficPresenceColliderStates = new bool[trafficPresenceColliders.Length];
+        for (int i = 0; i < trafficPresenceColliders.Length; i++)
+            trafficPresenceColliderStates[i] = trafficPresenceColliders[i].enabled;
+
+        var renderers = new List<Renderer>();
+        foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
+        {
+            if (goal != null && (renderer.transform == goal || renderer.transform.IsChildOf(goal))) continue;
+            renderers.Add(renderer);
+        }
+        trafficPresenceRenderers = renderers.ToArray();
+        trafficPresenceRendererStates = new bool[trafficPresenceRenderers.Length];
+        for (int i = 0; i < trafficPresenceRenderers.Length; i++)
+            trafficPresenceRendererStates[i] = trafficPresenceRenderers[i].enabled;
     }
 
     public void FinishTrafficMaxStep()
@@ -978,6 +1350,7 @@ public class CarAgent : Agent
     public void EndTrafficEpisode()
     {
         lastEpisodeReward = GetCumulativeReward();
+        RecordReverseEpisodeTelemetry();
         EndEpisode();
     }
 
@@ -1385,13 +1758,33 @@ public class CarAgent : Agent
         sensor.AddObservation(pedalIsBrake ? 1f : 0f); // 1 - which pedal is selected
         sensor.AddObservation(carController.accelerationInput + carController.brakeInput); // 1 - pedal magnitude (only one is ever nonzero)
 
-        // Optional: fraction of this episode's MaxStep budget remaining, 1=start -> 0=timeout.
+        // Optional: fraction of this episode's budget remaining, 1=start -> 0=timeout.
+        // Shared traffic episodes deliberately set every Agent.MaxStep=0 and use
+        // TrafficScenarioManager.SharedMaxSteps instead. Using MaxStep there
+        // would silently provide a constant 1.0 and make this proposed 90th
+        // observation useless, so prefer the manager's shared clock.
         // Gated behind includeRemainingStepsObservation - see its field comment above for why this
         // must be decided before training, not toggled at runtime. When off (default), this adds
         // nothing and the observation vector is unchanged from before.
         if (includeRemainingStepsObservation)
         {
-            float remainingStepsFraction = MaxStep > 0 ? Mathf.Clamp01(1f - (float)StepCount / MaxStep) : 1f;
+            float remainingStepsFraction;
+            if (trafficManager != null && trafficManager.SharedMaxSteps > 0)
+                remainingStepsFraction = Mathf.Clamp01(1f - (float)trafficManager.SharedStep / trafficManager.SharedMaxSteps);
+            else
+                remainingStepsFraction = MaxStep > 0 ? Mathf.Clamp01(1f - (float)StepCount / MaxStep) : 1f;
+            // -1 is reserved solely for a collision terminal observation. Normal
+            // decision-time values remain in [0, 1], so this does not change the
+            // 90-input policy's acting observations or its network shape. The
+            // marker deliberately has no EnvironmentParameters gate: terminal
+            // observations cannot change an ordinary PPO action, while the CPO
+            // trainer consumes it as a separate binary safety cost.
+            if (trafficFinished && trafficCollisionCostForTerminal)
+            {
+                remainingStepsFraction = -1f;
+                Academy.Instance.StatsRecorder.Add(
+                    "Custom/CpoCollisionMarkerWritten", 1f, StatAggregationMethod.Sum);
+            }
             sensor.AddObservation(remainingStepsFraction); // 1 (only present if includeRemainingStepsObservation)
         }
 
@@ -1406,8 +1799,12 @@ public class CarAgent : Agent
             if (includeSensorObservations && laserTileSensor != null)
                 laserTileSensor.AddObservations(sensor);
             else
+                // A ContinuousLasers agent is validated to have its sensor at
+                // startup. The legacy count is only a safe compile-time
+                // fallback for an invalid/missing reference.
                 AddZeroObservations(sensor, laserTileSensor != null
-                    ? laserTileSensor.ActiveObservationCount : LaserTileSensor.ObservationCount);
+                    ? laserTileSensor.ActiveObservationCount
+                    : LaserTileSensor.LegacyDirectionCount * LaserTileSensor.ObservationsPerDirection);
         }
         else if (includeSensorObservations && carSensor != null && carSensor.readings != null)
         {
@@ -1422,26 +1819,89 @@ public class CarAgent : Agent
         }
     }
 
+    void RecordReverseDecisionTelemetry()
+    {
+        Vector3 position = transform.position;
+        if (hasPreviousReverseTelemetryPosition)
+        {
+            float travelledM = Vector3.Distance(position, previousReverseTelemetryPosition);
+            Academy.Instance.StatsRecorder.Add("Custom/VehicleMovementDistanceM", travelledM,
+                StatAggregationMethod.Sum);
+            if (carController.reverseGear)
+            {
+                reverseDistanceThisEpisodeM += travelledM;
+                // Continuous reporting also works during shared traffic
+                // episodes, making genuine reverse movement visible in
+                // TensorBoard while the curriculum is still learning.
+                Academy.Instance.StatsRecorder.Add("Custom/ReverseMovementDistanceM", travelledM,
+                    StatAggregationMethod.Sum);
+            }
+        }
+        previousReverseTelemetryPosition = position;
+        hasPreviousReverseTelemetryPosition = true;
+
+        // Summed values make the learning curves directly interpretable:
+        // ReverseGearDecisionSteps / ReverseDecisionSteps is the fraction of
+        // decisions in reverse, while ReverseEpisodes / CompletedVehicleEpisodes
+        // is the fraction of episodes that used it at least once.
+        Academy.Instance.StatsRecorder.Add("Custom/ReverseDecisionSteps", 1f, StatAggregationMethod.Sum);
+        if (carController.reverseGear)
+            Academy.Instance.StatsRecorder.Add("Custom/ReverseGearDecisionSteps", 1f, StatAggregationMethod.Sum);
+    }
+
     public override void OnActionReceived(ActionBuffers actions)
     {
         if (trafficManager != null && trafficFinished) return;
         float steer = actions.ContinuousActions[0];
-        float pedal = (actions.ContinuousActions[1] + 1f) / 2f;
+        float rawPedal = Mathf.Clamp(actions.ContinuousActions[1], -1f, 1f);
+        bool signedPedalArcade = carController.signedPedalArcadeControls;
+        float pedal = signedPedalArcade ? Mathf.Abs(rawPedal) : (rawPedal + 1f) / 2f;
         pedal = Mathf.Clamp01(pedal); // safety net only, for rare slight overshoot
-        pedalIsBrake = actions.DiscreteActions[1] == 1;
+        // The normal build has [gear, pedal] branches. The arcade build has
+        // only [pedal], so its brake/drive choice is branch zero and it never
+        // exposes a gear-selection action to PPO.
+        bool arcadeReverseControls = carController.arcadeAutomaticReverse && !signedPedalArcade;
+        pedalIsBrake = signedPedalArcade
+            ? rawPedal < 0f
+            : actions.DiscreteActions[arcadeReverseControls ? 0 : 1] == 1;
 
         carController.steerDeltaInput = Mathf.Clamp(steer, -1f, 1f);  //clamping just for the safety net, to eliminate any float rounding errors
         
         
-        // Mutually exclusive by construction: only the selected pedal ever gets a nonzero input,
-        // so the agent can no longer press acceleration and brake at once (car_component previously allowed it).
-        carController.accelerationInput = pedalIsBrake ? 0f : pedal;
-        carController.brakeInput = pedalIsBrake ? pedal : 0f;
-        carController.RequestReverseGear(actions.DiscreteActions[0] == 1);
+        bool wasReverse = carController.reverseGear;
+        if (signedPedalArcade)
+        {
+            RecordSignedPedalControlTelemetry(rawPedal, steer);
+            carController.ApplySignedArcadePedal(rawPedal);
+        }
+        else if (arcadeReverseControls)
+        {
+            carController.ApplyArcadePedals(pedalIsBrake, pedal);
+        }
+        else
+        {
+            // Mutually exclusive by construction: only the selected pedal ever gets a nonzero input.
+            carController.accelerationInput = pedalIsBrake ? 0f : pedal;
+            carController.brakeInput = pedalIsBrake ? pedal : 0f;
+            carController.RequestReverseGear(actions.DiscreteActions[0] == 1);
+        }
+        if (!wasReverse && carController.reverseGear)
+            forwardToReverseShiftsThisEpisode++;
+        if (carController.reverseGear)
+            reverseUsedThisEpisode = true;
+        RecordReverseDecisionTelemetry();
+
+        if (trafficManager != null)
+        {
+            float clearanceReward = trafficManager.ConsumeRecoveryBlockerClearanceReward(this);
+            if (clearanceReward > 0f) AddReward(clearanceReward);
+        }
 
         episodeStepCount++;
         float scaledTimePenalty = rwTimePenalty * (1f + episodeStepCount * rwTimePenaltyGrowth);
         AddReward(scaledTimePenalty);
+
+        ApplyVehicleTtcRiskPenalty();
 
         // Escalating idle penalty: speed (not distance-to-goal) is the signal, specifically so
         // this can never penalise backing away from the goal the way a distance-delta shaping
@@ -1469,7 +1929,11 @@ public class CarAgent : Agent
                     0, CheckpointCount);
                 if (checkpointsReached > checkpointsAwarded)
                 {
-                    AddReward((checkpointsReached - checkpointsAwarded) * rwCheckpoint);
+                    float checkpointReward = exponentialCheckpointRewards
+                        ? checkpointRewardPrefix[checkpointsReached] -
+                          checkpointRewardPrefix[checkpointsAwarded]
+                        : (checkpointsReached - checkpointsAwarded) * rwCheckpoint;
+                    AddReward(checkpointReward);
                     checkpointsAwarded = checkpointsReached;
                 }
             }
@@ -1494,6 +1958,34 @@ public class CarAgent : Agent
             else EndEpisodeWithLog("Terminated");
             return;
         }
+    }
+
+    // Penalise only genuine forward closing risk, smoothly within the requested
+    // TTC horizon. A stopped parked obstacle is treated as velocity zero. This
+    // does not change observations, physics, terminal logic, or CPO's cost.
+    void ApplyVehicleTtcRiskPenalty()
+    {
+        if (rwVehicleTtcRiskPenalty >= 0f || trafficManager == null || rb == null ||
+            vehicleTtcRiskThresholdS <= 0f) return;
+
+        Vector3 forward = transform.forward;
+        forward.y = 0f;
+        if (forward.sqrMagnitude < 1e-6f) return;
+        forward.Normalize();
+        if (!trafficManager.TryNearestVehicleHit(this, transform.position, forward,
+                out CarAgent other, out float gap)) return;
+
+        float ownForwardSpeed = Vector3.Dot(rb.linearVelocity, forward);
+        Vector3 otherVelocity = other != null && other.rb != null ? other.rb.linearVelocity : Vector3.zero;
+        float closingSpeed = ownForwardSpeed - Vector3.Dot(otherVelocity, forward);
+        if (closingSpeed <= vehicleTtcRiskMinClosingSpeedMS) return;
+
+        float ttc = Mathf.Max(0f, gap) / closingSpeed;
+        if (ttc >= vehicleTtcRiskThresholdS) return;
+        float severity = 1f - ttc / vehicleTtcRiskThresholdS;
+        AddReward(rwVehicleTtcRiskPenalty * severity * severity);
+        Academy.Instance.StatsRecorder.Add("Custom/VehicleTtcRiskSeverity", severity,
+            StatAggregationMethod.Average);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -1535,13 +2027,29 @@ public class CarAgent : Agent
         // already 0..1 (no press -> full press), so it must be rescaled to match, not passed
         // through Clamp01 directly - otherwise idle (pedal=0) becomes ContinuousActions[1]=0, which
         // OnActionReceived remaps to a phantom pedal=0.5 instead of the intended 0.
+        if (carController.signedPedalArcadeControls)
+        {
+            // One signed pedal: W/trigger drives forward; S/brake drives in
+            // reverse once stopped. No discrete branch exists in this scene.
+            continuousActions[1] = Mathf.Clamp(acceleration - brake, -1f, 1f);
+            return;
+        }
+
         continuousActions[1] = Mathf.Clamp(pedal * 2f - 1f, -1f, 1f);
 
-        // Echo the current gear (driven by the Q-toggle in Update()) rather than requesting
-        // a fresh value here — otherwise RequestReverseGear() in OnActionReceived would fight
-        // the toggle every physics step.
-        discreteActions[0] = carController.reverseGear ? 1 : 0;
-        discreteActions[1] = brakePedal ? 1 : 0;
+        if (carController.arcadeAutomaticReverse)
+        {
+            // Arcade action space has one [drive/brake] branch; its current
+            // direction is controlled by the pedal state in ApplyArcadePedals.
+            discreteActions[0] = brakePedal ? 1 : 0;
+        }
+        else
+        {
+            // Echo the current gear (driven by the Q-toggle in Update()) rather than requesting
+            // a fresh value here — otherwise RequestReverseGear() would fight the toggle.
+            discreteActions[0] = carController.reverseGear ? 1 : 0;
+            discreteActions[1] = brakePedal ? 1 : 0;
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -1578,6 +2086,11 @@ public class CarAgent : Agent
             {
                 FinishTrafficCollision();
                 otherCar.FinishTrafficCollision();
+                return;
+            }
+            if (collision.collider.GetComponentInParent<TrafficVehicleObstacle>() != null)
+            {
+                FinishTrafficCollision();
                 return;
             }
         }

@@ -37,3 +37,9 @@
 - Replace fixed second routes with dynamic connected-road placement that enforces minimum spacing and produces likely encounters. Extend scenario generation and evaluation beyond two cars.
 - Test whether the 15-degree forward laser spacing misses other cars. If necessary, add a distinct moving-vehicle reading or wider forward detection; either change requires a new observation shape and training build.
 - In a separate ablation, make static Terminal contact use the physical chassis footprint rather than only the car's center. Keep the legacy center rule for the first traffic-transfer comparison.
+
+## Traffic curricula to evaluate
+
+- Test a smooth per-episode traffic-density curriculum separately from route length: sample an integer active-car count from 2--10 using a truncated discrete Gaussian. Hold its centre at 2.5 through 5M training steps, move it linearly to 9.5 through 35M, then hold it at 9.5 through 40M. Use a small uniform mixture (default 9% total) so every count remains possible throughout training. Evaluate deterministically and stochastically with 2, 5, and 10 cars as usual.
+- Test a smooth route-length curriculum separately from traffic density: retain 10 cars, cap connected-asphalt spawn-to-goal routes at 10 m for the first 5M steps, linearly expand that cap to 70 m through 35M, then remove the cap for the final 5M. The normal 8 m endpoint-spacing rule remains active; the legacy endpoint-spacing sampler alone does not reliably create short routes.
+- Do not include one-car episodes in the first mixed-traffic curriculum: one car currently intentionally uses the standard solo episode lifecycle, which is a different task. Consider it only as a separately controlled ablation.

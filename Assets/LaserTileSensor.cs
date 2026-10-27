@@ -1,18 +1,18 @@
 using UnityEngine;
 using Unity.MLAgents.Sensors;
 
-// Twelve continuous, car-relative tile lasers: seven evenly-spaced forward rays from -45 to +45
-// degrees plus the five existing side/rear rays. Each direction reports the first special tile
+// Continuous, car-relative tile lasers. The legacy layout has seven dense forward rays from
+// -45 to +45 degrees plus five side/rear rays. A separate opt-in layout samples the full circle
+// every 15 degrees. Each direction reports the first special tile
 // (Slippery, SpeedLimited or Terminal) plus its distance, and one road-boundary distance.
 // An optional sixth value reports nearest vehicle distance independently of floor tiles.
 // Traversal is through GridManager.tileTypes, rather than Physics.Raycast, so it is exact at
 // tile borders, works on every generated map, and regards the map edge as Terminal.
 public class LaserTileSensor : MonoBehaviour
 {
-    public const int DirectionCount = 12;
+    public const int LegacyDirectionCount = 12;
+    public const int DenseFullCircleDirectionCount = 24;
     public const int ObservationsPerDirection = 5; // special type one-hot (3), special distance, road boundary distance
-    public const int ObservationCount = DirectionCount * ObservationsPerDirection;
-    public const int VehicleObservationCount = DirectionCount; // one extra vehicle distance per ray
 
     [Tooltip("Grid whose logical tile map the lasers traverse.")]
     public GridManager gridManager;
@@ -24,12 +24,20 @@ public class LaserTileSensor : MonoBehaviour
     [Tooltip("Characteristic distance S for the Asphalt/non-Asphalt road boundary in d/(d+S). The generated roads are about 6 m wide, so 3 m represents their half-width and maps a centred side-boundary reading to about 0.5.")]
     [Min(0.001f)] public float roadBoundaryDistanceScaleM = 3f;
     [Header("Optional traffic observation")]
-    [Tooltip("Add one vehicle-distance reading per ray (77 -> 89 total observations). " +
+    [Tooltip("Add one vehicle-distance reading per ray (legacy 77 -> 89 total observations). " +
              "When disabled, cars retain the legacy Terminal-tile laser behavior. " +
              "Set Behavior Parameters Vector Observation Size to 89 before training with this enabled.")]
     public bool includeVehicleDistanceObservations = false;
     [Tooltip("Characteristic distance S in d/(d+S) for other cars. 10 m suits the current 3 m/s cap; this is not a detection range limit. YAML can override it.")]
     [Min(0.001f)] public float vehicleDistanceScaleM = 10f;
+
+    [Header("Ray layout")]
+    [Tooltip("Use 24 evenly spaced rays around the complete car (one every 15 degrees), instead of the legacy 12-ray layout with dense forward coverage only. This changes the policy observation size and therefore requires a newly trained model.")]
+    public bool denseFullCircle15DegreeRays = false;
+
+    public int DirectionCount => ActiveDirections.Length;
+    public int ObservationCount => DirectionCount * ObservationsPerDirection;
+    public int VehicleObservationCount => DirectionCount; // one extra vehicle distance per ray
 
     public int ActiveObservationCount => ObservationCount +
         (includeVehicleDistanceObservations ? VehicleObservationCount : 0);
@@ -50,7 +58,7 @@ public class LaserTileSensor : MonoBehaviour
 
     // Clockwise, car-local directions. Forward coverage is dense at 15-degree intervals; the
     // original right/back/left directions remain. These rotate automatically with the car.
-    private static readonly Vector3[] LocalDirections =
+    private static readonly Vector3[] LegacyLocalDirections =
     {
         DirectionFromDegrees(-45f),
         DirectionFromDegrees(-30f),
@@ -66,6 +74,19 @@ public class LaserTileSensor : MonoBehaviour
         new Vector3(-1f, 0f, 0f),
     };
 
+    private static readonly Vector3[] DenseFullCircleLocalDirections = BuildDenseFullCircleDirections();
+
+    private Vector3[] ActiveDirections => denseFullCircle15DegreeRays
+        ? DenseFullCircleLocalDirections : LegacyLocalDirections;
+
+    private static Vector3[] BuildDenseFullCircleDirections()
+    {
+        var directions = new Vector3[DenseFullCircleDirectionCount];
+        for (int i = 0; i < directions.Length; i++)
+            directions[i] = DirectionFromDegrees(-180f + i * 15f);
+        return directions;
+    }
+
     private static Vector3 DirectionFromDegrees(float degrees)
     {
         float radians = degrees * Mathf.Deg2Rad;
@@ -74,9 +95,9 @@ public class LaserTileSensor : MonoBehaviour
 
     // Kept as a method rather than exposing the backing array so the overlay can share the exact
     // observation ordering without being able to accidentally modify it.
-    public static Vector3 GetLocalDirection(int directionIndex)
+    public Vector3 GetLocalDirection(int directionIndex)
     {
-        return LocalDirections[directionIndex];
+        return ActiveDirections[directionIndex];
     }
 
     // ManualDrivingView uses this so the third-person test view gets world-space rays without
@@ -106,7 +127,7 @@ public class LaserTileSensor : MonoBehaviour
         runtimeLaserRoot.SetActive(true);
         for (int i = 0; i < DirectionCount; i++)
         {
-            Vector3 direction = transform.TransformDirection(LocalDirections[i]);
+            Vector3 direction = transform.TransformDirection(ActiveDirections[i]);
             TraceWithVehicle(transform.position, direction, out TileType type,
                 out float specialDistance, out _, out float vehicleDistance);
             bool vehicleFirst = includeVehicleDistanceObservations &&
@@ -167,7 +188,7 @@ public class LaserTileSensor : MonoBehaviour
         }
 
         Vector3 origin = transform.position;
-        foreach (Vector3 localDirection in LocalDirections)
+        foreach (Vector3 localDirection in ActiveDirections)
         {
             TraceWithVehicle(origin, transform.TransformDirection(localDirection), out TileType specialType,
                 out float specialDistance, out float roadBoundaryDistance, out float vehicleDistance);
@@ -328,7 +349,7 @@ public class LaserTileSensor : MonoBehaviour
             return;
 
         if (!showGizmos || !Application.isPlaying || gridManager == null || gridManager.tileTypes == null) return;
-        foreach (Vector3 localDirection in LocalDirections)
+        foreach (Vector3 localDirection in ActiveDirections)
         {
             TraceWithVehicle(transform.position, transform.TransformDirection(localDirection), out TileType type,
                 out float specialDistance, out float roadBoundaryDistance, out float vehicleDistance);

@@ -171,3 +171,8 @@ If most values cluster tightly and the dots end up hard to tell apart visually, 
 
 
 it's a known RL failure mode (Pardo et al., "Time Limits in Reinforcement Learning," 2018): without a way to observe remaining time, the optimal action in an identical physical state can depend on how much time is lef
+
+1019
+    - Signed-pedal brake + neutral-hold controller currently uses a ±0.10 neutral zone.
+    - Its five-seed result reduced collisions but had more MaxStep outcomes than the earlier signed-pedal baseline; one seed collapsed.
+    - Deferred ablation: after the four pending tests finish, compare them first, then consider a separate ±0.05 neutral-zone run. Do not replace the current ±0.10 configuration yet.
