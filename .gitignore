@@ -46,16 +46,14 @@ __pycache__/
 .claude/
 
 # ---- Training outputs ----
-# Trained model checkpoints/run artifacts - not published, keep only the .out console logs
-# from hpc/ below (whitelisted) as the record of what was run and how it went.
+# Trained model checkpoints/run artifacts and console logs are local-only.
 results/
 
-# hpc/: ignore everything by default, but keep directory traversal, *.out files themselves
-# (the plain-text console logs), and analysis-notebook output graphs (*.png/*.jpg) - excludes
-# run_logs/ (Player-N.log, timers.json) and any other binaries.
+# hpc/: ignore everything by default, but keep directory traversal, analysis output graphs
+# (*.png/*.jpg), and reusable traffic scripts. This excludes run logs (including *.out),
+# checkpoints, and other generated binaries.
 hpc/**
 !hpc/**/
-!hpc/**/*.out
 !hpc/**/*.png
 !hpc/**/*.jpg
 !hpc/**/*.jpeg
